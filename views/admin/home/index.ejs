@@ -1,0 +1,267 @@
+<div class="row">
+    <div class="col-sm-5">
+        <input type="text" name="unitName" id="txtUnitName" class="form-control" placeholder="Tên đơn vị">
+    </div>
+    <div class="col-sm-2">
+        <button class="btn btn-success" id="btnAddUnit">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+            Create
+        </button>
+    </div>
+    <!-- phần tìm kiếm -->
+    <div class="offset-sm-1 col-sm-4">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Keyword ..." id="txtSearch" />
+            <div class="input-group-btn">
+                <button class="btn btn-dark" id="btnSearch">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- kết thúc phần tìm kiếm -->
+</div>
+<table class="table table-dark mt-2">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Tên đơn vị</th>
+            <th scope="col">Handle</th>
+        </tr>
+    </thead>
+    <tbody id="tblContent"></tbody>
+</table>
+
+
+
+
+<div class="modal" tabindex="-1" role="dialog" id="modalDepartment">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-info" id="modalTitle">Danh sách phòng ban</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body container">
+
+                <div class="row">
+                    <div class="col-sm-10">
+                        <input type="text" name="Name" id="txtDeptName" class="form-control"
+                            placeholder="Tên phòng ban">
+                    </div>
+                    <div class="col-sm-2">
+                        <button class="btn btn-success" id="btnSubmitDept">Xác nhận</button>
+                    </div>
+                </div>
+                <table class="table mt-2">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Tên phòng ban</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tblDepartments"></tbody>
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<script>
+    var unitId = "";
+    var unitName = "";
+    var search ="";
+    $(document).ready(function () {
+        LoadUnit();
+    })
+
+    $('#btnSearch').click(function(){
+        search = $('#txtSearch').val();
+        LoadUnit();
+    })
+
+
+    $('#btnAddUnit').click(function () {
+        let name = $('#txtUnitName').val();
+        if (name.trim().length == 0) {
+            alert('Vui lòng nhập tên đơn vị!');
+            return;
+        }
+
+        $.ajax({
+            url: '/admin/unit',
+            type: 'post',
+            headers: {
+                Authorization: "Covid-19 " + getACCESS_TOKEN()
+            },
+            data: {
+                name
+            },
+            success: function (data) {
+                alert(data.msg);
+                LoadUnit();
+            }
+        })
+    })
+
+
+
+    $(document).on("click", "button[name='dept']", function () {
+        unitId = $(this).closest("tr").attr("id");
+        unitName = $(this).closest("tr").data("name");
+        $('#modalTitle').text(`Danh sách phòng ban ${unitName}`);
+        $('#modalDepartment').modal();
+    });
+    $(document).on("click", "button[name='delete']", function () {
+        unitId = $(this).closest("tr").attr("id");
+        unitName = $(this).closest("tr").data("name");
+        var r = confirm(
+            "Bạn thực sự muốn xóa " + unitName + "?"
+        );
+        if (r == true) {
+            $.ajax({
+                url:'/admin/unit',
+                type:'delete',
+                headers: {
+                    Authorization: "Covid-19 " + getACCESS_TOKEN()
+                },
+                data: {
+                    unitId
+                },
+                success:function(data){
+                    alert(data.msg);
+                    LoadUnit();
+                }
+            })
+        }
+
+    });
+
+    $("#modalDepartment").on('shown.bs.modal', function (e) {
+        LoadDepartmentsByUnitId();
+    })
+
+    $(document).on("click", "button[name='deleteDept']", function () {
+        let deptId = $(this).closest("tr").attr("id");
+        let deptName = $(this).closest("tr").data("dept");
+        console.log({ deptId, deptName });
+        var r = confirm(
+            "Bạn thực sự muốn xóa " + deptName + "?"
+        );
+        if (r == true) {
+            $.ajax({
+                url: '/admin/dept',
+                type: 'delete',
+                headers: {
+                    Authorization: "Covid-19 " + getACCESS_TOKEN()
+                },
+                data: {
+                    deptId
+                },
+                success: function (data) {
+                    alert(data.msg);
+                    LoadDepartmentsByUnitId();
+                }
+            })
+        }
+    });
+
+    $('#btnSubmitDept').click(function () {
+        let name = $('#txtDeptName').val();
+        if (name.trim().length == 0) {
+            alert('Vui lòng nhập tên khoa phòng!!');
+            return;
+        }
+
+        $.ajax({
+            url: '/admin/dept',
+            type: 'post',
+            headers: {
+                Authorization: "Covid-19 " + getACCESS_TOKEN()
+            },
+            data: {
+                name,
+                unitId
+            },
+            success: function (data) {
+                alert(data.msg);
+                LoadDepartmentsByUnitId();
+            }
+        })
+    })
+
+    function LoadDepartmentsByUnitId() {
+        $.ajax({
+            url: '/admin/dept',
+            type: 'get',
+            headers: {
+                Authorization: "Covid-19 " + getACCESS_TOKEN()
+            },
+            data: {
+                unitId
+            },
+            success: function (data) {
+                $('#tblDepartments').empty();
+                let idx = 1;
+                data.depts.forEach(d => {
+                    let tr = '<tr id="' + d._id + '" data-dept="' + d.name + '">';
+                    tr += '<td>' + (idx++) + '</td>';
+                    tr += '<td>' + d.name + '</td>';
+                    tr += '<td class="text-right">';
+                    tr += '<td class="text-right">';
+                    tr += '<button  name = "deleteDept" class = "btn btn-sm btn-danger ml-2"><i class="fa fa-trash" aria-hidden="true"></i></button>';
+                    tr += '</td>';
+                    $('#tblDepartments').append(tr);
+                })
+            }
+        })
+    }
+
+
+    function LoadUnit() {
+        $.ajax({
+            url: '/admin/unit',
+            type: 'get',
+            headers: {
+                Authorization: "Covid-19 " + getACCESS_TOKEN()
+            },
+            data:{
+                search
+            },
+            success: function (data) {
+                $('#tblContent').empty();
+                let idx = 1;
+                data.units.forEach(u => {
+                    let tr = '<tr id="' + u._id + '" data-name="' + u.name + '">';
+                    tr += '<td>' + (idx++) + '</td>';
+                    tr += '<td>' + u.name + '</td>';
+                    tr += '<td class="text-right">';
+                    tr += '<button name="dept" class = "btn btn-sm btn-success"><i class="fa fa-bars" aria-hidden="true"></i></button>';                  
+                    tr += '<button  name = "delete" class = "btn btn-sm btn-danger ml-2"><i class="fa fa-trash" aria-hidden="true"></i></button>';
+                    tr += '</td>';
+                    tr += '</tr>';
+                    $('#tblContent').append(tr);
+                })
+
+            }
+        })
+    }
+</script>

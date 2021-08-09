@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập quản trị hệ thống</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../../dist/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../dist/font-awesome/font-awesome.min.css">
+
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../dist/bootstrap/bootstrap.min.js"></script>
+    <script src="../../js/common.js"></script>
+</head>
+
+<body>
+    <div style="max-width:330px; margin: 0 auto; margin-top: 40px;">
+        <div class="container">
+            <div class="card rounded shadow shadow-sm">
+                <div class="card-header">
+                    <h4 class="mb-0">Đăng nhập admin</h4>
+                </div>
+
+                <div class="card-body container">
+                    <div class="form-group">
+                        <label class="text-md" for="username">Username</label>
+
+                        <input type="text" class="form-control" name="username" id="username" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="text-md">Password</label>
+
+                        <input type="password" class="form-control" name="password" id="password" />
+                    </div>
+                    <div class="error_div" id="login_alert">
+                        <label class="error_msg" id="error_content"></label>
+                    </div>
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn btn-sm btn-success" id="btnLogin">
+                            LOGIN
+                        </button>
+                        <button type="submit" class="btn btn-sm btn-dark" id="btnCancel">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            $(document).ready(function () {
+                $("#login_alert").hide();
+                $("#btnLogin").click(function () {
+                    let username = $("#username").val().trim();
+                    let password = $("#password").val();
+
+                    if (username.length > 0 && password.length > 0) {
+                        $.ajax({
+                            url: "/admin/login",
+                            type: "post",
+                            data: {
+                                username,
+                                password,
+                            },
+                            success: function (data, textStatus, xhr) {
+                                if (xhr.status == 200) {
+                                    localStorage.setItem("ACCESS_TOKEN", data.access_token);
+                                    //   // alert the value to check if we got it
+                                    //   alert(localStorage.getItem("test"));
+
+                                    let baseUrl = getBaseUrl();
+                                    $(location).attr('href', baseUrl + '/admin');
+
+                                }
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                $('#login_alert').show();
+                                $('#error_content').text(XMLHttpRequest.responseJSON.msg);
+                                $('#login_alert').hide(5000);
+                            },
+                        });
+                    }
+                });
+            });
+        </script>
+
+</body>
+
+</html>

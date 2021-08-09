@@ -1,0 +1,210 @@
+<div class="row">
+    <div class="col-sm-2">
+        <button class="btn btn-success" id="btnAddNew">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+            Create
+        </button>
+    </div>
+    <!-- phần tìm kiếm -->
+    <div class="offset-sm-6 col-sm-4">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Keyword ..." id="txtSearch" />
+            <div class="input-group-btn">
+                <button class="btn btn-dark" id="btnSearch">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- kết thúc phần tìm kiếm -->
+</div>
+<table class="table table-dark mt-2">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Đơn vị</th>
+            <th scope="col">Username</th>
+            <th scope="col">Họ tên</th>
+            <th scope="col">Điện thoại</th>
+            <th scope="col">Email</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody id="tblContent"></tbody>
+</table>
+
+
+
+<div class="modal" tabindex="-1" role="dialog" id="modalAccount">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-info" id="modalTitle">Thêm mới tài khoản</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body container">
+                <div class="form-group">
+                    <label for="">Đơn vị</label>
+                    <select name="" id="slUnit" class="form-control"></select>
+                </div>
+
+                <div class="form-group">
+                    <input type="text" name="" id="txtUsername" class="form-control" placeholder="Tài khoản">
+                </div>
+
+                <div class="form-group">
+                    <label for="">Mật khẩu (<span class="text-danger">Mặc định: 123</span>)</label>
+                    <input type="password" class="form-control" id="txtPassword" value="123">
+                </div>
+                <div class="form-group">
+                    <label for="">Xác nhận mật khẩu</label>
+                    <input type="password" class="form-control" id="txtConfirmPassword" value="123">
+                </div>
+
+                <div class="form-group">
+                    <input type="text" name="" id="txtFullname" class="form-control" placeholder="Họ tên">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="" id="txtPhone" class="form-control" placeholder="Điện thoại">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="" id="txtEmail" class="form-control" placeholder="Email">
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="btnSubmit">
+                    Xác nhận
+                </button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    var search = "";
+    var userId = "";
+    $(document).ready(function () {
+        LoadAccount();
+        LoadUnit();
+    })
+
+
+
+    $('#btnSearch').click(function(){
+        search = $('#txtSearch').val();
+        LoadAccount();
+    })
+
+    $('#btnAddNew').click(function () {
+        $('#modalTitle').text("Thêm mới tài khoản");
+        $('#modalAccount').modal();
+    })
+
+    $('#btnSubmit').click(function () {
+        let unitId = $('#slUnit option:selected').val();
+        let username = $('#txtUsername').val();
+        let password = $('#txtPassword').val();
+        let confirmPassword = $('#txtConfirmPassword').val();
+        let fullname = $('#txtFullname').val();
+        let phone = $('#txtPhone').val();
+        let email = $('#txtEmail').val();
+        if (username.trim().length == 0) {
+            alert('Vui lòng nhập tài khoản');
+            return;
+        }
+
+        if (password != confirmPassword) {
+            alert('Mật khẩu 2 lần nhập không giống nhau!');
+            return;
+        }
+
+        if (userId.trim().length == 0) {
+            //thêm mới 1 tài khoản
+            $.ajax({
+                url: '/admin/account',
+                type: 'post',
+                headers: {
+                    Authorization: "Covid-19 " + getACCESS_TOKEN()
+                },
+                data: {
+                    unitId,
+                    username,
+                    password,
+                    fullname,
+                    phone,
+                    email
+                }, success: function (data) {
+                    alert(data.msg);
+                    LoadAccount();
+                }, error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseJSON.msg);
+                },
+            })
+        } else {
+            //cập nhật tài khoản hiện có
+        }
+    })
+
+    function LoadUnit() {
+        $.ajax({
+            url: '/admin/unit',
+            type: 'get',
+            headers: {
+                Authorization: "Covid-19 " + getACCESS_TOKEN()
+            },
+            data: {
+                search
+            },
+            success: function (data) {
+                $('#slUnit').empty();
+
+                data.units.forEach(u => {
+                    let option = '<option value="' + u._id + '">' + u.name + '</option>';
+                    $('#slUnit').append(option);
+                })
+
+            }
+        })
+    }
+
+    function LoadAccount() {
+        $.ajax({
+            url: '/admin/account/list',
+            type: 'get',
+            headers: {
+                Authorization: "Covid-19 " + getACCESS_TOKEN()
+            },
+            data: {
+                search
+            },
+            success: function (data) {
+                $('#tblContent').empty();
+                let idx = 1;
+                console.log(data);
+                data.accounts.forEach(acc => {
+                    let tr = '<tr id="' + acc._id + '" data-name="' + acc.fullname + '">';
+                    tr += '<td>' + (idx++) + '</td>';
+                    tr += '<td>' + acc.unit.name + '</td>';
+                    tr += '<td>' + acc.username + '</td>';
+                    tr += '<td>' + acc.fullname + '</td>';
+                    tr += '<td>' + acc.phone + '</td>';
+                    tr += '<td>' + acc.email + '</td>';
+                    tr += '<td></td>';
+                    tr += '</tr>';
+                    $('#tblContent').append(tr);
+                });
+            }
+        })
+    }
+</script>
