@@ -39,6 +39,18 @@ const home_controller = require('./CONTROLLERS/home_controller');
 
 app.use('/', home_controller);
 
+const account_controller = require('./CONTROLLERS/account_controller');
+app.use('/account',account_controller);
+
+
+
+
+
+
+
+
+
+
 
 
 //ADMIN CONTROLLERS
@@ -57,8 +69,29 @@ app.use('/admin/don-vi-hanh-chinh',admin_administrative_unit_controller);
 const admin_dept_controller = require('./CONTROLLERS/admin/dept_controller');
 app.use('/admin/dept',admin_dept_controller);
 
+const admin_district_controller = require('./CONTROLLERS/admin/district_controller');
+app.use('/admin/district',admin_district_controller);
+
+const admin_health_facility_controller = require('./CONTROLLERS/admin/health_facility_controller');
+app.use('/admin/csyt',admin_health_facility_controller);
+
+const admin_priority_object_controller = require('./CONTROLLERS/admin/priority_object_controller');
+app.use('/admin/doi-tuong-uu-tien',admin_priority_object_controller);
+
+
+const admin_nation_controller = require('./CONTROLLERS/admin/nation_controller');
+app.use('/admin/dan-toc',admin_nation_controller);
+
+const admin_province_controller = require('./CONTROLLERS/admin/province_controller');
+app.use('/admin/province',admin_province_controller);
+
+
+
 const admin_unit_controller = require('./CONTROLLERS/admin/unit_controller');
 app.use('/admin/unit',admin_unit_controller);
+
+const admin_ward_controller = require('./CONTROLLERS/admin/ward_controller');
+app.use('/admin/ward',admin_ward_controller);
 
 
 

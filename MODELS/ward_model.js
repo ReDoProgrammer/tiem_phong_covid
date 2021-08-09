@@ -5,11 +5,15 @@ const Schema = mongoose.Schema;
 
 
 const wardSchema = new Schema({
+    code:{
+        type:String,
+        required: [true, 'Vui lòng nhập mã xã phường']
+    },
     name:{
         type:String,
         required: [true, 'Vui lòng nhập tên xã, phường!']
     },
-    district:{
+    dist:{
         type:Schema.Types.ObjectId,
         ref:'district'
     }  

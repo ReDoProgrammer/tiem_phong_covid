@@ -162,7 +162,6 @@
     $(document).on("click", "button[name='deleteDept']", function () {
         let deptId = $(this).closest("tr").attr("id");
         let deptName = $(this).closest("tr").data("dept");
-        console.log({ deptId, deptName });
         var r = confirm(
             "Bạn thực sự muốn xóa " + deptName + "?"
         );

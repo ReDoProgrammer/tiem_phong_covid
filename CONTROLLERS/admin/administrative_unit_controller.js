@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { authenticateToken } = require('../../middlewares/authenticate');
 
-const Nationality = require('../../MODELS/nationality');
+const Nationality = require('../../MODELS/nationality_model');
 
 router.get('/',(req,res)=>{
     res.render('admin/administrative_unit/index', {
@@ -26,8 +26,9 @@ router.get('/list',authenticateToken,(req,res)=>{
 })
 
 router.post('/',authenticateToken,(req,res)=>{
-    let {name} = req.body;
+    let {code,name} = req.body;
     var nat = new Nationality({
+        code,
         name
     });
     nat.save()

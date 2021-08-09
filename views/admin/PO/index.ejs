@@ -1,9 +1,9 @@
 <div class="row">
     <div class="col-sm-2">
-        <input type="text" placeholder="Mã quốc gia" id="txtNatCode" class="form-control">
+        <input type="text" placeholder="Mã nhóm" id="txtPOCode" class="form-control">
     </div>
-    <div class="col-sm-4">
-        <input type="text" placeholder="Tên quốc gia" id="txtNatName" class="form-control">
+    <div class="col-sm-8">
+        <input type="text" placeholder="Nghề nghiệp" id="txtPOName" class="form-control">
     </div>
     <div class="col-sm-2">
         <button class="btn btn-success" id="btnAddNew">
@@ -12,58 +12,42 @@
         </button>
     </div>
 </div>
+
 <table class="table table-dark mt-2">
     <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">Mã quốc gia</th>
-            <th scope="col">Tên quốc gia</th>
+            <th scope="col">Mã nhóm</th>
+            <th scope="col">Nghề nghiệp</th>
             <th scope="col"></th>
         </tr>
     </thead>
     <tbody id="tblContent"></tbody>
 </table>
 
-
-
-
-
 <script>
-    var natId = "";
-    var provId="";
-    var distId = "";
-    var wardId ="";
     $(document).ready(function () {
-        LoadNationalities();
+        LoadPiorityObjects();
     })
-
-
-    $(document).on("click", "button[name='provinces']", function () {
-        natId = $(this).closest("tr").attr("id");
-        LoadProvincesByNatId();
-        $('#modalProvince').modal();
-    })
-
-
-    $(document).on("click", "button[name='deleteNat']", function () {
-        natId = $(this).closest("tr").attr("id");
-        natName = $(this).closest("tr").data("name");
+    $(document).on("click", "button[name='delete']", function () {
+        let poId = $(this).closest("tr").attr("id");
+        let poName = $(this).closest("tr").data("name");
         var r = confirm(
-            "Bạn thực sự muốn xóa quốc tịch " + natName + "?"
+            "Bạn thực sự muốn xóa đối tượng ưu tiên " + poName + "?"
         );
         if (r) {
             $.ajax({
-                url: '/admin/don-vi-hanh-chinh',
+                url: '/admin/doi-tuong-uu-tien',
                 type: 'delete',
                 headers: {
                     Authorization: "Covid-19 " + getACCESS_TOKEN()
                 },
                 data: {
-                    natId
+                    poId
                 },
                 success: function (data) {
                     alert(data.msg);
-                    LoadNationalities();
+                    LoadPiorityObjects();
                 }, error: function (jqXHR, textStatus, errorThrown) {
                     alert(jqXHR.responseJSON.msg);
                 },
@@ -71,16 +55,16 @@
         }
     })
 
-
     $('#btnAddNew').click(function () {
-        let code = $('#txtNatCode').val();
-        let name = $('#txtNatName').val();
-        if (code.trim().length == 0 || name.trim().length == 0) {
-            alert('Vui lòng nhập đầy đủ mã và tên quốc gia!');
+        let code = $('#txtPOCode').val().trim();
+        let name = $('#txtPOName').val().trim();
+        if (code.length == 0 || name.length == 0) {
+            alert('Vui lòng nhập đầy đủ mã nhóm và nghề nghiệp!!');
             return;
         }
+
         $.ajax({
-            url: '/admin/don-vi-hanh-chinh',
+            url: '/admin/doi-tuong-uu-tien',
             type: 'post',
             headers: {
                 Authorization: "Covid-19 " + getACCESS_TOKEN()
@@ -91,46 +75,39 @@
             },
             success: function (data) {
                 alert(data.msg);
-                LoadNationalities();
+                LoadPiorityObjects();
+                $('#txtPOCode').val('');
+                $('#txtPOName').val('');
             }, error: function (jqXHR, textStatus, errorThrown) {
                 alert(jqXHR.responseJSON.msg);
             },
         })
     })
 
-    function LoadNationalities() {
+    function LoadPiorityObjects() {
         $.ajax({
-            url: '/admin/don-vi-hanh-chinh/list',
+            url: '/admin/doi-tuong-uu-tien/list',
             type: 'get',
             headers: {
                 Authorization: "Covid-19 " + getACCESS_TOKEN()
             },
             success: function (data) {
-                let idx = 1;
                 $('#tblContent').empty();
-                data.nats.forEach(n => {
-                    let tr = '<tr id="' + n._id + '" data-name= "' + n.name + '">';
+                let idx = 1;
+                data.pos.forEach(p => {
+                    let tr = '<tr id = "' + p._id + '" data-name="' + p.name + '">';
                     tr += '<td>' + (idx++) + '</td>';
-                    tr += '<td>' + n.code + '</td>';
-                    tr += '<td>' + n.name + '</td>';
+                    tr += '<td>' + p.code + '</td>';
+                    tr += '<td class="font-weight-bold text-info">' + p.name + '</td>';
                     tr += '<td class="text-right">';
-                    tr += '<button name="provinces" class = "btn btn-sm btn-success"><i class="fa fa-bars" aria-hidden="true"></i></button>';
-                    tr += '<button  name = "deleteNat" class = "btn btn-sm btn-danger ml-2"><i class="fa fa-trash" aria-hidden="true"></i></button>';
+                    tr += '<button  name = "delete" class = "btn btn-sm btn-danger ml-2"><i class="fa fa-trash" aria-hidden="true"></i></button>';
                     tr += '</td>';
                     tr += '</tr>';
                     $('#tblContent').append(tr);
                 })
-
             }, error: function (jqXHR, textStatus, errorThrown) {
                 alert(jqXHR.responseJSON.msg);
             },
         })
     }
 </script>
-
-
-
-<%-include('modal_province')%>
-<%-include('modal_district')%>
-
-<%-include('modal_ward')%>

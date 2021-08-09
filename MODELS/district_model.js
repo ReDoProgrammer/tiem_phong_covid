@@ -5,13 +5,17 @@ const Schema = mongoose.Schema;
 
 
 const districtSchema = new Schema({
+    code:{
+        type:String,
+        required: [true, 'Vui lòng nhập mã quận huyện']
+    },
     name:{
         type:String,
-        required: [true, 'Vui lòng nhập tên quốc tịch']
+        required: [true, 'Vui lòng nhập tên quận huyện']
     },
-    provice:{
+    prov:{
         type:Schema.Types.ObjectId,
-        ref:'provice'
+        ref:'province'
     }  
 
 });

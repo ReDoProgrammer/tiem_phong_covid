@@ -1,0 +1,144 @@
+<div class="modal" tabindex="-1" role="dialog" id="modalWard">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-info" id="title_ward">Danh sách phườnng/xã</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body container">
+
+                <div class="row">
+                    <div class="col-sm-3">
+                        <input type="text" name="Name" id="txtWardCode" class="form-control" placeholder="Mã xã phường">
+                    </div>
+                    <div class="col-sm-7">
+                        <input type="text" name="Name" id="txtWardName" class="form-control"
+                            placeholder="Tên xã phường">
+                    </div>
+                    <div class="col-sm-2">
+                        <button class="btn btn-success" id="btnSubmitWard">Xác nhận</button>
+                    </div>
+                </div>
+                <table class="table mt-2">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Mã</th>
+                            <th scope="col">Tên xã phường</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tblWard"></tbody>
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    $('#btnSubmitWard').click(function () {
+        let code = $('#txtWardCode').val().trim();
+        let name = $('#txtWardName').val().trim();
+        if (code.length == 0 || name.length == 0) {
+            alert('Vui lòng nhập đầy đủ mã và tên của xã phường');
+            return;
+        }
+
+        $.ajax({
+            url: '/admin/ward',
+            type: 'post',
+            headers: {
+                Authorization: "Covid-19 " + getACCESS_TOKEN()
+            },
+            data: {
+                code,
+                name,
+                distId
+            },
+            success: function (data) {
+                alert(data.msg);
+                LoadWardsByDistId();
+            }, error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseJSON.msg);
+            },
+        })
+    })
+
+
+    $("#modalWard").on('shown.bs.modal', function (e) {
+        LoadWardsByDistId();
+    })
+
+    $('#modalWard').on('hidden.bs.modal', function () {
+        $('#modalDistrict').modal();
+    })
+
+
+    $(document).on("click", "button[name='deleteWard']", function () {
+        wardId = $(this).closest("tr").attr("id");
+        let wardName = $(this).closest("tr").data('ward');
+        var r = confirm(
+            "Bạn thực sự muốn xóa xã phường " + wardName + "?"
+        );
+        if (r) {
+            $.ajax({
+                url: '/admin/ward',
+                type: 'delete',
+                headers: {
+                    Authorization: "Covid-19 " + getACCESS_TOKEN()
+                },
+                data: {
+                    wardId
+                },
+                success: function (data) {
+                    alert(data.msg);
+                    LoadWardsByDistId();
+                }, error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseJSON.msg);
+                },
+            })
+        }
+    })
+    function LoadWardsByDistId() {
+        $.ajax({
+            url: '/admin/ward',
+            type: 'get',
+            headers: {
+                Authorization: "Covid-19 " + getACCESS_TOKEN()
+            },
+            data: {
+                distId
+            },
+            success: function (data) {
+                $('#tblWard').empty();
+                let idx = 1;
+                data.wards.forEach(w => {
+                    let tr = '<tr id="' + w._id + '" data-ward="' + w.name + '">';
+                    tr += '<td>' + (idx++) + '</td>';
+                    tr += '<td class="font-weight-bold text-danger">' + w.code + '</td>';
+                    tr += '<td>' + w.name + '</td>';
+                    tr += '<td class="text-right">';
+                    tr += '<button  name = "deleteWard" class = "btn btn-sm btn-danger ml-2"><i class="fa fa-trash" aria-hidden="true"></i></button>';
+                    tr += '</td>'
+                    tr += '</tr>';
+                    $('#tblWard').append(tr);
+                })
+            }, error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseJSON.msg);
+            },
+        })
+    }
+
+</script>
