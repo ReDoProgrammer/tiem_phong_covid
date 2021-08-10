@@ -1,0 +1,565 @@
+<div class="modal" tabindex="-1" role="dialog" id="modalVaccination">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-info" id="title_ward"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body container">
+                <div class="row">
+                    <div class="col-sm-4 form-group">
+                        <label class="text-info">Họ tên:</label>
+                        <input type="text" name="" id="txtFullname" class="form-control">
+                    </div>
+                    <div class="col-sm-3 form-group">
+                        <label class="text-info">Giới tính:</label>
+                        <div class="mt-2">
+                            <label class="radio-inline text-info">
+                                <input type="radio" name="optradio" id="rbtMale" checked> Nam
+                            </label>
+                            <label class="radio-inline ml-2 text-primary">
+                                <input type="radio" name="optradio" id="rbtFemale"> Nữ
+                            </label>
+                            <label class="radio-inline ml-2 text-warning">
+                                <input type="radio" name="optradio" id="rbtOther"> K. rõ
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 form-group">
+                        <label class="text-info">Ngày sinh (<span class="text-danger">dd/mm/yyyy</span>):</label>
+                        <div class="input-group date" data-provide="datepicker">
+                            <input type="text" class="form-control" id="txtDOB">
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 form-group">
+                        <label class="text-info">Dân tộc:</label>
+                        <select name="" id="slNation" class="form-control"></select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4 form-group">
+                        <label class="text-info">Email:</label>
+                        <input type="text" name="" id="txtEmail" class="form-control">
+                    </div>
+                    <div class="col-sm-8 form-group">
+                        <label class="text-info">Đối tương Ư.T:</label>
+                        <select name="" id="slPO" class="form-control"></select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-3 form-group">
+                        <label class="text-info">Nghề nghiệp:</label>
+                        <select name="" id="slJob" class="form-control"></select>
+                    </div>
+                    <div class="col-sm-3 form-group">
+                        <label class="text-info">Điện thoại:</label>
+                        <input type="text" name="" id="txtPhone" class="form-control">
+                    </div>
+                    <div class="col-sm-3 form-group">
+                        <label class="text-info">CMND/CCCD:</label>
+                        <input type="text" name="" id="txtIDNumber" class="form-control">
+                    </div>
+                    <div class="col-sm-3 form-group">
+                        <label class="text-info">Thẻ BHYT:</label>
+                        <input type="text" name="" id="txtHINo" class="form-control">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4 form-group">
+                        <label class="text-info">Quốc tịch:</label>
+                        <select name="" id="slNationality" class="form-control"></select>
+                    </div>
+                    <div class="col-sm-4 form-group">
+                        <label class="text-info">Tỉnh thành:</label>
+                        <select name="" id="slProvince" class="form-control"></select>
+                    </div>
+                    <div class="col-sm-4 form-group">
+                        <label class="text-info">Quân/huyện:</label>
+                        <select name="" id="slDistrict" class="form-control"></select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 form-group">
+                        <label class="text-info">Xã/phường/thị trấn:</label>
+                        <select name="" id="slWard" class="form-control"></select>
+                    </div>
+                    <div class="col-sm-8 form-group">
+                        <label class="text-info">Địa chỉ chi tiết:</label>
+                        <input type="text" name="" id="txtDetailAddress" class="form-control">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12 form-group">
+                        <label class="text-info">CSYT Tiêm:</label>
+                        <select name="" id="slHF" class="form-control"></select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 form-group">
+                        <label class="text-info">Ghi chú:</label>
+                        <input type="text" name="" id="txtRemark" class="form-control">
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        Mũi 1
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-6 form-group">
+                                <label class="text-info">Loại vaccin</label>
+                                <select name="" id="slVaccin1" class="form-control vaccin"></select>
+                            </div>
+                            <div class="col-sm-3 form-group">
+                                <label class="text-info">Ngày tiêm (<span
+                                        class="text-danger">dd/mm/yyyy</span>):</label>
+                                <div class="input-group date" data-provide="datepicker">
+                                    <input type="text" class="form-control" id="txtDate1">
+                                    <div class="input-group-addon">
+                                        <span class="glyphicon glyphicon-th"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 form-group">
+                                <label class="text-info">Lô vaccin:</label>
+                                <input type="text" name="" id="txtNo1" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-2">
+                    <div class="card-header">
+                        Mũi 2
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-6 form-group">
+                                <label class="text-info">Loại vaccin</label>
+                                <select name="" id="slVaccin2" class="form-control vaccin"></select>
+                            </div>
+                            <div class="col-sm-3 form-group">
+                                <label class="text-info">Ngày tiêm (<span
+                                        class="text-danger">dd/mm/yyyy</span>):</label>
+                                <div class="input-group date" data-provide="datepicker">
+                                    <input type="text" class="form-control" id="txtDate2">
+                                    <div class="input-group-addon">
+                                        <span class="glyphicon glyphicon-th"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 form-group">
+                                <label class="text-info">Lô vaccin:</label>
+                                <input type="text" name="" id="txtNo2" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="btnSubmit">
+                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                    Xác nhận
+                </button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        LoadPO();
+        LoadJob();
+        LoadNationality();
+        LoadHF();
+        LoadVaccin();
+        LoadNation();
+
+    })
+
+    $.fn.datepicker.defaults.format = "dd/mm/yyyy";
+    $('.datepicker').datepicker({
+        startDate: '-3d'
+    });
+
+
+    $('#btnSubmit').click(function () {
+        let fullname = $('#txtFullname').val().trim();
+        let gender = $('#rbtMale').is(':checked') ? 1 : $('#rbtFemale').is(':checked') ? 2 : 0;
+        let dob = $('#txtDOB').val().trim();
+        let nation = $('#slNation option:selected').val();
+        let email = $('#txtEmail').val();
+        let po = $('#slPO option:selected').val();
+        let job = $('#slJob option:selected').val();
+        let phone = $('#txtPhone').val().trim();
+        let id_number = $('#txtIDNumber').val().trim();
+        let hi_no = $('#txtHINo').val().trim();
+        let nationality = $('#slNationality option:selected').val();
+        let province = $('#slProvince option:selected').val();
+        let district = $('#slDistrict option:selected').val();
+        let ward = $('#slWard option:selected').val();
+        let detail_address = $('#txtDetailAddress').val();
+        let hf = $('#slHF option:selected').val();
+        let remark = $('#txtRemark').val();
+        let vaccin1 = $('#slVaccin1 option:selected').val();
+        let date1 = $('#txtDate1').val().trim();
+        let no1 = $('#txtNo1').val().trim();
+
+        let vaccin2 = $('#slVaccin2 option:selected').val();
+        let date2 = $('#txtDate2').val().trim();
+        let no2 = $('#txtNo2').val().trim();
+
+
+
+        //data validation
+
+        if (fullname.length == 0) {
+            alert('Vui lòng nhập họ tên!');
+            return;
+        }
+
+
+        if (dob.length == 0 || !IsDate(dob)) {
+            alert('Dữ liệu ngày sinh không hợp lệ!');
+            return;
+        }
+
+        if (phone.length < 10) {
+            alert('Số điện thoại không hợp lệ. SĐT tối thiểu là 10 số');
+            return;
+        }
+        if (phone.substr(0, 1) != '0') {
+            alert('Số điện thoại không hợp lệ. SĐT phải bắt đầu bằng số 0');
+            return;
+        }
+
+        if (!(id_number.length == 8 || id_number.length == 9 || id_number.length == 12)) {
+            alert('Dữ liệu CMND/CCCD không hợp lệ. Độ dài phải là 8 hoặc 9 hoặc 12 kí tự!');
+            return;
+        }
+
+        if (hi_no.length != 0 & !(hi_no.length == 10 || hi_no.length == 15)) {
+            alert('Dữ liệu thẻ BHYT không hợp lệ. BHYT phải là 10 hoặc 15 kí tự!');
+            return;
+        }
+
+        if ((date1.length != 0 && date1.length != 10) || (date1.length == 8 && !isDate(date1))) {
+            alert('Dữ liệu ngày tiêm lần 1 không hợp lệ!');
+            return;
+        }
+        if ((date2.length != 0 && date2.length != 10) || (date2.length == 8 && !isDate(date2))) {
+            alert('Dữ liệu ngày tiêm lần 2 không hợp lệ!');
+            return;
+        }
+
+        if (date1.length > 0 && !isDate(date1)) {
+            alert('Dữ liệu ngày tiêm lần 1 không hợp lệ. Vui lòng kiểm tra lại!');
+            return;
+        }
+        if (date1.length > 0 && isDate(date1) && no1.length == 0) {
+            alert('Vui lòng nhập lô vaccin tiêm lần 1!');
+            return;
+        }
+
+
+
+        if (date2.length > 0 && !isDate(date2)) {
+            alert('Dữ liệu ngày tiêm lần 2 không hợp lệ. Vui lòng kiểm tra lại!');
+            return;
+        }
+        if (date2.length > 0 && isDate(date2)) {
+            if (date1.length == 0 || !isDate(date1) || no1.length == 0) {
+                alert('Vui lòng nhập dữ liệu tiêm lần 1 trước');
+                return;
+            }
+            if (no2.length == 0) {
+                alert('Vui lòng nhập dữ lô vaccin tiêm lần 2');
+                return;
+            }
+
+        }
+
+
+        if (new Date(date2) <= new Date(date1)) {
+            alert('Dữ liệu ngày tiêm lần 1 và lần 2 không hợp lệ. Ngày tiêm lần 2 phải lớn hơn ngày tiêm lần 1');
+            return;
+        }
+
+
+        //end data validation
+
+
+
+
+
+
+
+
+
+        $.ajax({
+            url: '/danh-sach-tiem-phong-covid-19',
+            type: 'post',
+            headers: {
+                Authorization: "Covid-19 " + getACCESS_TOKEN()
+            },
+            data: { fullname, gender, dob, nation, email, po, job, phone, id_number, hi_no, nationality, province, district, ward, detail_address, hf, remark, vaccin1, date1, no1, vaccin2, date2, no2 },
+            success: function (data) {
+                alert(data.msg);
+
+                $('#txtFullname').val('');
+                $('#txtDOB').val('');
+                $('#txtEmail').val('');
+                $('#txtPhone').val('');
+                $('#txtIDNumber').val('');
+                $('#txtHINo').val('');
+                $('#txtDetailAddress').val('');
+                $('#txtRemark').val('');
+            }, error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseJSON.msg);
+            },
+        })
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    function LoadNation() {
+        $.ajax({
+            url: '/danh-sach-tiem-phong-covid-19/nation',
+            type: 'get',
+            headers: {
+                Authorization: "Covid-19 " + getACCESS_TOKEN()
+            },
+            success: function (data) {
+                $('#slNation').empty();
+                data.nt.forEach(n => {
+                    let opt = '<option value="' + n._id + '">' + n.name + '</option>';
+                    $('#slNation').append(opt);
+                })
+            }, error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseJSON.msg);
+            },
+        })
+    }
+
+    function LoadVaccin() {
+        $.ajax({
+            url: '/danh-sach-tiem-phong-covid-19/vaccin',
+            type: 'get',
+            headers: {
+                Authorization: "Covid-19 " + getACCESS_TOKEN()
+            },
+            success: function (data) {
+                $('.vaccin').empty();
+                data.vc.forEach(v => {
+                    let opt = '<option value="' + v._id + '">' + v.name + '</option>';
+                    $('.vaccin').append(opt);
+                })
+            }, error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseJSON.msg);
+            },
+        })
+    }
+
+
+    function LoadHF() {
+        $.ajax({
+            url: '/danh-sach-tiem-phong-covid-19/hf',
+            type: 'get',
+            headers: {
+                Authorization: "Covid-19 " + getACCESS_TOKEN()
+            },
+            success: function (data) {
+                $('#slHF').empty();
+                data.hf.forEach(h => {
+                    let opt = '<option value="' + h._id + '">' + h.name + '</option>';
+                    $('#slHF').append(opt);
+                })
+            }, error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseJSON.msg);
+            },
+        })
+    }
+
+
+
+
+
+    $('#slDistrict').on('change', function (e) {
+        LoadWard();
+    });
+
+    $('#slProvince').on('change', function (e) {
+        LoadDistrict();
+    });
+
+    $('#slNationality').on('change', function (e) {
+        LoadProvince();
+    });
+
+
+    function LoadWard() {
+        $.ajax({
+            url: '/danh-sach-tiem-phong-covid-19/ward',
+            type: 'get',
+            headers: {
+                Authorization: "Covid-19 " + getACCESS_TOKEN()
+            },
+            data: {
+                distId: $('#slDistrict option:selected').val()
+            },
+            success: function (data) {
+                $('#slWard').empty();
+                data.wd.forEach(w => {
+                    let opt = '<option value="' + w._id + '">' + w.name + '</option>';
+                    $('#slWard').append(opt);
+                })
+            }, error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseJSON.msg);
+            },
+        })
+    }
+
+    function LoadDistrict() {
+        $.ajax({
+            url: '/danh-sach-tiem-phong-covid-19/district',
+            type: 'get',
+            headers: {
+                Authorization: "Covid-19 " + getACCESS_TOKEN()
+            },
+            data: {
+                provId: $('#slProvince option:selected').val()
+            },
+            success: function (data) {
+                $('#slDistrict').empty();
+                data.dt.forEach(d => {
+                    let opt = '<option value="' + d._id + '">' + d.name + '</option>';
+                    $('#slDistrict').append(opt);
+                })
+                LoadWard();
+            }, error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseJSON.msg);
+            },
+        })
+    }
+
+    function LoadProvince() {
+        $.ajax({
+            url: '/danh-sach-tiem-phong-covid-19/province',
+            type: 'get',
+            headers: {
+                Authorization: "Covid-19 " + getACCESS_TOKEN()
+            },
+            data: {
+                natId: $('#slNationality option:selected').val()
+            },
+            success: function (data) {
+                $('#slProvince').empty();
+                data.pv.forEach(p => {
+                    let opt = '<option value="' + p._id + '">' + p.name + '</option>';
+                    $('#slProvince').append(opt);
+
+                })
+                LoadDistrict();
+            }, error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseJSON.msg);
+            },
+        })
+    }
+
+    function LoadNationality() {
+        $.ajax({
+            url: '/danh-sach-tiem-phong-covid-19/nationality',
+            type: 'get',
+            headers: {
+                Authorization: "Covid-19 " + getACCESS_TOKEN()
+            },
+            success: function (data) {
+                $('#slNationality').empty();
+                data.nt.forEach(n => {
+                    let opt = '<option value="' + n._id + '">' + n.name + '</option>';
+                    $('#slNationality').append(opt);
+                })
+                LoadProvince();
+            }, error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseJSON.msg);
+            },
+        })
+    }
+
+
+
+    function LoadJob() {
+        $.ajax({
+            url: '/danh-sach-tiem-phong-covid-19/job',
+            type: 'get',
+            headers: {
+                Authorization: "Covid-19 " + getACCESS_TOKEN()
+            },
+            success: function (data) {
+                $('#slJob').empty();
+                data.jb.forEach(j => {
+                    let opt = '<option value="' + j._id + '">' + j.name + '</option>';
+                    $('#slJob').append(opt);
+                })
+            }, error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseJSON.msg);
+            },
+        })
+    }
+
+
+
+    function LoadPO() {
+        $.ajax({
+            url: '/danh-sach-tiem-phong-covid-19/po',
+            type: 'get',
+            headers: {
+                Authorization: "Covid-19 " + getACCESS_TOKEN()
+            },
+            success: function (data) {
+                $('#slPO').empty();
+                data.po.forEach(p => {
+                    let opt = '<option value="' + p._id + '">' + p.name + '</option>';
+                    $('#slPO').append(opt);
+                })
+            }, error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseJSON.msg);
+            },
+        })
+    }
+</script>

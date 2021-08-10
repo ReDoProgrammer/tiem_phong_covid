@@ -27,61 +27,70 @@
 <div class="modal" tabindex="-1" role="dialog" id="modalLogin">
   <div class="modal-dialog" role="document">
     <div class="modal-content card text-white bg-info mb-3">
-      <div class="modal-header card-header">      
+      <div class="modal-header card-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body container card-body bt-white">
-          <div class="form-group">
-            <label for="">Tài khoản:</label>
-            <input type="text" name="" id="txtUsername" class="form-control">
-          </div>
+        <div class="form-group">
+          <label for="">Tài khoản:</label>
+          <input type="text" name="" id="txtUsername" class="form-control">
+        </div>
 
-          <div class="form-group">
-            <label for="">Mật khẩu:</label>
-            <input type="password" name="" id="txtPassword" class="form-control">
-          </div>
-          <div class="form-group text-center">
-            <button class="btn btn-info border border-light" id="btnSubmitLogin">Đăng nhập</button>
-            <button class="btn btn-secondary ml-10  border border-light" id="btnCancel">Hủy</button>
-          </div>
+        <div class="form-group">
+          <label for="">Mật khẩu:</label>
+          <input type="password" name="" id="txtPassword" class="form-control">
+        </div>
+        <div id="login_message">
+          <label class="text-danger font-weight-bold" id="error_message"></label>
+        </div>
+        <div class="form-group text-center">
+          <button class="btn btn-info border border-light" id="btnSubmitLogin">Đăng nhập</button>
+          <button class="btn btn-secondary ml-10  border border-light" id="btnCancel">Hủy</button>
+        </div>
       </div>
 
-     
+
     </div>
   </div>
 </div>
 
-<script src="../../js/common.js"></script>    
+<script src="../../js/common.js"></script>
 
 <script>
-
+  $(document).ready(function(){
+    $('#login_message').hide();
+  })
   $('#btnLogin').click(function (e) {
     e.preventDefault();
     $('#modalLogin').modal();
   })
 
-  $('#btnSubmitLogin').click(function(){
-      let username = $('#txtUsername').val().trim();
-      let password = $('#txtPassword').val().trim();
-      if(username.length == 0 || password.length == 0){
-        alert('Vui lòng nhập đầy đủ tài khoản và mật khẩu');
-        return;
-      }
-      $.ajax({
-        url:'/account/login',
-        type:'post',
-        data:{
-          username,
-          password
-        },
-        success:function(data){
-          localStorage.setItem("ACCESS_TOKEN", data.access_token);      
-          let baseUrl = getBaseUrl();
-          $(location).attr('href', baseUrl + '/');
-        }
-      })
+  $('#btnSubmitLogin').click(function () {
+    let username = $('#txtUsername').val().trim();
+    let password = $('#txtPassword').val().trim();
+    if (username.length == 0 || password.length == 0) {
+      alert('Vui lòng nhập đầy đủ tài khoản và mật khẩu');
+      return;
+    }
+    $.ajax({
+      url: '/account/login',
+      type: 'post',
+      data: {
+        username,
+        password
+      },
+      success: function (data) {
+        localStorage.setItem("ACCESS_TOKEN", data.access_token);
+        let baseUrl = getBaseUrl();
+        $(location).attr('href', baseUrl + '/danh-sach-tiem-phong-covid-19');
+      }, error: function (XMLHttpRequest, textStatus, errorThrown) {
+        $('#login_message').show();
+        $('#error_message').text(XMLHttpRequest.responseJSON.msg);
+        $('#login_message').hide(5000);
+      },
+    })
   })
 
 

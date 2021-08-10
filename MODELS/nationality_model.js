@@ -12,8 +12,7 @@ const nationalitySchema = new Schema({
     name:{
         type:String,
         required: [true, 'Vui lòng nhập tên quốc tịch']
-    }  
-
+    }
 });
 
 

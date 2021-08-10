@@ -42,6 +42,9 @@ app.use('/', home_controller);
 const account_controller = require('./CONTROLLERS/account_controller');
 app.use('/account',account_controller);
 
+const vaccination_controller = require('./CONTROLLERS/vaccination_controller');
+app.use('/danh-sach-tiem-phong-covid-19',vaccination_controller);
+
 
 
 
@@ -75,6 +78,9 @@ app.use('/admin/district',admin_district_controller);
 const admin_health_facility_controller = require('./CONTROLLERS/admin/health_facility_controller');
 app.use('/admin/csyt',admin_health_facility_controller);
 
+const admin_job_controller = require('./CONTROLLERS/admin/job_controller');
+app.use('/admin/job',admin_job_controller);
+
 const admin_priority_object_controller = require('./CONTROLLERS/admin/priority_object_controller');
 app.use('/admin/doi-tuong-uu-tien',admin_priority_object_controller);
 
@@ -89,6 +95,9 @@ app.use('/admin/province',admin_province_controller);
 
 const admin_unit_controller = require('./CONTROLLERS/admin/unit_controller');
 app.use('/admin/unit',admin_unit_controller);
+
+const admin_vaccin_controller = require('./CONTROLLERS/admin/vaccin_controller');
+app.use('/admin/vaccin',admin_vaccin_controller);
 
 const admin_ward_controller = require('./CONTROLLERS/admin/ward_controller');
 app.use('/admin/ward',admin_ward_controller);

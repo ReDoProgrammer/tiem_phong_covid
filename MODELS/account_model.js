@@ -33,6 +33,10 @@ const accountSchema = new Schema({
     is_admin:{
         type:Boolean,
         default:false
+    },
+    created_by:{
+        type:Schema.Types.ObjectId,
+        ref:'account'
     }
 });
 
