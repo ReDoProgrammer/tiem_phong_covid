@@ -68,18 +68,22 @@
   <script>
     var search = "";
     $(document).ready(function () {
-      LoadEV();     
+      LoadCV();
     })
     $('#btnAddNew').click(function () {
       $('#modalVaccination').modal();
     })
 
-    $('#btnSearch').click(function(){
+    $("#modalVaccination").on("hidden.bs.modal", function () {
+      LoadCV();
+    });
+
+    $('#btnSearch').click(function () {
       search = $('#txtSearch').val();
-      LoadEV();
+      LoadCV();
     })
 
-    function LoadEV() {
+    function LoadCV() {
       $.ajax({
         url: '/danh-sach-tiem-phong-covid-19/list',
         type: 'get',
@@ -92,13 +96,12 @@
         success: function (data) {
           let idx = 1;
           $('#tblData').empty();
-          console.log(data);
           data.cv.forEach(c => {
             let tr = '<tr id="' + c._id + '">';
-            tr += '<td class="text-nowrap text-right">' +( idx<10? '0'+(idx++):(idx++) )+ '</td>';
+            tr += '<td class="text-nowrap text-right">' + (idx < 10 ? '0' + (idx++) : (idx++)) + '</td>';
             tr += '<td class="text-nowrap">' + UppercaseEachFirstLetter(c.fullname) + '</td>';
             tr += '<td class="text-nowrap">';
-            tr+=   c.gender == 1?'Nam':(c.gender == 2?'Nữ':'Không rõ');
+            tr += c.gender == 1 ? 'Nam' : (c.gender == 2 ? 'Nữ' : 'Không rõ');
             tr += '</td>';
             tr += '<td class="text-nowrap">' + c.dob + '</td>';
             tr += '<td class="text-nowrap">' + c.email + '</td>';
@@ -152,36 +155,20 @@
     }
   </script>
 
-<style>
-  #data_center{
-    display: inline-block;
-    overflow-y: scroll;
-    max-height:550px;
-  }
-  table {
-  text-align: left;
-  position: relative;
-}
+  <style>
+    #data_center {
+      display: inline-block;
+      overflow-y: scroll;
+      max-height: 550px;
+    }
 
-thead {  
-  position: sticky;
-  top: 0;
-}
+    table {
+      text-align: left;
+      position: relative;
+    }
 
-.table > tbody > tr > td:nth-child(1) {
-            position: absolute;
-            display: inline-block;
-            background-color: #D4D4D4;
-            width:40px;
-            /*height: 100%;*/
-        }
-
-        .table > tbody > tr > td:nth-child(2) {
-            position: absolute;
-            display: inline-block;
-            background-color: #D4D4D4;
-            width:80px;
-            left:40px;
-            /*height: 100%;*/
-        }
-</style>
+    thead {
+      position: sticky;
+      top: 0;
+    }
+  </style>

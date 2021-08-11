@@ -1,5 +1,6 @@
-<footer id="footer" class="bg-secondary">
-    <h2 class="text-center mt-20 mb-20 font-weight-bold text-warning">TRUNG TÂM Y TẾ HUYỆN CHƯ SÊ</h2>
+<footer id="footer" class="bg-secondary text-center">
+  <h2 class="text-center mt-20 mb-20 font-weight-bold text-warning text-uppercase" id="unit_name">TRUNG TÂM Y TẾ HUYỆN CHƯ SÊ</h2>
+  <h3 class="text-white text-uppercase" id="user_fullname"></h3>
 </footer>
 
 <style>
@@ -7,8 +8,25 @@
     position: fixed;
     bottom: 0;
     width: 100%;
-}
+  }
 </style>
 
 
 <script src="/dist/bootstrap/bootstrap.min.js"></script>
+<script>
+  $(document).ready(_ => {
+    $.ajax({
+      url: '/profile',
+      type: 'get',
+      headers: {
+        Authorization: "Covid-19 " + getACCESS_TOKEN()
+      },
+      success: function (data) {
+        console.log(data);
+        $('#unit_name').text(data.user.unit.name);
+        $('#user_fullname').text(UppercaseEachFirstLetter(data.user.fullname));
+      }
+
+    })
+  })
+</script>

@@ -44,7 +44,6 @@ router.get('/list',authenticateToken,(req,res)=>{
     .populate('created_by','-_id fullname')
     .exec()
     .then(cv=>{
-        console.log(cv);
        return res.status(200).json({
            msg:'Load danh sách tiêm chủng Covid-19 thành công!',
            cv:cv
