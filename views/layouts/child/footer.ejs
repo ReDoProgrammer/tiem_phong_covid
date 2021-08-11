@@ -1,5 +1,6 @@
 <footer id="footer" class="bg-secondary text-center">
-  <h2 class="text-center mt-20 mb-20 font-weight-bold text-warning text-uppercase" id="unit_name">TRUNG TÂM Y TẾ HUYỆN CHƯ SÊ</h2>
+  <h2 class="text-center mt-20 mb-20 font-weight-bold text-warning text-uppercase" id="unit_name">TRUNG TÂM Y TẾ HUYỆN
+    CHƯ SÊ</h2>
   <h3 class="text-white text-uppercase" id="user_fullname"></h3>
 </footer>
 
@@ -21,10 +22,15 @@
       headers: {
         Authorization: "Covid-19 " + getACCESS_TOKEN()
       },
-      success: function (data) {      
+      success: function (data) {
         $('#unit_name').text(data.user.unit.name);
         $('#user_fullname').text(UppercaseEachFirstLetter(data.user.fullname));
-      }
+      },
+      error: function (XMLHttpRequest, textStatus, errorThrown) {
+        // let baseUrl = getBaseUrl();
+        // $(location).attr('href', baseUrl + '/');
+      },
+
 
     })
   })

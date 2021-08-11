@@ -34,6 +34,10 @@ const accountSchema = new Schema({
         type:Boolean,
         default:false
     },
+    is_mod:{
+        type:Boolean,
+        default:false
+    },
     created_by:{
         type:Schema.Types.ObjectId,
         ref:'account'

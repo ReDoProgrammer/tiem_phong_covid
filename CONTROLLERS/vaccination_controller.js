@@ -99,39 +99,49 @@ router.delete('/',authenticateToken,(req,res)=>{
 router.get('/list',authenticateToken,(req,res)=>{
     let {search} = req.query;
     let user_id = req.user;
-    CV.find({
-        $or: [
-            { fullname: { "$regex": search, "$options": "i" } },
-            { phone: { "$regex": search, "$options": "i" } },
-            { email: { "$regex": search, "$options": "i" } },
-            { id_number: { "$regex": search, "$options": "i" } },
-            { hi_no: { "$regex": search, "$options": "i" } }           
-          ]
-    })
-    .populate('nation_id','-_id name')
-    .populate('po_id','-_id name')
-    .populate('job_id','-_id name')
-    .populate('nationality_id','-_id name')
-    .populate('prov_id','-_id name')
-    .populate('dist_id','-_id name')
-    .populate('ward_id','-_id name')
-    .populate('hf_id','-_id name')
-    .populate('vaccin1','-_id name')
-    .populate('vaccin2','-_id name')
-    .populate('created_by','fullname')
-    .exec()
-    .then(cv=>{
-       return res.status(200).json({
-           msg:'Load danh sách tiêm chủng Covid-19 thành công!',
-           cv:cv,
-           user_id
-       })
+    Account.findById(user_id)
+    .then(usr=>{
+        CV.find({
+            $or: [
+                { fullname: { "$regex": search, "$options": "i" } },
+                { phone: { "$regex": search, "$options": "i" } },
+                { email: { "$regex": search, "$options": "i" } },
+                { id_number: { "$regex": search, "$options": "i" } },
+                { hi_no: { "$regex": search, "$options": "i" } }           
+              ],
+              unit_id:usr.unit
+        })
+        .populate('nation_id','-_id name')
+        .populate('po_id','-_id name')
+        .populate('job_id','-_id name')
+        .populate('nationality_id','-_id name')
+        .populate('prov_id','-_id name')
+        .populate('dist_id','-_id name')
+        .populate('ward_id','-_id name')
+        .populate('hf_id','-_id name')
+        .populate('vaccin1','-_id name')
+        .populate('vaccin2','-_id name')
+        .populate('created_by','fullname')
+        .exec()
+        .then(cv=>{
+           return res.status(200).json({
+               msg:'Load danh sách tiêm chủng Covid-19 thành công!',
+               cv:cv,
+               user_id
+           })
+        })
+        .catch(err=>{
+            return res.status(500).json({
+                msg:`Load danh sách tiêm chủng Covid-19 thất bại. Lỗi: ${new Error(err.message)}`
+            })
+        })
     })
     .catch(err=>{
         return res.status(500).json({
-            msg:`Load danh sách tiêm chủng Covid-19 thất bại. Lỗi: ${new Error(err.message)}`
+            msg:`Lỗi kiểm tra tài khoản: ${new Error(err.message)}`
         })
     })
+   
 })
 
 
