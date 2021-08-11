@@ -21,8 +21,7 @@
       headers: {
         Authorization: "Covid-19 " + getACCESS_TOKEN()
       },
-      success: function (data) {
-        console.log(data);
+      success: function (data) {      
         $('#unit_name').text(data.user.unit.name);
         $('#user_fullname').text(UppercaseEachFirstLetter(data.user.fullname));
       }

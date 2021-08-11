@@ -20,8 +20,25 @@ router.get('/', (req, res) => {
 });
 
 
+router.delete('/',authenticateToken,(req,res)=>{
+    let {cvId} = req.body;
+    CV.findOneAndDelete({_id:cvId})
+    .then(_=>{
+        return res.status(200).json({
+            msg:'Xóa hồ sơ thành công!'
+        })
+    })
+    .catch(err=>{
+        return res.status(500).json({
+            msg:`Xóa hồ sơ thất bại. Lỗi: ${new Error(err.message)}`
+        })
+    })
+})
+
+
 router.get('/list',authenticateToken,(req,res)=>{
     let {search} = req.query;
+    let user_id = req.user;
     CV.find({
         $or: [
             { fullname: { "$regex": search, "$options": "i" } },
@@ -41,12 +58,13 @@ router.get('/list',authenticateToken,(req,res)=>{
     .populate('hf_id','-_id name')
     .populate('vaccin1','-_id name')
     .populate('vaccin2','-_id name')
-    .populate('created_by','-_id fullname')
+    .populate('created_by','fullname')
     .exec()
     .then(cv=>{
        return res.status(200).json({
            msg:'Load danh sách tiêm chủng Covid-19 thành công!',
-           cv:cv
+           cv:cv,
+           user_id
        })
     })
     .catch(err=>{
@@ -122,13 +140,6 @@ router.post('/', authenticateToken, (req, res) => {
         })
 
 })
-
-
-
-
-
-
-
 
 
 router.get('/nation', authenticateToken, (req, res) => {

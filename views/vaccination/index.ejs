@@ -41,6 +41,7 @@
         <th colspan="3" class="text-center font-weight-bold text-center">Mũi 1</th>
         <th colspan="3" class="text-center font-weight-bold text-center">Mũi 2</th>
         <th rowspan="2" class="align-middle font-weight-bold text-center">Người nhập</th>
+        <th rowspan="2" class="align-middle font-weight-bold text-center"></th>
       </tr>
       <tr>
         <th class="text-center">Loại vaccin</th>
@@ -70,6 +71,35 @@
     $(document).ready(function () {
       LoadCV();
     })
+
+    $(document).on("click", "button[name='delete']", function () {
+      let cvId = $(this).closest("tr").attr("id");
+      let cvName = $(this).closest("tr").data("name");
+      var r = confirm(
+        "Bạn thực sự muốn xóa hồ sơ của " + cvName + "?"
+      );
+      if (r) {
+        $.ajax({
+          url: '/danh-sach-tiem-phong-covid-19',
+          type: 'delete',
+          headers: {
+            Authorization: "Covid-19 " + getACCESS_TOKEN()
+          },
+          data: {
+            cvId
+          },
+          success: function (data) {
+            alert(data.msg);
+            LoadCV();
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            alert(jqXHR.responseJSON.msg);
+          },
+
+        })
+      }
+    })
+
     $('#btnAddNew').click(function () {
       $('#modalVaccination').modal();
     })
@@ -97,7 +127,7 @@
           let idx = 1;
           $('#tblData').empty();
           data.cv.forEach(c => {
-            let tr = '<tr id="' + c._id + '">';
+            let tr = '<tr id="' + c._id + '" data-name="' + UppercaseEachFirstLetter(c.fullname) + '">';
             tr += '<td class="text-nowrap text-right">' + (idx < 10 ? '0' + (idx++) : (idx++)) + '</td>';
             tr += '<td class="text-nowrap">' + UppercaseEachFirstLetter(c.fullname) + '</td>';
             tr += '<td class="text-nowrap">';
@@ -143,7 +173,11 @@
 
 
             tr += '<td class="text-nowrap">' + c.created_by.fullname + '</td>';
-
+            tr += '<td class="text-right">';
+            if (c.created_by._id == data.user_id) {
+              tr += '<button  name = "delete" class = "btn btn-sm btn-danger ml-2"><i class="fa fa-trash" aria-hidden="true"></i></button>';
+            }
+            tr += '</td>';
             tr += '</tr>';
             $('#tblData').append(tr);
           })

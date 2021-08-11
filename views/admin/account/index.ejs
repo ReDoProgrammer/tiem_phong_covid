@@ -191,7 +191,6 @@
             success: function (data) {
                 $('#tblContent').empty();
                 let idx = 1;
-                console.log(data);
                 data.accounts.forEach(acc => {
                     let tr = '<tr id="' + acc._id + '" data-name="' + acc.fullname + '">';
                     tr += '<td>' + (idx++) + '</td>';
