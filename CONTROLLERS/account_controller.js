@@ -5,7 +5,6 @@ const jwt = require("jsonwebtoken");
 
 router.post('/login', (req, res) => {
     const { username, password } = req.body;
-console.log({ username, password });
     Account
     .findOne({ username: username, password: password })
     .then((user) => {

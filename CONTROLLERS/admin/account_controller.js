@@ -93,7 +93,8 @@ router.post('/',authenticateToken,(req,res)=>{
                 password,
                 fullname,
                 phone,
-                email
+                email,
+                is_mod:true
             })
             acc.save()
             .then(_=>{
