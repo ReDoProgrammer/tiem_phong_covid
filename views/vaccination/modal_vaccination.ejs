@@ -309,33 +309,50 @@
 
 
 
+        if (cvId.trim().length == 0) {
+            $.ajax({
+                url: '/danh-sach-tiem-phong-covid-19',
+                type: 'post',
+                headers: {
+                    Authorization: "Covid-19 " + getACCESS_TOKEN()
+                },
+                data: { fullname, gender, dob, nation, email, po, job, phone, id_number, hi_no, nationality, province, district, ward, detail_address, hf, remark, vaccin1, date1, no1, vaccin2, date2, no2 },
+                success: function (data) {
+                    alert(data.msg);
+
+                    $('#txtFullname').val('');
+                    $('#txtDOB').val('');
+                    $('#txtEmail').val('');
+                    $('#txtPhone').val('');
+                    $('#txtIDNumber').val('');
+                    $('#txtHINo').val('');
+                    $('#txtDetailAddress').val('');
+                    $('#txtRemark').val('');
+                }, error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseJSON.msg);
+                },
+            })
+        } else {
+            $.ajax({
+                url: '/danh-sach-tiem-phong-covid-19',
+                type: 'put',
+                headers: {
+                    Authorization: "Covid-19 " + getACCESS_TOKEN()
+                },
+                data: { cvId,fullname, gender, dob, nation, email, po, job, phone, id_number, hi_no, nationality, province, district, ward, detail_address, hf, remark, vaccin1, date1, no1, vaccin2, date2, no2 },
+                success: function (data) {
+                    alert(data.msg);
+                    $('#modalVaccination').modal('hide');
+                }, error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseJSON.msg);
+                },
+            })
+        }
 
 
 
 
 
-        $.ajax({
-            url: '/danh-sach-tiem-phong-covid-19',
-            type: 'post',
-            headers: {
-                Authorization: "Covid-19 " + getACCESS_TOKEN()
-            },
-            data: { fullname, gender, dob, nation, email, po, job, phone, id_number, hi_no, nationality, province, district, ward, detail_address, hf, remark, vaccin1, date1, no1, vaccin2, date2, no2 },
-            success: function (data) {
-                alert(data.msg);
-
-                $('#txtFullname').val('');
-                $('#txtDOB').val('');
-                $('#txtEmail').val('');
-                $('#txtPhone').val('');
-                $('#txtIDNumber').val('');
-                $('#txtHINo').val('');
-                $('#txtDetailAddress').val('');
-                $('#txtRemark').val('');
-            }, error: function (jqXHR, textStatus, errorThrown) {
-                alert(jqXHR.responseJSON.msg);
-            },
-        })
     })
 
 

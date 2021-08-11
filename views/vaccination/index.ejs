@@ -41,6 +41,7 @@
         <th colspan="3" class="text-center font-weight-bold text-center">Mũi 1</th>
         <th colspan="3" class="text-center font-weight-bold text-center">Mũi 2</th>
         <th rowspan="2" class="align-middle font-weight-bold text-center">Người nhập</th>
+        <th rowspan="2" class="align-middle font-weight-bold text-center">Chú thích lỗi</th>
         <th rowspan="2" class="align-middle font-weight-bold text-center"></th>
       </tr>
       <tr>
@@ -68,9 +69,81 @@
 
   <script>
     var search = "";
+    var cvId = "";
     $(document).ready(function () {
       LoadCV();
     })
+
+
+    $('#modalVaccination').on('shown.bs.modal', function (e) {
+      $('#txtFullname').val('');
+      $('#txtDOB').val('');
+      $('#txtEmail').val('');
+      $('#txtPhone').val('');
+      $('#txtIDNumber').val('');
+      $('#txtHINo').val('');
+      $('#txtDetailAddress').val('');
+      $('#txtRemark').val('');
+    });
+
+    $(document).on("click", "button[name='update']", function () {
+       cvId = $(this).closest("tr").attr("id");
+
+      $.ajax({
+        url: '/danh-sach-tiem-phong-covid-19/detail',
+        type: 'get',
+        headers: {
+          Authorization: "Covid-19 " + getACCESS_TOKEN()
+        },
+        data: {
+          cvId
+        },
+        success: function (data) {
+          console.log(data);
+          $('#modalVaccination').modal();
+
+          $('#txtFullname').val(UppercaseEachFirstLetter(data.cv.fullname));
+          $('#txtDOB').val(data.cv.dob);
+          $('#txtEmail').val(data.cv.email);
+          $('#txtPhone').val(data.cv.phone);
+          $('#txtIDNumber').val(data.cv.id_number);
+          $('#txtHINo').val(data.cv.hi_no);
+          $('#txtDetailAddress').val(data.cv.detail_address);
+          $('#txtRemark').val(data.cv.remark);
+          $('#txtDate1').val(data.cv.date1);
+          $('#txtDate2').val(data.cv.date2);
+          $('#txtNo1').val(data.cv.no1);
+          $('#txtNo2').val(data.cv.no2);
+
+          $('#slNationality').val(data.cv.nationality_id);
+          $('#slProvince').val(data.cv.prov_id);
+          $('#slDistrict').val(data.cv.dist_id);
+          $('#slWard').val(data.cv.ward_id);
+          $('#slNation').val(data.cv.nation_id);
+          $('#slPO').val(data.cv.po_id);
+          $('#slJob').val(data.cv.job_id);
+          $('#slHF').val(data.cv.hf_id);
+          $('#slVaccin1').val(data.cv.vaccin1);
+          $('#slVaccin2').val(data.cv.vaccin2);
+
+          if (data.cv.gender == 1) {
+            $('#rbtMale').prop('checked', true);
+          } else {
+            if (data.cv.gender == 2) {
+              $('#rbtFemale').prop('checked', true);
+            } else {
+              $('#rbtOther').prop('checked', true);
+            }
+          }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+          alert(jqXHR.responseJSON.msg);
+        },
+
+      })
+
+    })
+
 
     $(document).on("click", "button[name='delete']", function () {
       let cvId = $(this).closest("tr").attr("id");
@@ -101,6 +174,7 @@
     })
 
     $('#btnAddNew').click(function () {
+      cvId = "";
       $('#modalVaccination').modal();
     })
 
@@ -128,6 +202,9 @@
           $('#tblData').empty();
           data.cv.forEach(c => {
             let tr = '<tr id="' + c._id + '" data-name="' + UppercaseEachFirstLetter(c.fullname) + '">';
+            if (!c.is_correct) {
+              tr = '<tr id="' + c._id + '" data-name="' + UppercaseEachFirstLetter(c.fullname) + '" class="bg-warning">';
+            }
             tr += '<td class="text-nowrap text-right">' + (idx < 10 ? '0' + (idx++) : (idx++)) + '</td>';
             tr += '<td class="text-nowrap">' + UppercaseEachFirstLetter(c.fullname) + '</td>';
             tr += '<td class="text-nowrap">';
@@ -173,8 +250,10 @@
 
 
             tr += '<td class="text-nowrap">' + c.created_by.fullname + '</td>';
-            tr += '<td class="text-right">';
+            tr += '<td class="text-nowrap">' + c.error_note + '</td>';
+            tr += '<td class="text-right text-nowrap">';
             if (c.created_by._id == data.user_id) {
+              tr += '<button  name = "update" class = "btn btn-sm btn-warning ml-2"><i class="fa fa-refresh" aria-hidden="true"></i></button>';
               tr += '<button  name = "delete" class = "btn btn-sm btn-danger ml-2"><i class="fa fa-trash" aria-hidden="true"></i></button>';
             }
             tr += '</td>';

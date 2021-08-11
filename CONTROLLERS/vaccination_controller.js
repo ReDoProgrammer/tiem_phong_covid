@@ -20,6 +20,66 @@ router.get('/', (req, res) => {
 });
 
 
+router.put('/', authenticateToken, (req, res) => {
+    let { cvId,fullname, gender, dob, nation, email, po, job, phone, id_number, hi_no, nationality, province, district, ward, detail_address, hf, remark, vaccin1, date1, no1, vaccin2, date2, no2 } = req.body; console.log({ fullname, gender, dob, nation, email, po, job, phone, id_number, hi_no, nationality, province, district, ward, detail_address, hf, remark, vaccin1, date1, no1, vaccin2, date2, no2 });
+
+
+    CV.findOneAndUpdate({_id:cvId},{
+        fullname,
+        gender,
+        dob,
+        nation_id: nation,
+        email,
+        po_id: po,
+        job_id: job,
+        phone,
+        id_number,
+        hi_no,
+        nationality_id: nationality,
+        prov_id: province,
+        dist_id: district,
+        ward_id: ward,
+        detail_address,
+        hf_id: hf,
+        remark,
+        vaccin1,
+        date1,
+        no1,
+        vaccin2,
+        date2,
+        no2,
+        is_correct:true,
+        error_note:''       
+    })
+    .exec()
+    .then(_=>{
+        return res.status(200).json({
+            msg:'Cập nhật hồ sơ thành công!'
+        })
+    })
+    .catch(err=>{
+        return res.status(500).json({
+            msg:`Cập nhật hồ sơ thất bại. Lỗi: ${new Error(err.message)}`
+        })
+    })    
+
+})
+
+
+router.get('/detail',authenticateToken,(req,res)=>{
+    let {cvId} = req.query;
+    CV.findById(cvId)
+    .then(cv=>{
+       return res.status(200).json({
+           msg:'Load thông tin tiêm phòng Covid-19 thành công!',
+           cv
+       })
+    })
+    .catch(err=>{
+        console.log(err.message);
+    })
+})
+
 router.delete('/',authenticateToken,(req,res)=>{
     let {cvId} = req.body;
     CV.findOneAndDelete({_id:cvId})

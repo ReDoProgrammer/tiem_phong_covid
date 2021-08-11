@@ -89,6 +89,14 @@ const citizenVaccinatonSchema = new Schema({
     no2:{
         type:String
     },
+    is_correct:{
+        type:Boolean,
+        default:true
+    },
+    error_note:{
+        type:String,
+        default:''
+    },
     created_by:{
         type:Schema.Types.ObjectId,
         ref:'account'
