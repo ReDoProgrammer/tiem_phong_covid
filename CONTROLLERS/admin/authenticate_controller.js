@@ -20,7 +20,10 @@ router.post('/login', (req, res) => {
             } else {
                 if(user.is_admin){
                     const access_token = jwt.sign(
-                        user._id.toString(),                      
+                        {
+                            user_id:user._id.toString(),       
+                            is_admin:user.is_admin
+                        },               
                         process.env.ACCESS_TOKEN_SECRET
                     );
                     return res.status(200).json({

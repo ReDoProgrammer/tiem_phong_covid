@@ -69,6 +69,7 @@ router.get('/list',authenticateToken,(req,res)=>{
     .populate('unit','-_id name')
     .exec()
     .then(accounts=>{
+        
         return res.status(200).json({
             msg:'Load danh sách tài khoản thành công!',
             accounts:accounts
@@ -83,18 +84,20 @@ router.get('/list',authenticateToken,(req,res)=>{
 
 
 router.post('/',authenticateToken,(req,res)=>{
-    let {unitId,username,password,fullname,phone,email} = req.body;
+    let {unitId,deptId,username,password,fullname,phone,email} = req.body;
     Account.countDocuments({username})
     .then(count=>{
         if(count == 0){
             let acc = new Account({
                 unit:unitId,
+                dept:deptId,
                 username,
                 password,
                 fullname,
                 phone,
                 email,
-                is_mod:true
+                is_mod:true,
+                created_by:req.user.user_id
             })
             acc.save()
             .then(_=>{

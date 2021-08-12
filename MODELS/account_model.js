@@ -30,6 +30,10 @@ const accountSchema = new Schema({
         type:Schema.Types.ObjectId,
         ref:'unit'
     },
+    dept:{
+        type:Schema.Types.ObjectId,
+        ref:'dept'
+    },
     is_admin:{
         type:Boolean,
         default:false

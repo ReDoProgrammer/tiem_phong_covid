@@ -75,6 +75,9 @@ app.use('/admin/dept',admin_dept_controller);
 const admin_district_controller = require('./CONTROLLERS/admin/district_controller');
 app.use('/admin/district',admin_district_controller);
 
+const admin_doc_controller = require('./CONTROLLERS/admin/doc_controller');
+app.use('/admin/doc',admin_doc_controller);
+
 const admin_health_facility_controller = require('./CONTROLLERS/admin/health_facility_controller');
 app.use('/admin/csyt',admin_health_facility_controller);
 

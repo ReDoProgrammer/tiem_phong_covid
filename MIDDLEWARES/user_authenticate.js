@@ -17,7 +17,7 @@ function authenticateToken(req, res, next) {
             msg:`Lỗi xác thực tài khoản ${err.message}`
           });
     
-        }      
+        }          
       req.user = user;   
       next();
     });

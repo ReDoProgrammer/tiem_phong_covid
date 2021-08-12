@@ -16,19 +16,29 @@
 <script src="/dist/bootstrap/bootstrap.min.js"></script>
 <script>
   $(document).ready(_ => {
+    $('#btnLogin').show();
+    $('#btnLogout').hide();
+    $('#ev_list').hide();
     $.ajax({
-      url: '/profile',
+      url: '/account/profile',
       type: 'get',
       headers: {
         Authorization: "Covid-19 " + getACCESS_TOKEN()
       },
       success: function (data) {
+        if (data.user.is_mod) {
+          $('#mod_mngr').show();
+        }
         $('#unit_name').text(data.user.unit.name);
         $('#user_fullname').text(UppercaseEachFirstLetter(data.user.fullname));
+        $('#btnLogin').hide();
+        $('#btnLogout').show();
+        $('#ev_list').show();
       },
       error: function (XMLHttpRequest, textStatus, errorThrown) {
-        // let baseUrl = getBaseUrl();
-        // $(location).attr('href', baseUrl + '/');
+        $('#btnLogin').show();
+        $('#btnLogout').hide();
+        $('#ev_list').hide();
       },
 
 

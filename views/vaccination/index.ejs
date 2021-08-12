@@ -6,7 +6,7 @@
     </button>
   </div>
   <!-- phần tìm kiếm -->
-  <div class="offset-sm-6 col-sm-4">
+  <div class="offset-sm-4 col-sm-4">
     <div class="input-group">
       <input type="text" class="form-control" placeholder="Keyword ..." id="txtSearch" />
       <div class="input-group-btn">
@@ -17,6 +17,12 @@
     </div>
   </div>
   <!-- kết thúc phần tìm kiếm -->
+  <div class="col-sm-2">
+    <button class="btn btn-info" id="btnExportExcel">
+      <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+      Xuất Excel
+    </button>
+  </div>
 </div>
 <div class="table-responsive" id="data_center">
 
@@ -66,6 +72,7 @@
 <link rel="stylesheet" href="../../dist/date-picker/css/bootstrap-datepicker.css">
 <!-- <link rel="stylesheet" href="../../css/bootstrap-glyphicons.css"> -->
 <%-include('modal_vaccination')%>
+<%-include('modal_error')%>
 
   <script>
     var search = "";
@@ -74,6 +81,18 @@
       LoadCV();
     })
 
+
+    $('#btnExportExcel').click(function(){
+      $.ajax({
+        url: '/danh-sach-tiem-phong-covid-19/excel',
+        type: 'get',
+        headers: {
+          Authorization: "Covid-19 " + getACCESS_TOKEN()
+        },
+
+      })
+
+    })
 
     $('#modalVaccination').on('shown.bs.modal', function (e) {
       $('#txtFullname').val('');
@@ -85,6 +104,12 @@
       $('#txtDetailAddress').val('');
       $('#txtRemark').val('');
     });
+
+    $(document).on("click","button[name='set_error']",function(){
+      cvId = $(this).closest("tr").attr("id");
+      $('#modalError').modal();
+
+    })
 
     $(document).on("click", "button[name='update']", function () {
        cvId = $(this).closest("tr").attr("id");
@@ -145,6 +170,8 @@
     })
 
 
+
+
     $(document).on("click", "button[name='delete']", function () {
       let cvId = $(this).closest("tr").attr("id");
       let cvName = $(this).closest("tr").data("name");
@@ -179,6 +206,9 @@
     })
 
     $("#modalVaccination").on("hidden.bs.modal", function () {
+      LoadCV();
+    });
+    $("#modalError").on("hidden.bs.modal", function () {
       LoadCV();
     });
 
@@ -249,12 +279,15 @@
             }
 
 
-            tr += '<td class="text-nowrap">' + c.created_by.fullname + '</td>';
+            tr += '<td class="text-nowrap">' + UppercaseEachFirstLetter(c.created_by.fullname) + '</td>';
             tr += '<td class="text-nowrap">' + c.error_note + '</td>';
             tr += '<td class="text-right text-nowrap">';
             if (c.created_by._id == data.user_id) {
               tr += '<button  name = "update" class = "btn btn-sm btn-warning ml-2"><i class="fa fa-refresh" aria-hidden="true"></i></button>';
               tr += '<button  name = "delete" class = "btn btn-sm btn-danger ml-2"><i class="fa fa-trash" aria-hidden="true"></i></button>';
+            }
+            if(data.error_editable){
+              tr += '<button  name = "set_error" class = "btn btn-sm btn-warning ml-2"><i class="fa fa-exclamation-triangle text-danger" aria-hidden="true"></i></button>';
             }
             tr += '</td>';
             tr += '</tr>';

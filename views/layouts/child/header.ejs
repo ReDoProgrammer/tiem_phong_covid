@@ -9,15 +9,17 @@
     <div class="collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
       <ul class="navbar-nav justify-content-end" id="top-menu">
         <li class="position-relative">
-          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">MORE</a>
-          <div class="dropdown-menu float-right position-absolute">
-            <a href="#" class="dropdown-item">Merchandise</a>
-            <a href="#" class="dropdown-item">Extras</a>
-            <a href="#" class="dropdown-item">Media</a>
-          </div>
+          <a href="/" class="nav-link">Trang chủ</a>
+        </li>
+        <li class="position-relative" id="mod_mngr">
+          <a href="/account" class="nav-link">Tài khoản</a>
+        </li>
+        <li class="position-relative" id="ev_list">
+          <a href="/danh-sach-tiem-phong-covid-19" class="nav-link">Hồ sơ</a>
         </li>
         <li class="nav-item">
           <a href="#" class="nav-link text-warning" id="btnLogin">Đăng nhập</a>
+          <a href="#" class="nav-link text-danger" id="btnLogout">Đăng xuất</a>
         </li>
       </ul>
     </div>
@@ -59,8 +61,9 @@
 <script src="../../js/common.js"></script>
 
 <script>
-  $(document).ready(function(){
+  $(document).ready(function () {
     $('#login_message').hide();
+    $('#mod_mngr').hide();
   })
   $('#btnLogin').click(function (e) {
     e.preventDefault();
@@ -93,7 +96,13 @@
     })
   })
 
+  $('#btnLogout').click(function (e) {
+    localStorage.clear();
+    alert('Đăng xuất thành công!!')
+    let baseUrl = getBaseUrl();
+    $(location).attr('href', baseUrl + '/');
 
+  })
 </script>
 
 <style>

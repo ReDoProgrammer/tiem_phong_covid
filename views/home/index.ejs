@@ -1,4 +1,28 @@
 <img src="/images/GUI/thong_diep_5k.jpg" id="_5k" />
+<ul class="list-group mt-2" id="docs">
+   
+</ul>
+
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: '/doc',
+            type: 'get',
+            success: function (data) {
+                $('#docs').empty();
+                data.docs.forEach(d => {
+                    let li = ' <li class="list-group-item">';
+                        li += '<a href="'+d.url+'" target="_blank" class="text-info font-weight-bold">'+d.name+'</a>'
+                        li+= '</li>';
+                    $('#docs').append(li);
+                })
+            }
+        })
+    })
+</script>
+
+
 
 
 <style>
@@ -8,5 +32,11 @@
         height: 100%;
         margin-left: auto;
         margin-right: auto;
+    }
+
+    #docs {
+        max-height: 200px;
+        width:  40%;
+        margin: 0 auto;
     }
 </style>
