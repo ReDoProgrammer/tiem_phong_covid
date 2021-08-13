@@ -3,7 +3,7 @@ const Account = require('../MODELS/account_model');
 const Unit = require('../MODELS/unit_model');
 const Dept = require('../MODELS/dept_model');
 const jwt = require("jsonwebtoken");
-const { authenticateToken } = require('../middlewares/user_authenticate');
+const { authenticateToken } = require('../MIDDLEWARES/user_authenticate');
 
 
 router.get('/',(req,res)=>{
