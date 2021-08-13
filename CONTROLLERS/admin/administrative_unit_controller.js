@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { authenticateToken } = require('../../middlewares/authenticate');
+const { authenticateToken } = require('../../MIDDLEWARES/authenticate');
 
 const Nationality = require('../../MODELS/nationality_model');
 
