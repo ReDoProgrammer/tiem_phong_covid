@@ -1,5 +1,5 @@
 const router = require('express').Router();
-var excel = require('excel4node');
+const excel = require('node-excel-export');
 
 const { authenticateToken } = require('../middlewares/user_authenticate');
 const PO = require('../MODELS/priority_object_model');
@@ -27,40 +27,120 @@ router.get('/', (req, res) => {
 
 
 
-router.get('/excel', (req, res) => {
-    // Create a new instance of a Workbook class
-    var workbook = new excel.Workbook();
-
-    // Add Worksheets to the workbook
-    var worksheet = workbook.addWorksheet('Sheet 1');
-    var worksheet2 = workbook.addWorksheet('Sheet 2');
-
-    // Create a reusable style
-    var style = workbook.createStyle({
-        font: {
-            color: '#FF0800',
-            size: 12
+router.get('/excel',authenticateToken, (req, res) => {
+    let styles = {
+        headerDark: {
+            fill: {
+                fgColor: {
+                    rgb: 'FF000000'
+                }
+            },
+            font: {
+                color: {
+                    rgb: 'FFFFFFFF'
+                },
+                sz: 14,
+                bold: true,
+                underline: true
+            }
         },
-        numberFormat: '$#,##0.00; ($#,##0.00); -'
-    });
+        cellPink: {
+            fill: {
+                fgColor: {
+                    rgb: 'FFFFCCFF'
+                }
+            }
+        },
+        cellGreen: {
+            fill: {
+                fgColor: {
+                    rgb: 'FF00FF00'
+                }
+            }
+        }
+    };
 
-    // Set value of cell A1 to 100 as a number type styled with paramaters of style
-    worksheet.cell(1, 1).number(100).style(style);
+    // Array of objects representing heading rows
+    let heading = [
+        [
+            { value: 'STT', style: styles.headerDark },
+            { value: 'Họ và tên', style: styles.headerDark },
+            { value: 'Ngày sinh', style: styles.headerDark },
+            { value: 'Số điện thoại', style: styles.headerDark },
+            { value: 'Email', style: styles.headerDark },
+            { value: 'Mã Đ.T.Ư.T', style: styles.headerDark },
+            { value: 'Nghề nghiệp', style: styles.headerDark },
+            { value: 'CMND/CCCD', style: styles.headerDark },
+            { value: 'Thẻ BHYT', style: styles.headerDark },
+            { value: 'Dân tộc', style: styles.headerDark },
+            { value: 'Quốc tịch', style: styles.headerDark },
+            { value: 'Địa chỉ', style: styles.headerDark },
+            { value: 'CSYT tiêm phòng', style: styles.headerDark },
+            { value: 'Ghi chú', style: styles.headerDark },
+        ],
+        ['a2', 'b2', 'c2'] // <-- It can be only values
+    ];
 
-    // Set value of cell B1 to 300 as a number type styled with paramaters of style
-    worksheet.cell(1, 2).number(200).style(style);
+    // export structure
+    let specification = {
+        customer_name: { // <- the key should match the actual data key
+            displayName: 'Customer', // <- Here you specify the column header
+            headerStyle: styles.headerDark, // <- Header style
+            cellStyle: function (value, row) { // <- style renderer function
+                // if the status is 1 then color in green else color in red
+                // Notice how we use another cell value to style the current one
+                return (row.status_id == 1) ? styles.cellGreen : { fill: { fgColor: { rgb: 'FFFF0000' } } }; // <- Inline cell style is possible
+            },
+            width: 120 // <- width in pixels
+        },
+        status_id: {
+            displayName: 'Status',
+            headerStyle: styles.headerDark,
+            cellFormat: function (value, row) { // <- Renderer function, you can access also any row.property
+                return (value == 1) ? 'Active' : 'Inactive';
+            },
+            width: '10' // <- width in chars (when the number is passed as string)
+        },
+        note: {
+            displayName: 'Description',
+            headerStyle: styles.headerDark,
+            cellStyle: styles.cellPink, // <- Cell style
+            width: 220 // <- width in pixels
+        }
+    };
 
-    // Set value of cell C1 to a formula styled with paramaters of style
-    worksheet.cell(1, 3).formula('A1 + B1').style(style);
+    
+    // CV.find({created_by:req.user.user_id})
+    // .exec()
+    // .then(cv=>{
+    //     console.log(cv);
+    // })
+    // .catch(err=>{
+    //     console.log(err.message);
+    // })
 
-    // Set value of cell A2 to 'string' styled with paramaters of style
-    worksheet.cell(2, 1).string('string').style(style);
 
-    // Set value of cell A3 to true as a boolean type styled with paramaters of style but with an adjustment to the font size.
-    worksheet.cell(3, 1).bool(true).style(style).style({ font: { size: 14 } });
+    let dataset = [
+        { customer_name: 'IBM', status_id: 1, note: 'some note', misc: 'not shown' },
+        { customer_name: 'HP', status_id: 0, note: 'some note' },
+        { customer_name: 'MS', status_id: 0, note: 'some note', misc: 'not shown' }
+    ];
 
-    workbook.write('Excel.xlsx');
-    console.log('ok');
+    // Create the excel report.
+    // This function will return Buffer
+    let report = excel.buildExport(
+        [ // <- Notice that this is an array. Pass multiple sheets to create multi sheet report
+            {
+                name: 'Sheet name', // <- Specify sheet name (optional)
+                heading: heading, // <- Raw heading array (optional)
+                specification: specification, // <- Report specification
+                data: dataset // <-- Report data
+            }
+        ]
+    );
+
+    // convert excel file content to base64 and send to a client
+    res.send({ content: report.toString('base64') });
 })
 
 

@@ -5,6 +5,17 @@ const Dept = require('../MODELS/dept_model');
 const jwt = require("jsonwebtoken");
 const { authenticateToken } = require('../middlewares/user_authenticate');
 
+
+router.get('/',(req,res)=>{
+    res.render('account/index', {
+        name: 'Danh sách tài khoản bạn quản lý',
+        layout: 'layouts/user_layout'
+    });
+})
+
+
+
+
 router.post('/login', (req, res) => {
     const { username, password } = req.body;
     Account

@@ -65,9 +65,10 @@ function getBaseUrl() {
 function getACCESS_TOKEN(){
   return localStorage.getItem("ACCESS_TOKEN");
 }
-function isDate(val) {
-  var d = new Date(val);
-  return !isNaN(d.valueOf());
+function isDate(s) {
+  var bits = s.split('/');
+  var d = new Date(bits[2] + '/' + bits[1] + '/' + bits[0]);
+  return !!(d && (d.getMonth() + 1) == bits[1] && d.getDate() == Number(bits[0]));
 }
 
 
