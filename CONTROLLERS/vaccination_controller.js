@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const excel = require('node-excel-export');
 
 const { authenticateToken } = require('../middlewares/user_authenticate');
 const PO = require('../MODELS/priority_object_model');
@@ -28,120 +27,38 @@ router.get('/', (req, res) => {
 
 
 router.get('/excel',authenticateToken, (req, res) => {
-    let styles = {
-        headerDark: {
-            fill: {
-                fgColor: {
-                    rgb: 'FF000000'
-                }
-            },
-            font: {
-                color: {
-                    rgb: 'FFFFFFFF'
-                },
-                sz: 14,
-                bold: true,
-                underline: true
-            }
-        },
-        cellPink: {
-            fill: {
-                fgColor: {
-                    rgb: 'FFFFCCFF'
-                }
-            }
-        },
-        cellGreen: {
-            fill: {
-                fgColor: {
-                    rgb: 'FF00FF00'
-                }
-            }
-        }
-    };
-
-    // Array of objects representing heading rows
-    let heading = [
-        [
-            { value: 'STT', style: styles.headerDark },
-            { value: 'Họ và tên', style: styles.headerDark },
-            { value: 'Ngày sinh', style: styles.headerDark },
-            { value: 'Số điện thoại', style: styles.headerDark },
-            { value: 'Email', style: styles.headerDark },
-            { value: 'Mã Đ.T.Ư.T', style: styles.headerDark },
-            { value: 'Nghề nghiệp', style: styles.headerDark },
-            { value: 'CMND/CCCD', style: styles.headerDark },
-            { value: 'Thẻ BHYT', style: styles.headerDark },
-            { value: 'Dân tộc', style: styles.headerDark },
-            { value: 'Quốc tịch', style: styles.headerDark },
-            { value: 'Địa chỉ', style: styles.headerDark },
-            { value: 'CSYT tiêm phòng', style: styles.headerDark },
-            { value: 'Ghi chú', style: styles.headerDark },
-        ],
-        ['a2', 'b2', 'c2'] // <-- It can be only values
-    ];
-
-    // export structure
-    let specification = {
-        customer_name: { // <- the key should match the actual data key
-            displayName: 'Customer', // <- Here you specify the column header
-            headerStyle: styles.headerDark, // <- Header style
-            cellStyle: function (value, row) { // <- style renderer function
-                // if the status is 1 then color in green else color in red
-                // Notice how we use another cell value to style the current one
-                return (row.status_id == 1) ? styles.cellGreen : { fill: { fgColor: { rgb: 'FFFF0000' } } }; // <- Inline cell style is possible
-            },
-            width: 120 // <- width in pixels
-        },
-        status_id: {
-            displayName: 'Status',
-            headerStyle: styles.headerDark,
-            cellFormat: function (value, row) { // <- Renderer function, you can access also any row.property
-                return (value == 1) ? 'Active' : 'Inactive';
-            },
-            width: '10' // <- width in chars (when the number is passed as string)
-        },
-        note: {
-            displayName: 'Description',
-            headerStyle: styles.headerDark,
-            cellStyle: styles.cellPink, // <- Cell style
-            width: 220 // <- width in pixels
-        }
-    };
-
-    
-    // CV.find({created_by:req.user.user_id})
-    // .exec()
-    // .then(cv=>{
-    //     console.log(cv);
-    // })
-    // .catch(err=>{
-    //     console.log(err.message);
-    // })
-
-
-    let dataset = [
-        { customer_name: 'IBM', status_id: 1, note: 'some note', misc: 'not shown' },
-        { customer_name: 'HP', status_id: 0, note: 'some note' },
-        { customer_name: 'MS', status_id: 0, note: 'some note', misc: 'not shown' }
-    ];
-
-    // Create the excel report.
-    // This function will return Buffer
-    let report = excel.buildExport(
-        [ // <- Notice that this is an array. Pass multiple sheets to create multi sheet report
-            {
-                name: 'Sheet name', // <- Specify sheet name (optional)
-                heading: heading, // <- Raw heading array (optional)
-                specification: specification, // <- Report specification
-                data: dataset // <-- Report data
-            }
-        ]
-    );
-
-    // convert excel file content to base64 and send to a client
-    res.send({ content: report.toString('base64') });
+   CV.find({created_by:req.user.user_id})
+   .populate('nation_id','-_id code')
+   .populate('nationality_id','-_id code')
+   .populate('prov_id','-_id code name')
+   .populate('dist_id','-_id code name')
+   .populate('ward_id','-_id code name')
+   .populate('po_id','-_id code')
+   .populate('job_id','-_id name')
+   .populate('unit_id','-_id name')
+   .populate('hf_id','-_id code')
+   .populate('vaccin1','-_id name')
+   .populate('vaccin2','-_id name')
+   .exec()  
+   .then(cv=>{
+       return res.status(200).json({
+           msg:'Load danh sách hồ sơ thành công!',
+           cv
+       })
+   })
+   .catch(err=>{
+       return res.status(500).json({
+           msg:`Load danh sách hồ sơ thất bại. Lỗi: ${new Error(err.message)}`
+       })
+   })
 })
+
+router.get('/export-to-excel',(req,res)=>{
+    res.render('vaccination/excel', {     
+        layout: 'vaccination/excel'
+    });
+})
+
 
 
 router.put('/', authenticateToken, (req, res) => {
