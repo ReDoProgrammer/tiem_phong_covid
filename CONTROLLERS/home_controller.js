@@ -1,6 +1,4 @@
 const router = require('express').Router();
-
-
 const Doc = require('../MODELS/docs_model');
 
 router.get('/', (req, res) => {
