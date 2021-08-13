@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const Province = require('../../MODELS/province_model');
-const { authenticateToken } = require('../../middlewares/authenticate');
+const { authenticateToken } = require('../../MIDDLEWARES/authenticate');
 const mongoose = require('mongoose');
 
 

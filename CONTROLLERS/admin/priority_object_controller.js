@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const PO = require('../../MODELS/priority_object_model');
-const { authenticateToken } = require('../../middlewares/authenticate');
+const { authenticateToken } = require('../../MIDDLEWARES/authenticate');
 
 
 

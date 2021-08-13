@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const Dept = require('../../MODELS/dept_model');
-const { authenticateToken } = require('../../middlewares/authenticate');
+const { authenticateToken } = require('../../MIDDLEWARES/authenticate');
 
 
 

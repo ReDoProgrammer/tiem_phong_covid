@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const HF = require('../../MODELS/health_facility_model');
-const { authenticateToken } = require('../../middlewares/authenticate');
+const { authenticateToken } = require('../../MIDDLEWARES/authenticate');
 
 
 

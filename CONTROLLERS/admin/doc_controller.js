@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const Doc = require('../../MODELS/docs_model');
-const { authenticateToken } = require('../../middlewares/authenticate');
+const { authenticateToken } = require('../../MIDDLEWARES/authenticate');
 
 router.get('/',(req,res)=>{
     res.render('admin/doc/index', {

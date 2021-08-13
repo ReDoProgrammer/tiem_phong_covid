@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const District = require('../../MODELS/district_model');
-const { authenticateToken } = require('../../middlewares/authenticate');
+const { authenticateToken } = require('../../MIDDLEWARES/authenticate');
 const mongoose = require('mongoose');
 
 

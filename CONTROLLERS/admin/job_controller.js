@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const Job = require('../../MODELS/job_model');
-const { authenticateToken } = require('../../middlewares/authenticate');
+const { authenticateToken } = require('../../MIDDLEWARES/authenticate');
 
 
 router.get('/',(req,res)=>{
