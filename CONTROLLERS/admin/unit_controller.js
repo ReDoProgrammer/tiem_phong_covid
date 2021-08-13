@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const Unit = require('../../MODELS/unit_model');
-const { authenticateToken } = require('../../middlewares/authenticate');
+const { authenticateToken } = require('../../MIDDLEWARES/authenticate');
 
 router.get('/init',(req,res)=>{
     Unit.countDocuments()
