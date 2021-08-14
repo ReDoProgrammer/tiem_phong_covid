@@ -68,6 +68,21 @@ router.get('/list', authenticateToken, (req, res) => {
 });
 
 
+router.delete('/destroy',authenticateToken,(req,res)=>{
+    CV.deleteMany()
+    .then(_=>{
+        return res.status(200).json({
+            msg:'Xóa toàn bộ hồ sơ thành công!'
+        })
+    })
+    .catch(err=>{
+        return res.status(500).json({
+            msg:`Xóa toàn bộ hồ sơ thất bại. Lỗi: ${new Error(err.message)}`
+        })
+    })
+})
+
+
 router.get('/excel', authenticateToken, (req, res) => {
     CV.find()
         .populate('nation_id', '-_id code')

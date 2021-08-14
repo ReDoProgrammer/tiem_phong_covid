@@ -1,288 +1,309 @@
-
 <div class="row">
-    <!-- phần tìm kiếm -->
-    <div class="offset-sm-6 col-sm-4">
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Keyword ..." id="txtSearch" />
-        <div class="input-group-btn">
-          <button class="btn btn-dark" id="btnSearch">
-            <i class="fa fa-search" aria-hidden="true"></i>
-          </button>
-        </div>
+  <!-- phần tìm kiếm -->
+  <div class="offset-sm-6 col-sm-4">
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="Keyword ..." id="txtSearch" />
+      <div class="input-group-btn">
+        <button class="btn btn-dark" id="btnSearch">
+          <i class="fa fa-search" aria-hidden="true"></i>
+        </button>
       </div>
     </div>
-    <!-- kết thúc phần tìm kiếm -->
-    <div class="col-sm-2">
-      <button class="btn btn-info" id="btnExportExcel">
-        <i class="fa fa-file-excel-o" aria-hidden="true"></i>
-        Xuất Excel
-      </button>
-    </div>
   </div>
-  <div class="table-responsive" id="data_center">
-  
-    <table class="table table-bordered mt-20">
-      <thead class="bg-info text-white text-white ">
-        <tr>
-          <th rowspan="2" class="align-middle font-weight-bold text-center">STT</th>
-          <th rowspan="2" class="align-middle font-weight-bold text-center">Họ và tên</th>
-          <th rowspan="2" class="align-middle font-weight-bold text-center">Giới tính</th>
-          <th rowspan="2" class="align-middle font-weight-bold text-center">Ngày sinh</th>
-          <th rowspan="2" class="align-middle font-weight-bold text-center">Email</th>
-          <th rowspan="2" class="align-middle font-weight-bold text-center">Đối tượng ưu tiên</th>
-          <th rowspan="2" class="align-middle font-weight-bold text-center">Nghề nghiệp</th>
-          <th rowspan="2" class="align-middle font-weight-bold text-center">Số điện thoại</th>
-          <th rowspan="2" class="align-middle font-weight-bold text-center">CMND/CCCD</th>
-          <th rowspan="2" class="align-middle font-weight-bold text-center">Số thẻ BHYT</th>
-          <th rowspan="2" class="align-middle font-weight-bold text-center">Dân tộc</th>
-          <th rowspan="2" class="align-middle font-weight-bold text-center">Quốc tịch</th>
-          <th rowspan="2" class="align-middle font-weight-bold text-center">Địa chỉ</th>
-          <th rowspan="2" class="align-middle font-weight-bold text-center">CSYT tiêm</th>
-          <th rowspan="2" class="align-middle font-weight-bold text-center">Ghi chú</th>
-          <th colspan="3" class="text-center font-weight-bold text-center">Mũi 1</th>
-          <th colspan="3" class="text-center font-weight-bold text-center">Mũi 2</th>
-          <th rowspan="2" class="align-middle font-weight-bold text-center">Người nhập</th>
-          <th rowspan="2" class="align-middle font-weight-bold text-center">Chú thích lỗi</th>
-          <th rowspan="2" class="align-middle font-weight-bold text-center"></th>
-        </tr>
-        <tr>
-          <th class="text-center">Loại vaccin</th>
-          <th class="text-center">Ngày tiêm</th>
-          <th class="text-center">Lô vaccin</th>
-          <th class="text-center">Loại vaccin</th>
-          <th class="text-center">Ngày tiêm</th>
-          <th class="text-center">Lô vaccin</th>
-  
-        </tr>
-  
-      </thead>
-      <tbody id="tblData">
-  
-      </tbody>
-    </table>
+  <!-- kết thúc phần tìm kiếm -->
+  <div class="col-sm-2">
+    <button class="btn btn-info" id="btnExportExcel">
+      <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+      Xuất Excel
+    </button>
   </div>
-  
-  
-  <%-include('modal_error')%>
+</div>
+<div class="table-responsive" id="data_center">
+
+  <table class="table table-bordered mt-20">
+    <thead class="bg-info text-white text-white ">
+      <tr>
+        <th rowspan="2" class="align-middle font-weight-bold text-center">STT</th>
+        <th rowspan="2" class="align-middle font-weight-bold text-center">Họ và tên</th>
+        <th rowspan="2" class="align-middle font-weight-bold text-center">Giới tính</th>
+        <th rowspan="2" class="align-middle font-weight-bold text-center">Ngày sinh</th>
+        <th rowspan="2" class="align-middle font-weight-bold text-center">Email</th>
+        <th rowspan="2" class="align-middle font-weight-bold text-center">Đối tượng ưu tiên</th>
+        <th rowspan="2" class="align-middle font-weight-bold text-center">Nghề nghiệp</th>
+        <th rowspan="2" class="align-middle font-weight-bold text-center">Số điện thoại</th>
+        <th rowspan="2" class="align-middle font-weight-bold text-center">CMND/CCCD</th>
+        <th rowspan="2" class="align-middle font-weight-bold text-center">Số thẻ BHYT</th>
+        <th rowspan="2" class="align-middle font-weight-bold text-center">Dân tộc</th>
+        <th rowspan="2" class="align-middle font-weight-bold text-center">Quốc tịch</th>
+        <th rowspan="2" class="align-middle font-weight-bold text-center">Địa chỉ</th>
+        <th rowspan="2" class="align-middle font-weight-bold text-center">CSYT tiêm</th>
+        <th rowspan="2" class="align-middle font-weight-bold text-center">Ghi chú</th>
+        <th colspan="3" class="text-center font-weight-bold text-center">Mũi 1</th>
+        <th colspan="3" class="text-center font-weight-bold text-center">Mũi 2</th>
+        <th rowspan="2" class="align-middle font-weight-bold text-center">Người nhập</th>
+        <th rowspan="2" class="align-middle font-weight-bold text-center">Chú thích lỗi</th>
+        <th rowspan="2" class="align-middle font-weight-bold text-center"></th>
+      </tr>
+      <tr>
+        <th class="text-center">Loại vaccin</th>
+        <th class="text-center">Ngày tiêm</th>
+        <th class="text-center">Lô vaccin</th>
+        <th class="text-center">Loại vaccin</th>
+        <th class="text-center">Ngày tiêm</th>
+        <th class="text-center">Lô vaccin</th>
+
+      </tr>
+
+    </thead>
+    <tbody id="tblData">
+
+    </tbody>
+  </table>
+</div>
+
+<button class="btn btn-danger" id="btnDestroyAllCV">Xóa toàn bộ hồ sơ</button>
+
+
+<%-include('modal_error')%>
 
   <script src="../../dist/date-picker/js/bootstrap-datepicker.min.js"></script>
   <link rel="stylesheet" href="../../dist/date-picker/css/bootstrap-datepicker.css">
   <script type="text/javascript" src="//unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 
-      <script>
-        var search = "";
-        var cvId = "";
-        $(document).ready(function () {
-          LoadCV();
+  <script>
+    var search = "";
+    var cvId = "";
+    $(document).ready(function () {
+      LoadCV();
+    })
+
+    $('#btnDestroyAllCV').click(function () {
+      var r = confirm(
+        "Thao tác này sẽ xóa toàn bộ hồ sơ. Bạn vẫn muốn tiếp tục?"
+      );
+      if (r == true) {
+        $.ajax({
+          url: '/admin/ho-so/destroy',
+          type: 'delete',
+          headers: {
+            Authorization: "Covid-19 " + getACCESS_TOKEN()
+          },
+          success: function (data) {
+            alert(data.msg);
+            LoadCV();
+          },
         })
-        
-      $(document).on("click", "button[name='set_error']", function () {
-        cvId = $(this).closest("tr").attr("id");
-        $('#modalError').modal();
+      }
+    })
+
+
+    $(document).on("click", "button[name='set_error']", function () {
+      cvId = $(this).closest("tr").attr("id");
+      $('#modalError').modal();
+    })
+    $("#modalError").on("hidden.bs.modal", function () {
+      LoadCV();
+    });
+
+
+    $('#btnExportExcel').click(function () {
+      $.ajax({
+        url: '/admin/ho-so/excel',
+        type: 'get',
+        headers: {
+          Authorization: "Covid-19 " + getACCESS_TOKEN()
+        },
+        success: function (data) {
+          console.log(data);
+          var createXLSLFormatObj = [];
+
+          /* XLS Head Columns */
+          var xlsHeader = ["STT", "Họ và tên", "Giới tính", "Ngày sinh", "E-mail", "Mã nhóm đối tượng ưu tiên (*)", "Nghề nghiệp", "Đơn vị công tác", "Số điện thoại (*)",
+            "Số CMT/CCCD/Hộ chiếu (*) ", "Số thẻ bảo hiểm y tế ", "Dân tộc", "Quốc tịch", "Tỉnh/Thành phố", "Mã Tỉnh/Thành phố (*)", "Quận/Huyện", "Mã Quận/Huyện", "Xã/Phường", "Mã Xã/Phường", "Địa chỉ chi tiết",
+            "Mã cơ sở y tế tiêm (*)", "Ghi chú", "Loại vắc xin (*)", "Ngày tiêm (*) ", "Lô vắc xin (*)", "Loại vắc xin (*)", "Ngày tiêm (*) ", "Lô vắc xin (*)"];
+
+
+          /* XLS Rows Data */
+          let idx = 1;
+          var xlsRows = data.cv.map(c => {
+            let x = {};
+            x['idx'] = idx++;
+            x['fullname'] = UppercaseEachFirstLetter(c.fullname);
+            x['gender'] = c.gender;
+            x['dob'] = c.dob.split('/')[2] + c.dob.split('/')[1] + c.dob.split('/')[0];
+            x['email'] = c.email;
+            x['po_code'] = c.po_id.code;
+            x['job'] = c.job_id.name;
+            x['unit'] = c.unit_id.name;
+            x['phone'] = c.phone;
+            x['id_number'] = c.id_number;
+            x['hi_no'] = c.hi_no;
+            x['nation'] = c.nation_id.code;
+            x['nationality'] = c.nationality_id.code;
+            x['province'] = c.prov_id.name;
+            x['province_code'] = c.prov_id.code;
+            x['district'] = c.dist_id.name;
+            x['district_code'] = c.dist_id.code;
+            x['ward'] = c.ward_id.name;
+            x['ward_code'] = c.ward_id.code;
+            x['detail_address'] = c.detail_address;
+            x['hf_no'] = c.hf_id.code;
+            x['remark'] = c.remark;
+            x['vaccin1'] = c.date1.trim().length == 0 ? '' : c.vaccin1.name;
+            x['date1'] = c.date1.trim().length == 0 ? '' : c.date1.split('/')[2] + c.date1.split('/')[1] + c.date1.split('/')[0];
+            x['no1'] = c.date1.trim().length == 0 ? '' : c.no1;
+            x['vaccin2'] = c.date2.trim().length == 0 ? '' : c.vaccin2.name;
+            x['date2'] = c.date2.trim().length == 0 ? '' : c.date2.split('/')[2] + c.date2.split('/')[1] + c.date2.split('/')[0];
+            x['no2'] = c.date2.trim().length == 0 ? '' : c.no2;
+
+            return x;
+          });
+
+          createXLSLFormatObj.push(xlsHeader);
+          $.each(xlsRows, function (index, value) {
+            var innerRowData = [];
+
+            $.each(value, function (ind, val) {
+              innerRowData.push(val);
+            });
+            createXLSLFormatObj.push(innerRowData);
+          });
+
+
+          /* File Name */
+          var filename = "PL1_Danh sách đối tượng tiêm.xlsx";
+
+          /* Sheet Name */
+          var ws_name = "PL1_Danh sách đối tượng tiêm";
+
+          if (typeof console !== 'undefined') console.log(new Date());
+          var wb = XLSX.utils.book_new(),
+            ws = XLSX.utils.aoa_to_sheet(createXLSLFormatObj);
+
+          /* Add worksheet to workbook */
+          XLSX.utils.book_append_sheet(wb, ws, ws_name);
+
+          /* Write workbook and Download */
+          if (typeof console !== 'undefined') console.log(new Date());
+          XLSX.writeFile(wb, filename);
+          if (typeof console !== 'undefined') console.log(new Date());
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+          alert(jqXHR.responseJSON.msg);
+        }
       })
-        $("#modalError").on("hidden.bs.modal", function () {
-        LoadCV();
-      });
 
-  
-        $('#btnExportExcel').click(function () {
-          $.ajax({
-            url: '/admin/ho-so/excel',
-            type: 'get',
-            headers: {
-              Authorization: "Covid-19 " + getACCESS_TOKEN()
-            },
-            success: function (data) {
-              console.log(data);
-              var createXLSLFormatObj = [];
-  
-              /* XLS Head Columns */
-              var xlsHeader = ["STT", "Họ và tên","Giới tính","Ngày sinh","E-mail","Mã nhóm đối tượng ưu tiên (*)","Nghề nghiệp","Đơn vị công tác","Số điện thoại (*)",
-              "Số CMT/CCCD/Hộ chiếu (*) ","Số thẻ bảo hiểm y tế ","Dân tộc","Quốc tịch","Tỉnh/Thành phố","Mã Tỉnh/Thành phố (*)","Quận/Huyện","Mã Quận/Huyện","Xã/Phường","Mã Xã/Phường","Địa chỉ chi tiết",
-            "Mã cơ sở y tế tiêm (*)","Ghi chú","Loại vắc xin (*)","Ngày tiêm (*) ","Lô vắc xin (*)","Loại vắc xin (*)","Ngày tiêm (*) ","Lô vắc xin (*)"];
-  
-  
-              /* XLS Rows Data */
-              let idx = 1;
-              var xlsRows = data.cv.map(c=>{
-                let x = {};
-                x['idx'] = idx++;
-                x['fullname'] = UppercaseEachFirstLetter(c.fullname);
-                x['gender'] = c.gender;
-                x['dob'] = c.dob.split('/')[2]+ c.dob.split('/')[1]+ c.dob.split('/')[0];
-                x['email'] = c.email;
-                x['po_code'] = c.po_id.code;
-                x['job'] = c.job_id.name;
-                x['unit'] = c.unit_id.name;
-                x['phone'] = c.phone;
-                x['id_number'] = c.id_number;
-                x['hi_no'] = c.hi_no;
-                x['nation'] = c.nation_id.code;
-                x['nationality'] = c.nationality_id.code;
-                x['province'] = c.prov_id.name;
-                x['province_code'] = c.prov_id.code;
-                x['district'] = c.dist_id.name;
-                x['district_code'] =c.dist_id.code;
-                x['ward'] = c.ward_id.name;
-                x['ward_code'] = c.ward_id.code;
-                x['detail_address'] = c.detail_address;
-                x['hf_no'] = c.hf_id.code;
-                x['remark'] = c.remark;
-                x['vaccin1'] =c.date1.trim().length == 0?'': c.vaccin1.name;
-                x['date1'] =c.date1.trim().length == 0?'': c.date1.split('/')[2]+ c.date1.split('/')[1]+ c.date1.split('/')[0];
-                x['no1'] = c.date1.trim().length == 0?'':c.no1;
-                x['vaccin2'] = c.date2.trim().length == 0?'':c.vaccin2.name;
-                x['date2'] =  c.date2.trim().length == 0?'':c.date2.split('/')[2]+ c.date2.split('/')[1]+ c.date2.split('/')[0];
-                x['no2'] =  c.date2.trim().length == 0?'':c.no2;
-                
-                return x;
-              });
-  
-              createXLSLFormatObj.push(xlsHeader);
-              $.each(xlsRows, function (index, value) {
-                var innerRowData = [];
-                
-                $.each(value, function (ind, val) {
-                  innerRowData.push(val);
-                });
-                createXLSLFormatObj.push(innerRowData);
-              });
-  
-  
-              /* File Name */
-              var filename = "PL1_Danh sách đối tượng tiêm.xlsx";
-  
-              /* Sheet Name */
-              var ws_name = "PL1_Danh sách đối tượng tiêm";
-  
-              if (typeof console !== 'undefined') console.log(new Date());
-              var wb = XLSX.utils.book_new(),
-                ws = XLSX.utils.aoa_to_sheet(createXLSLFormatObj);
-  
-              /* Add worksheet to workbook */
-              XLSX.utils.book_append_sheet(wb, ws, ws_name);
-  
-              /* Write workbook and Download */
-              if (typeof console !== 'undefined') console.log(new Date());
-              XLSX.writeFile(wb, filename);
-              if (typeof console !== 'undefined') console.log(new Date());
-  
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-              alert(jqXHR.responseJSON.msg);
+    })
+
+    $(document).on("click", "button[name='set_error']", function () {
+      cvId = $(this).closest("tr").attr("id");
+      $('#modalError').modal();
+
+    })
+
+
+
+
+
+    $('#btnSearch').click(function () {
+      search = $('#txtSearch').val();
+      LoadCV();
+    })
+
+    function LoadCV() {
+      $.ajax({
+        url: '/admin/ho-so/list',
+        type: 'get',
+        headers: {
+          Authorization: "Covid-19 " + getACCESS_TOKEN()
+        },
+        data: {
+          search
+        },
+        success: function (data) {
+          let idx = 1;
+          $('#tblData').empty();
+          console.log(data);
+          data.cv.forEach(c => {
+            let tr = '<tr id="' + c._id + '" data-name="' + UppercaseEachFirstLetter(c.fullname) + '">';
+            if (!c.is_correct) {
+              tr = '<tr id="' + c._id + '" data-name="' + UppercaseEachFirstLetter(c.fullname) + '" class="bg-warning">';
             }
-          })
-  
-        })
+            tr += '<td class="text-nowrap text-right">' + (idx < 10 ? '0' + (idx++) : (idx++)) + '</td>';
+            tr += '<td class="text-nowrap">' + UppercaseEachFirstLetter(c.fullname) + '</td>';
+            tr += '<td class="text-nowrap">';
+            tr += c.gender == 1 ? 'Nam' : (c.gender == 2 ? 'Nữ' : 'Không rõ');
+            tr += '</td>';
+            tr += '<td class="text-nowrap">' + c.dob + '</td>';
+            tr += '<td class="text-nowrap">' + c.email + '</td>';
+            tr += '<td class="text-nowrap">' + c.po_id.name + '</td>';
+            tr += '<td class="text-nowrap">' + c.job_id.name + '</td>';
+            tr += '<td class="text-nowrap">' + c.phone + '</td>';
+            tr += '<td class="text-nowrap">' + c.id_number + '</td>';
+            tr += '<td class="text-nowrap">' + c.hi_no + '</td>';
+            tr += '<td class="text-nowrap">' + c.nation_id.name + '</td>';
+            tr += '<td class="text-nowrap">' + c.nationality_id.name + '</td>';
+            tr += '<td class="text-nowrap">';
+            if (c.detail_address.trim().length > 0) {
+              tr += c.detail_address + ' - ';
+            }
+            tr += c.ward_id.name + ' - ' + c.dist_id.name + ' - ' + c.prov_id.name + ' - ' + c.nationality_id.name
+            tr += '</td>';
+            tr += '<td class="text-nowrap">' + c.hf_id.name + '</td>';
+            tr += '<td class="text-nowrap">' + c.remark + '</td>';
 
-        $(document).on("click", "button[name='set_error']", function () {
-          cvId = $(this).closest("tr").attr("id");
-          $('#modalError').modal();
-  
-        })
-  
-     
-  
-  
+            if (c.date1.length > 0) {
+              tr += '<td class="text-nowrap">' + c.vaccin1.name + '</td>';
+              tr += '<td class="text-nowrap">' + c.date1 + '</td>';
+              tr += '<td class="text-nowrap">' + c.no1 + '</td>';
+            } else {
+              tr += '<td></td>';
+              tr += '<td></td>';
+              tr += '<td></td>';
+            }
 
-        $('#btnSearch').click(function () {
-          search = $('#txtSearch').val();
-          LoadCV();
-        })
-  
-        function LoadCV() {
-          $.ajax({
-            url: '/admin/ho-so/list',
-            type: 'get',
-            headers: {
-              Authorization: "Covid-19 " + getACCESS_TOKEN()
-            },
-            data: {
-              search
-            },
-            success: function (data) {
-              let idx = 1;
-              $('#tblData').empty();
-              console.log(data);
-              data.cv.forEach(c => {
-                let tr = '<tr id="' + c._id + '" data-name="' + UppercaseEachFirstLetter(c.fullname) + '">';
-                if (!c.is_correct) {
-                  tr = '<tr id="' + c._id + '" data-name="' + UppercaseEachFirstLetter(c.fullname) + '" class="bg-warning">';
-                }
-                tr += '<td class="text-nowrap text-right">' + (idx < 10 ? '0' + (idx++) : (idx++)) + '</td>';
-                tr += '<td class="text-nowrap">' + UppercaseEachFirstLetter(c.fullname) + '</td>';
-                tr += '<td class="text-nowrap">';
-                tr += c.gender == 1 ? 'Nam' : (c.gender == 2 ? 'Nữ' : 'Không rõ');
-                tr += '</td>';
-                tr += '<td class="text-nowrap">' + c.dob + '</td>';
-                tr += '<td class="text-nowrap">' + c.email + '</td>';
-                tr += '<td class="text-nowrap">' + c.po_id.name + '</td>';
-                tr += '<td class="text-nowrap">' + c.job_id.name + '</td>';
-                tr += '<td class="text-nowrap">' + c.phone + '</td>';
-                tr += '<td class="text-nowrap">' + c.id_number + '</td>';
-                tr += '<td class="text-nowrap">' + c.hi_no + '</td>';
-                tr += '<td class="text-nowrap">' + c.nation_id.name + '</td>';
-                tr += '<td class="text-nowrap">' + c.nationality_id.name + '</td>';
-                tr += '<td class="text-nowrap">';
-                if (c.detail_address.trim().length > 0) {
-                  tr += c.detail_address + ' - ';
-                }
-                tr += c.ward_id.name + ' - ' + c.dist_id.name + ' - ' + c.prov_id.name + ' - ' + c.nationality_id.name
-                tr += '</td>';
-                tr += '<td class="text-nowrap">' + c.hf_id.name + '</td>';
-                tr += '<td class="text-nowrap">' + c.remark + '</td>';
-  
-                if (c.date1.length > 0) {
-                  tr += '<td class="text-nowrap">' + c.vaccin1.name + '</td>';
-                  tr += '<td class="text-nowrap">' + c.date1 + '</td>';
-                  tr += '<td class="text-nowrap">' + c.no1 + '</td>';
-                } else {
-                  tr += '<td></td>';
-                  tr += '<td></td>';
-                  tr += '<td></td>';
-                }
-  
-                if (c.date2.length > 0) {
-                  tr += '<td class="text-nowrap">' + c.vaccin2.name + '</td>';
-                  tr += '<td class="text-nowrap">' + c.date2 + '</td>';
-                  tr += '<td class="text-nowrap">' + c.no2 + '</td>';
-                } else {
-                  tr += '<td></td>';
-                  tr += '<td></td>';
-                  tr += '<td></td>';
-                }
-  
-  
-                tr += '<td class="text-nowrap">' + UppercaseEachFirstLetter(c.created_by.fullname) + '</td>';
-                tr += '<td class="text-nowrap">' + c.error_note + '</td>';
-                tr += '<td class="text-right text-nowrap">';               
-                  tr += '<button  name = "set_error" class = "btn btn-sm btn-warning ml-2"><i class="fa fa-exclamation-triangle text-danger" aria-hidden="true"></i></button>';               
-                tr += '</td>';
-                tr += '</tr>';
-                $('#tblData').append(tr);
-              })
-  
-            }, error: function (jqXHR, textStatus, errorThrown) {
-              alert(jqXHR.responseJSON.msg);
-            },
+            if (c.date2.length > 0) {
+              tr += '<td class="text-nowrap">' + c.vaccin2.name + '</td>';
+              tr += '<td class="text-nowrap">' + c.date2 + '</td>';
+              tr += '<td class="text-nowrap">' + c.no2 + '</td>';
+            } else {
+              tr += '<td></td>';
+              tr += '<td></td>';
+              tr += '<td></td>';
+            }
+
+
+            tr += '<td class="text-nowrap">' + UppercaseEachFirstLetter(c.created_by.fullname) + '</td>';
+            tr += '<td class="text-nowrap">' + c.error_note + '</td>';
+            tr += '<td class="text-right text-nowrap">';
+            tr += '<button  name = "set_error" class = "btn btn-sm btn-warning ml-2"><i class="fa fa-exclamation-triangle text-danger" aria-hidden="true"></i></button>';
+            tr += '</td>';
+            tr += '</tr>';
+            $('#tblData').append(tr);
           })
-        }
-      </script>
-  
-      <style>
-        #data_center {
-          display: inline-block;
-          overflow-y: scroll;
-          max-height: 550px;
-        }
-  
-        table {
-          text-align: left;
-          position: relative;
-        }
-  
-        thead {
-          position: sticky;
-          top: 0;
-        }
-      </style>
+
+        }, error: function (jqXHR, textStatus, errorThrown) {
+          alert(jqXHR.responseJSON.msg);
+        },
+      })
+    }
+  </script>
+
+  <style>
+    #data_center {
+      display: inline-block;
+      overflow-y: scroll;
+      max-height: 550px;
+    }
+
+    table {
+      text-align: left;
+      position: relative;
+    }
+
+    thead {
+      position: sticky;
+      top: 0;
+    }
+  </style>
