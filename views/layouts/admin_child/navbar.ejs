@@ -1,56 +1,61 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Tiêm phòng Covid</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-  
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">  
-        <li class="nav-item">
-          <a class="nav-link" href="/admin/doc">Tài liệu</a>
-        </li>    
-        <li class="nav-item">
-          <a class="nav-link" href="/admin/">Đơn vị</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/admin/account">Tài khoản</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Danh mục
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">          
-            <a class="dropdown-item" href="/admin/don-vi-hanh-chinh">Đơn vị hành chính</a>           
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/admin/doi-tuong-uu-tien">Đối tượng ưu tiên</a>
-            <a class="dropdown-item" href="/admin/job">Nghề nghiệp</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/admin/dan-toc">Dân tộc</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/admin/csyt">Cơ sở y tế</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/admin/vaccin">Loại vaccin</a>
-          </div>
-        </li>
-      
-      </ul>
-       
-        <button class="btn btn-warning btn-sm my-2" id="btnChangePassword">Change Password</button>
-        <button class="btn btn-danger btn-sm my-2 ml-3" id="btnLogout">Logout</button>
+  <a class="navbar-brand" href="/admin">Tiêm phòng Covid</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
-    </div>
-  </nav>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/admin/ho-so">Hồ sơ</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/admin/doc">Tài liệu</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/admin/">Đơn vị</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/admin/account">Tài khoản</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          Danh mục
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/admin/don-vi-hanh-chinh">Đơn vị hành chính</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/admin/doi-tuong-uu-tien">Đối tượng ưu tiên</a>
+          <a class="dropdown-item" href="/admin/job">Nghề nghiệp</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/admin/dan-toc">Dân tộc</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/admin/csyt">Cơ sở y tế</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/admin/vaccin">Loại vaccin</a>
+        </div>
+      </li>
 
-  <%-include('change_password')%>
-  <script>
-    $('#btnChangePassword').click(function(){
+    </ul>
+
+    <button class="btn btn-warning btn-sm my-2" id="btnChangePassword">Change Password</button>
+    <button class="btn btn-danger btn-sm my-2 ml-3" id="btnLogout">Logout</button>
+
+  </div>
+</nav>
+
+<%-include('change_password')%>
+  <script>   
+    $('#btnChangePassword').click(function () {
       $('#modalChangePassword').modal();
     })
 
-    $('#btnLogout').click(function(){
+    $('#btnLogout').click(function () {
       window.localStorage.removeItem('ACCESS_TOKEN');
       alert('You have logout');
-      let baseUrl =getBaseUrl();
-      $(location).attr('href', baseUrl+'/login');
+      let baseUrl = getBaseUrl();
+      $(location).attr('href', baseUrl + '/admin/login');
     })
   </script>

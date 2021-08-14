@@ -69,6 +69,11 @@ app.use('/admin/account',admin_account_controller);
 const admin_administrative_unit_controller = require('./CONTROLLERS/admin/administrative_unit_controller');
 app.use('/admin/don-vi-hanh-chinh',admin_administrative_unit_controller);
 
+
+const admin_citizen_vaccination_controller = require('./CONTROLLERS/admin/citizen_vaccination_controller');
+app.use('/admin/ho-so',admin_citizen_vaccination_controller);
+
+
 const admin_dept_controller = require('./CONTROLLERS/admin/dept_controller');
 app.use('/admin/dept',admin_dept_controller);
 

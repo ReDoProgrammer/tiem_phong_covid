@@ -120,7 +120,9 @@ router.put('/error', authenticateToken, (req, res) => {
                     msg: `Cập nhật lỗi hồ sơ thất bại. Lỗi: ${new Error(err.message)}`
                 })
             }
-            return res.status(200).json('Cập nhật lỗi hồ sơ thành công!');
+            return res.status(200).json({
+                msg:'Cập nhật lỗi hồ sơ thành công!'
+            });
         })
     } else {
         return res.status(409).json({
