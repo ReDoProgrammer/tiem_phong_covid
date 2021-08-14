@@ -34,6 +34,10 @@ const citizenVaccinatonSchema = new Schema({
         type:Schema.Types.ObjectId,
         ref:'job'
     },
+    work_place:{
+        type:String,
+        default:''
+    },
     phone:{
         type:String
     },

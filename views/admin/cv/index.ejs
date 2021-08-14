@@ -30,6 +30,7 @@
         <th rowspan="2" class="align-middle font-weight-bold text-center">Email</th>
         <th rowspan="2" class="align-middle font-weight-bold text-center">Đối tượng ưu tiên</th>
         <th rowspan="2" class="align-middle font-weight-bold text-center">Nghề nghiệp</th>
+        <th rowspan="2" class="align-middle font-weight-bold text-center">Đơn vị công tác</th>
         <th rowspan="2" class="align-middle font-weight-bold text-center">Số điện thoại</th>
         <th rowspan="2" class="align-middle font-weight-bold text-center">CMND/CCCD</th>
         <th rowspan="2" class="align-middle font-weight-bold text-center">Số thẻ BHYT</th>
@@ -62,6 +63,7 @@
 </div>
 
 <button class="btn btn-danger" id="btnDestroyAllCV">Xóa toàn bộ hồ sơ</button>
+<button class="btn btn-danger" id="btnDropCollection">Xóa bảng</button>
 
 
 <%-include('modal_error')%>
@@ -95,6 +97,26 @@
         })
       }
     })
+
+    $('#btnDropCollection').click(function () {
+      var r = confirm(
+        "Thao tác này sẽ xóa toàn bộ hồ sơ. Bạn vẫn muốn tiếp tục?"
+      );
+      if (r == true) {
+        $.ajax({
+          url: '/admin/ho-so/drop',
+          type: 'post',
+          headers: {
+            Authorization: "Covid-19 " + getACCESS_TOKEN()
+          },
+          success: function (data) {
+            alert(data.msg);
+            LoadCV();
+          },
+        })
+      }
+    })
+
 
 
     $(document).on("click", "button[name='set_error']", function () {
@@ -134,7 +156,7 @@
             x['email'] = c.email;
             x['po_code'] = c.po_id.code;
             x['job'] = c.job_id.name;
-            x['unit'] = c.unit_id.name;
+            x['unit'] = c.work_place;
             x['phone'] = c.phone;
             x['id_number'] = c.id_number;
             x['hi_no'] = c.hi_no;
@@ -239,6 +261,7 @@
             tr += '<td class="text-nowrap">' + c.email + '</td>';
             tr += '<td class="text-nowrap">' + c.po_id.name + '</td>';
             tr += '<td class="text-nowrap">' + c.job_id.name + '</td>';
+            tr += '<td class="text-nowrap">' + c.work_place + '</td>';
             tr += '<td class="text-nowrap">' + c.phone + '</td>';
             tr += '<td class="text-nowrap">' + c.id_number + '</td>';
             tr += '<td class="text-nowrap">' + c.hi_no + '</td>';

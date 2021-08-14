@@ -83,6 +83,19 @@ router.delete('/destroy',authenticateToken,(req,res)=>{
 })
 
 
+router.post('/drop',authenticateToken,(req,res)=>{
+        try {
+            CV.collection.drop();
+            return res.status(200).json({
+                msg:'Drop collection successfully!'
+            });
+        } catch (error) {
+            return res.status(500).json({
+                msg:`Drop collection failed. Error: ${new Error(err.message)}`
+            })
+        }
+})
+
 router.get('/excel', authenticateToken, (req, res) => {
     CV.find()
         .populate('nation_id', '-_id code')

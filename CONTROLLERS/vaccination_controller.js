@@ -53,11 +53,6 @@ router.get('/excel',authenticateToken, (req, res) => {
    })
 })
 
-router.get('/export-to-excel',(req,res)=>{
-    res.render('vaccination/excel', {     
-        layout: 'vaccination/excel'
-    });
-})
 
 
 
@@ -73,6 +68,7 @@ router.put('/', authenticateToken, (req, res) => {
         email,
         po_id: po,
         job_id: job,
+        work_place,
         phone,
         id_number,
         hi_no,
@@ -110,7 +106,6 @@ router.put('/', authenticateToken, (req, res) => {
 router.put('/error', authenticateToken, (req, res) => {
     if (req.user.is_mod) {
         let { cvId, err } = req.body;
-        console.log({ cvId, err });
         CV.findOneAndUpdate({ _id: cvId }, {
             error_note: err,
             is_correct: false
@@ -204,7 +199,7 @@ router.get('/list', authenticateToken, (req, res) => {
 
 
 router.post('/', authenticateToken, (req, res) => {
-    let { fullname, gender, dob, nation, email, po, job, phone, id_number, hi_no, nationality, province, district, ward, detail_address, hf, remark, vaccin1, date1, no1, vaccin2, date2, no2 } = req.body; console.log({ fullname, gender, dob, nation, email, po, job, phone, id_number, hi_no, nationality, province, district, ward, detail_address, hf, remark, vaccin1, date1, no1, vaccin2, date2, no2 });
+    let { fullname, gender, dob, nation, email, po, job,work_place, phone, id_number, hi_no, nationality, province, district, ward, detail_address, hf, remark, vaccin1, date1, no1, vaccin2, date2, no2 } = req.body; console.log({ fullname, gender, dob, nation, email, po, job, phone, id_number, hi_no, nationality, province, district, ward, detail_address, hf, remark, vaccin1, date1, no1, vaccin2, date2, no2 });
 
     CV.countDocuments({ id_number })
         .then(count => {
@@ -219,6 +214,7 @@ router.post('/', authenticateToken, (req, res) => {
                     email,
                     po_id: po,
                     job_id: job,
+                    work_place,
                     phone,
                     id_number,
                     hi_no,

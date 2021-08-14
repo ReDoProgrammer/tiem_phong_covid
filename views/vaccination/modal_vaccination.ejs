@@ -54,19 +54,27 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-sm-3 form-group">
+                    <div class="col-sm-4 form-group">
                         <label class="text-info">Nghề nghiệp:</label>
                         <select name="" id="slJob" class="form-control"></select>
                     </div>
-                    <div class="col-sm-3 form-group">
-                        <label class="text-info">Điện thoại:</label>
+                    <div class="col-sm-8">
+                        <label for="">Đơn vị công tác</label>
+                        <input type="text" placeholder="Đơn vị công tác" id="txtWorkPlace" class="form-control">
+                    </div>
+                   
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4 form-group">
+                        <label class="text-info">Điện thoại(<span class="text-danger">*</span>):</label>
                         <input type="text" name="" id="txtPhone" class="form-control">
                     </div>
-                    <div class="col-sm-3 form-group">
-                        <label class="text-info">CMND/CCCD:</label>
+                    <div class="col-sm-4 form-group">
+                        <label class="text-info">CMND/CCCD(<span class="text-danger">*</span>):</label>
                         <input type="text" name="" id="txtIDNumber" class="form-control">
                     </div>
-                    <div class="col-sm-3 form-group">
+                    <div class="col-sm-4 form-group">
                         <label class="text-info">Thẻ BHYT:</label>
                         <input type="text" name="" id="txtHINo" class="form-control">
                     </div>
@@ -209,6 +217,7 @@
         let email = $('#txtEmail').val();
         let po = $('#slPO option:selected').val();
         let job = $('#slJob option:selected').val();
+        let work_place = $('#txtWorkPlace').val();
         let phone = $('#txtPhone').val().trim();
         let id_number = $('#txtIDNumber').val().trim();
         let hi_no = $('#txtHINo').val().trim();
@@ -242,7 +251,7 @@
             return;
         }
 
-        if (phone.length < 10) {
+        if (phone.length != 10) {
             alert('Số điện thoại không hợp lệ. SĐT tối thiểu là 10 số');
             return;
         }
@@ -316,7 +325,7 @@
                 headers: {
                     Authorization: "Covid-19 " + getACCESS_TOKEN()
                 },
-                data: { fullname, gender, dob, nation, email, po, job, phone, id_number, hi_no, nationality, province, district, ward, detail_address, hf, remark, vaccin1, date1, no1, vaccin2, date2, no2 },
+                data: { fullname, gender, dob, nation, email, po, job,work_place, phone, id_number, hi_no, nationality, province, district, ward, detail_address, hf, remark, vaccin1, date1, no1, vaccin2, date2, no2 },
                 success: function (data) {
                     alert(data.msg);
 
