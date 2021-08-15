@@ -159,6 +159,7 @@ router.delete('/', authenticateToken, (req, res) => {
 router.get('/list', authenticateToken, (req, res) => {
 
     let { search } = req.query;
+   
     CV.find({
         $or: [
             { fullname: { "$regex": search, "$options": "i" } },
@@ -166,7 +167,7 @@ router.get('/list', authenticateToken, (req, res) => {
             { email: { "$regex": search, "$options": "i" } },
             { id_number: { "$regex": search, "$options": "i" } },
             { hi_no: { "$regex": search, "$options": "i" } }
-        ],
+        ],       
         unit_id:req.user.unit_id
     })
         .populate('nation_id', '-_id name')
@@ -182,6 +183,9 @@ router.get('/list', authenticateToken, (req, res) => {
         .populate('created_by', 'fullname')
         .exec()
         .then(cv => {
+            if(!req.user.is_mod){
+                cv = cv.filter(x=>x.created_by._id == req.user.user_id);
+            }
             return res.status(200).json({
                 msg: 'Load danh sách tiêm chủng Covid-19 thành công!',
                 cv: cv,
