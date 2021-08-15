@@ -183,6 +183,7 @@ router.get('/list', authenticateToken, (req, res) => {
         .populate('created_by', 'fullname')
         .exec()
         .then(cv => {
+            console.log(cv);
             if(!req.user.is_mod){
                 cv = cv.filter(x=>x.created_by._id == req.user.user_id);
             }
