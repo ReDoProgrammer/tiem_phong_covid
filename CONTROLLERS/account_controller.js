@@ -14,6 +14,30 @@ router.get('/',(req,res)=>{
 })
 
 
+router.put('/change-password', authenticateToken, (req, res) => {
+    let { current_password, new_password } = req.body;
+    Account.findOneAndUpdate({ _id: req.user.user_id, password: current_password }, {
+        password:new_password
+    }, (err, acc) => {
+        if (err) {
+            return res.status(500).json({
+                msg: `Đổi mật khẩu thất bại! Lỗi: ${new Error(err.message)}`
+            })
+        }
+        if (acc == null) {
+            return res.status(404).json({
+                msg: 'Mật khẩu hiện tại không đúng. Vui lòng kiểm tra lại!'
+            })
+        } else {
+            return res.status(200).json({
+                msg: 'Cập nhật mật khẩu thành công!'
+            })
+        }
+
+
+    })
+})
+
 
 
 router.post('/login', (req, res) => {

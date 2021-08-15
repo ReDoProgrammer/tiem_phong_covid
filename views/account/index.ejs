@@ -45,11 +45,16 @@
                 </button>
             </div>
             <div class="modal-body container">
-
-                <div class="form-group">
-                    <select name="" id="slDept" class="form-control"></select>
+                <div class="row">
+                    <div class="col-sm-10">
+                        <select name="" id="slDept" class="form-control"></select>
+                    </div>
+                    <div class="col-sm-2 mt-1">
+                        <button class="btn btn-sm btn-success" id="btnAddDept"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                    </div>
                 </div>
-                <div class="form-group">
+
+                <div class="form-group mt-2">
                     <input type="text" name="" id="txtAccUsername" class="form-control" placeholder="Tài khoản">
                 </div>
 
@@ -88,170 +93,143 @@
     </div>
 </div>
 
+<%-include('modal_dept')%>
+
+    <script>
+        var search = "";
+        var accId = "";
+        $(document).ready(function () {
+            LoadAccount();
+            LoadDepartment();
+        })
 
 
-<script>
-    var search = "";
-    var accId = "";
-    $(document).ready(function () {
-        LoadAccount();
-        LoadDepartment();
-    })
+        $('#btnAddDept').click(function(){
+            $('#modalDept').modal();
+            $('#modalAccount').modal('hide');
+        });
 
-    function LoadDepartment() {
-        $.ajax({
-            url: '/account/dept',
-            type: 'get',
-            headers: {
-                Authorization: "Covid-19 " + getACCESS_TOKEN()
-            },
-            success: function (data) {
-                data.depts.forEach(d => {
-                    let opt = '<option value="' + d._id + '">' + d.name + '</option>';
-                    $('#slDept').append(opt);
+
+        function LoadDepartment() {
+            $.ajax({
+                url: '/account/dept',
+                type: 'get',
+                headers: {
+                    Authorization: "Covid-19 " + getACCESS_TOKEN()
+                },
+                success: function (data) {
+                    $('#slDept').empty();
+                    data.depts.forEach(d => {
+                        let opt = '<option value="' + d._id + '">' + d.name + '</option>';
+                        $('#slDept').append(opt);
+                    })
+                }, error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseJSON.msg);
+                },
+            })
+        }
+
+
+
+        $('#btnSearch').click(function () {
+            search = $('#txtSearch').val();
+            LoadAccount();
+        })
+
+        $('#btnAddNew').click(function () {
+            accId = "";
+            $('#modalTitle').text("Thêm mới tài khoản");
+            $('#modalAccount').modal();
+            $('#txtAccUsername').val('');
+            $('#txtAccPhone').val('');
+            $('#txtAccPhone').val('');
+            $('#txtAccEmail').val('');
+            $('#txtAccPassword').val('123');
+            $('#txtAccConfirmPassword').val('123');
+
+            $('#txtAccUsername').prop('readonly', false);
+        })
+
+        $('#btnSubmit').click(function () {
+            let dept = $('#slDept option:selected').val();
+            let username = $('#txtAccUsername').val();
+            let password = $('#txtAccPassword').val();
+            let confirmPassword = $('#txtAccConfirmPassword').val();
+            let fullname = UppercaseEachFirstLetter($('#txtAccFullname').val());
+            let phone = $('#txtAccPhone').val();
+            let email = $('#txtAccEmail').val();
+            if (username.trim().length == 0) {
+                alert('Vui lòng nhập tài khoản');
+                return;
+            }
+
+            if (password != confirmPassword) {
+                alert('Mật khẩu 2 lần nhập không giống nhau!');
+                return;
+            }
+
+            if (accId.trim().length == 0) {
+                //thêm mới 1 tài khoản
+                $.ajax({
+                    url: '/account',
+                    type: 'post',
+                    headers: {
+                        Authorization: "Covid-19 " + getACCESS_TOKEN()
+                    },
+                    data: {
+                        dept,
+                        username,
+                        password,
+                        fullname,
+                        phone,
+                        email
+                    }, success: function (data) {
+                        alert(data.msg);
+                        LoadAccount();
+
+                        $('#txtAccUsername').val('');
+                        $('#txtAccPassword').val('123');
+                        $('#txtAccConfirmPassword').val('123');
+                        $('#txtAccFullname').val('');
+                        $('#txtAccPhone').val('');
+                        $('#txtAccEmail').val('');
+                    }, error: function (jqXHR, textStatus, errorThrown) {
+                        alert(jqXHR.responseJSON.msg);
+                    },
                 })
-            }, error: function (jqXHR, textStatus, errorThrown) {
-                alert(jqXHR.responseJSON.msg);
-            },
-        })
-    }
-
-
-
-    $('#btnSearch').click(function () {
-        search = $('#txtSearch').val();
-        LoadAccount();
-    })
-
-    $('#btnAddNew').click(function () {
-        accId = "";
-        $('#modalTitle').text("Thêm mới tài khoản");
-        $('#modalAccount').modal();
-        $('#txtAccUsername').val('');
-        $('#txtAccPhone').val('');
-        $('#txtAccPhone').val('');
-        $('#txtAccEmail').val('');
-        $('#txtAccPassword').val('123');
-        $('#txtAccConfirmPassword').val('123');
-
-        $('#txtAccUsername').prop('readonly', false);
-    })
-
-    $('#btnSubmit').click(function () {
-        let dept = $('#slDept option:selected').val();
-        let username = $('#txtAccUsername').val();
-        let password = $('#txtAccPassword').val();
-        let confirmPassword = $('#txtAccConfirmPassword').val();
-        let fullname = UppercaseEachFirstLetter($('#txtAccFullname').val());
-        let phone = $('#txtAccPhone').val();
-        let email = $('#txtAccEmail').val();
-        if (username.trim().length == 0) {
-            alert('Vui lòng nhập tài khoản');
-            return;
-        }
-
-        if (password != confirmPassword) {
-            alert('Mật khẩu 2 lần nhập không giống nhau!');
-            return;
-        }
-
-        if (accId.trim().length == 0) {
-            //thêm mới 1 tài khoản
-            $.ajax({
-                url: '/account',
-                type: 'post',
-                headers: {
-                    Authorization: "Covid-19 " + getACCESS_TOKEN()
-                },
-                data: {
-                    dept,
-                    username,
-                    password,
-                    fullname,
-                    phone,
-                    email
-                }, success: function (data) {
-                    alert(data.msg);
-                    LoadAccount();
-
-                    $('#txtAccUsername').val('');
-                    $('#txtAccPassword').val('123');
-                    $('#txtAccConfirmPassword').val('123');
-                    $('#txtAccFullname').val('');
-                    $('#txtAccPhone').val('');
-                    $('#txtAccEmail').val('');
-                }, error: function (jqXHR, textStatus, errorThrown) {
-                    alert(jqXHR.responseJSON.msg);
-                },
-            })
-        } else {
-            //cập nhật tài khoản hiện có
-            $.ajax({
-                url: '/account',
-                type: 'put',
-                headers: {
-                    Authorization: "Covid-19 " + getACCESS_TOKEN()
-                },
-                data: {
-                    accId,
-                    dept,
-                    username,
-                    password,
-                    fullname,
-                    phone,
-                    email
-                }, success: function (data) {
-                    alert(data.msg);
-                    LoadAccount();
-                    accId = "";
-                    $('#modalAccount').modal('hide');
-                }, error: function (jqXHR, textStatus, errorThrown) {
-                    alert(jqXHR.responseJSON.msg);
-                },
-            })
-        }
-    })
-
-    $(document).on("click", "button[name='update']", function () {
-        accId = $(this).closest("tr").attr("id");
-        $.ajax({
-            url: '/account/detail',
-            type: 'get',
-            headers: {
-                Authorization: "Covid-19 " + getACCESS_TOKEN()
-            },
-            data: {
-                accId
-            },
-            success: function (data) {
-                $('#modalTitle').text("Cập nhật thông tin tài khoản");
-                $('#slDept').val(data.acc.dept);
-                $('#txtAccUsername').val(data.acc.username);
-                $('#txtAccUsername').prop('readonly', true);
-                $('#txtAccPhone').val(data.acc.phone);
-                $('#txtAccFullname').val(UppercaseEachFirstLetter(data.acc.fullname));
-                $('#txtAccEmail').val(data.acc.email);
-                $('#txtAccPassword').val(data.acc.password);
-                $('#txtAccConfirmPassword').val(data.acc.password);
-                $('#modalAccount').modal();
-            }, error: function (jqXHR, textStatus, errorThrown) {
-                alert(jqXHR.responseJSON.msg);
-            },
+            } else {
+                //cập nhật tài khoản hiện có
+                $.ajax({
+                    url: '/account',
+                    type: 'put',
+                    headers: {
+                        Authorization: "Covid-19 " + getACCESS_TOKEN()
+                    },
+                    data: {
+                        accId,
+                        dept,
+                        username,
+                        password,
+                        fullname,
+                        phone,
+                        email
+                    }, success: function (data) {
+                        alert(data.msg);
+                        LoadAccount();
+                        accId = "";
+                        $('#modalAccount').modal('hide');
+                    }, error: function (jqXHR, textStatus, errorThrown) {
+                        alert(jqXHR.responseJSON.msg);
+                    },
+                })
+            }
         })
 
-    })
-
-
-    $(document).on("click", "button[name='delete']", function () {
-        accId = $(this).closest("tr").attr("id");
-        accName = $(this).closest("tr").data("name");
-        var r = confirm(
-            "Bạn thực sự muốn xóa tài khoản " + accName + "?"
-        );
-        if (r) {
+        $(document).on("click", "button[name='update']", function () {
+            accId = $(this).closest("tr").attr("id");
             $.ajax({
-                url: '/account',
-                type: 'delete',
+                url: '/account/detail',
+                type: 'get',
                 headers: {
                     Authorization: "Covid-19 " + getACCESS_TOKEN()
                 },
@@ -259,45 +237,80 @@
                     accId
                 },
                 success: function (data) {
-                    alert(data.msg);
-                    LoadAccount();
+                    $('#modalTitle').text("Cập nhật thông tin tài khoản");
+                    $('#slDept').val(data.acc.dept);
+                    $('#txtAccUsername').val(data.acc.username);
+                    $('#txtAccUsername').prop('readonly', true);
+                    $('#txtAccPhone').val(data.acc.phone);
+                    $('#txtAccFullname').val(UppercaseEachFirstLetter(data.acc.fullname));
+                    $('#txtAccEmail').val(data.acc.email);
+                    $('#txtAccPassword').val(data.acc.password);
+                    $('#txtAccConfirmPassword').val(data.acc.password);
+                    $('#modalAccount').modal();
                 }, error: function (jqXHR, textStatus, errorThrown) {
                     alert(jqXHR.responseJSON.msg);
                 },
             })
-        }
-    })
 
-    function LoadAccount() {
-        $.ajax({
-            url: '/account/list',
-            type: 'get',
-            headers: {
-                Authorization: "Covid-19 " + getACCESS_TOKEN()
-            },
-            data: {
-                search
-            },
-            success: function (data) {
-                $('#tblContent').empty();
-                let idx = 1;
-                data.accounts.forEach(acc => {
-                    let tr = '<tr id="' + acc._id + '" data-name="' + UppercaseEachFirstLetter(acc.fullname) + '">';
-                    tr += '<td>' + (idx++) + '</td>';
-                    tr += '<td>' + acc.dept.name + '</td>';
-                    tr += '<td>' + acc.username + '</td>';
-                    tr += '<td>' + UppercaseEachFirstLetter(acc.fullname) + '</td>';
-                    tr += '<td>' + acc.phone + '</td>';
-                    tr += '<td>' + acc.email + '</td>';
-                    tr += '<td class="text-right">';
-                    tr += '<button name="update" class = "btn btn-sm btn-warning"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>';
+        })
 
-                    tr += '<button  name = "delete" class = "btn btn-sm btn-danger ml-2"><i class="fa fa-trash" aria-hidden="true"></i></button>';
-                    tr += '</td>';
-                    tr += '</tr>';
-                    $('#tblContent').append(tr);
-                });
+
+        $(document).on("click", "button[name='delete']", function () {
+            accId = $(this).closest("tr").attr("id");
+            accName = $(this).closest("tr").data("name");
+            var r = confirm(
+                "Bạn thực sự muốn xóa tài khoản " + accName + "?"
+            );
+            if (r) {
+                $.ajax({
+                    url: '/account',
+                    type: 'delete',
+                    headers: {
+                        Authorization: "Covid-19 " + getACCESS_TOKEN()
+                    },
+                    data: {
+                        accId
+                    },
+                    success: function (data) {
+                        alert(data.msg);
+                        LoadAccount();
+                    }, error: function (jqXHR, textStatus, errorThrown) {
+                        alert(jqXHR.responseJSON.msg);
+                    },
+                })
             }
         })
-    }
-</script>
+
+        function LoadAccount() {
+            $.ajax({
+                url: '/account/list',
+                type: 'get',
+                headers: {
+                    Authorization: "Covid-19 " + getACCESS_TOKEN()
+                },
+                data: {
+                    search
+                },
+                success: function (data) {
+                    $('#tblContent').empty();
+                    let idx = 1;
+                    data.accounts.forEach(acc => {
+                        let tr = '<tr id="' + acc._id + '" data-name="' + UppercaseEachFirstLetter(acc.fullname) + '">';
+                        tr += '<td>' + (idx++) + '</td>';
+                        tr += '<td>' + acc.dept.name + '</td>';
+                        tr += '<td>' + acc.username + '</td>';
+                        tr += '<td>' + UppercaseEachFirstLetter(acc.fullname) + '</td>';
+                        tr += '<td>' + acc.phone + '</td>';
+                        tr += '<td>' + acc.email + '</td>';
+                        tr += '<td class="text-right">';
+                        tr += '<button name="update" class = "btn btn-sm btn-warning"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>';
+
+                        tr += '<button  name = "delete" class = "btn btn-sm btn-danger ml-2"><i class="fa fa-trash" aria-hidden="true"></i></button>';
+                        tr += '</td>';
+                        tr += '</tr>';
+                        $('#tblContent').append(tr);
+                    });
+                }
+            })
+        }
+    </script>

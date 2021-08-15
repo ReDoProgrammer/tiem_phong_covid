@@ -42,6 +42,9 @@ app.use('/', home_controller);
 const account_controller = require('./CONTROLLERS/account_controller');
 app.use('/account',account_controller);
 
+const dept_controller = require('./CONTROLLERS/deparment_controller');
+app.use('/dept',dept_controller);
+
 const vaccination_controller = require('./CONTROLLERS/vaccination_controller');
 app.use('/danh-sach-tiem-phong-covid-19',vaccination_controller);
 
