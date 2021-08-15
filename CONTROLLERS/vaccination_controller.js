@@ -58,6 +58,7 @@ router.get('/excel',authenticateToken, (req, res) => {
 
 router.put('/', authenticateToken, (req, res) => {
     let { cvId, fullname, gender, dob, nation, email, po, job,work_place, phone, id_number, hi_no, nationality, province, district, ward, detail_address, hf, remark, vaccin1, date1, no1, vaccin2, date2, no2 } = req.body; console.log({ fullname, gender, dob, nation, email, po, job, phone, id_number, hi_no, nationality, province, district, ward, detail_address, hf, remark, vaccin1, date1, no1, vaccin2, date2, no2 });
+    console.log({ cvId, fullname, gender, dob, nation, email, po, job,work_place, phone, id_number, hi_no, nationality, province, district, ward, detail_address, hf, remark, vaccin1, date1, no1, vaccin2, date2, no2 } = req.body; console.log({ fullname, gender, dob, nation, email, po, job, phone, id_number, hi_no, nationality, province, district, ward, detail_address, hf, remark, vaccin1, date1, no1, vaccin2, date2, no2 });
 
 
     CV.findOneAndUpdate({ _id: cvId }, {
@@ -166,7 +167,8 @@ router.get('/list', authenticateToken, (req, res) => {
             { email: { "$regex": search, "$options": "i" } },
             { id_number: { "$regex": search, "$options": "i" } },
             { hi_no: { "$regex": search, "$options": "i" } }
-        ]
+        ],
+        unit_id:req.user.unit_id
     })
         .populate('nation_id', '-_id name')
         .populate('po_id', '-_id name')
