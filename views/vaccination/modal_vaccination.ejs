@@ -349,7 +349,7 @@
                 headers: {
                     Authorization: "Covid-19 " + getACCESS_TOKEN()
                 },
-                data: { cvId,fullname, gender, dob, nation, email, po, job, phone, id_number, hi_no, nationality, province, district, ward, detail_address, hf, remark, vaccin1, date1, no1, vaccin2, date2, no2 },
+                data: { cvId,fullname, gender, dob, nation, email, po, job,work_place, phone, id_number, hi_no, nationality, province, district, ward, detail_address, hf, remark, vaccin1, date1, no1, vaccin2, date2, no2 },
                 success: function (data) {
                     alert(data.msg);
                     $('#modalVaccination').modal('hide');
