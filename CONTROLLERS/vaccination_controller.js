@@ -26,38 +26,41 @@ router.get('/', (req, res) => {
 
 
 
-router.get('/excel',authenticateToken, (req, res) => {
-   CV.find({created_by:req.user.user_id})
-   .populate('nation_id','-_id code')
-   .populate('nationality_id','-_id code')
-   .populate('prov_id','-_id code name')
-   .populate('dist_id','-_id code name')
-   .populate('ward_id','-_id code name')
-   .populate('po_id','-_id code')
-   .populate('job_id','-_id name')
-   .populate('unit_id','-_id name')
-   .populate('hf_id','-_id code')
-   .populate('vaccin1','-_id name')
-   .populate('vaccin2','-_id name')
-   .exec()  
-   .then(cv=>{
-       return res.status(200).json({
-           msg:'Load danh sách hồ sơ thành công!',
-           cv
-       })
-   })
-   .catch(err=>{
-       return res.status(500).json({
-           msg:`Load danh sách hồ sơ thất bại. Lỗi: ${new Error(err.message)}`
-       })
-   })
+router.get('/excel', authenticateToken, (req, res) => {
+    CV.find({ unit_id: req.user.unit_id })
+        .populate('nation_id', '-_id code')
+        .populate('nationality_id', '-_id code')
+        .populate('prov_id', '-_id code name')
+        .populate('dist_id', '-_id code name')
+        .populate('ward_id', '-_id code name')
+        .populate('po_id', '-_id code')
+        .populate('job_id', '-_id name')
+        .populate('unit_id', '-_id name')
+        .populate('hf_id', '-_id code')
+        .populate('vaccin1', '-_id name')
+        .populate('vaccin2', '-_id name')
+        .exec()
+        .then(cv => {
+            if (!req.user.is_mod) {
+                cv = cv.filter(x => x.created_by == req.user.user_id)
+            }
+            return res.status(200).json({
+                msg: 'Load danh sách hồ sơ thành công!',
+                cv
+            })
+        })
+        .catch(err => {
+            return res.status(500).json({
+                msg: `Load danh sách hồ sơ thất bại. Lỗi: ${new Error(err.message)}`
+            })
+        })
 })
 
 
 
 
 router.put('/', authenticateToken, (req, res) => {
-    let { cvId, fullname, gender, dob, nation, email, po, job,work_place, phone, id_number, hi_no, nationality, province, district, ward, detail_address, hf, remark, vaccin1, date1, no1, vaccin2, date2, no2 } = req.body; 
+    let { cvId, fullname, gender, dob, nation, email, po, job, work_place, phone, id_number, hi_no, nationality, province, district, ward, detail_address, hf, remark, vaccin1, date1, no1, vaccin2, date2, no2 } = req.body;
 
 
     CV.findOneAndUpdate({ _id: cvId }, {
@@ -116,7 +119,7 @@ router.put('/error', authenticateToken, (req, res) => {
                 })
             }
             return res.status(200).json({
-                msg:'Cập nhật lỗi hồ sơ thành công!'
+                msg: 'Cập nhật lỗi hồ sơ thành công!'
             });
         })
     } else {
@@ -159,7 +162,7 @@ router.delete('/', authenticateToken, (req, res) => {
 router.get('/list', authenticateToken, (req, res) => {
 
     let { search } = req.query;
-   
+
     CV.find({
         $or: [
             { fullname: { "$regex": search, "$options": "i" } },
@@ -167,8 +170,8 @@ router.get('/list', authenticateToken, (req, res) => {
             { email: { "$regex": search, "$options": "i" } },
             { id_number: { "$regex": search, "$options": "i" } },
             { hi_no: { "$regex": search, "$options": "i" } }
-        ],       
-        unit_id:req.user.unit_id
+        ],
+        unit_id: req.user.unit_id
     })
         .populate('nation_id', '-_id name')
         .populate('po_id', '-_id name')
@@ -183,9 +186,8 @@ router.get('/list', authenticateToken, (req, res) => {
         .populate('created_by', 'fullname')
         .exec()
         .then(cv => {
-            console.log(cv);
-            if(!req.user.is_mod){
-                cv = cv.filter(x=>x.created_by._id == req.user.user_id);
+            if (!req.user.is_mod) {
+                cv = cv.filter(x => x.created_by._id == req.user.user_id);
             }
             return res.status(200).json({
                 msg: 'Load danh sách tiêm chủng Covid-19 thành công!',
@@ -205,7 +207,7 @@ router.get('/list', authenticateToken, (req, res) => {
 
 
 router.post('/', authenticateToken, (req, res) => {
-    let { fullname, gender, dob, nation, email, po, job,work_place, phone, id_number, hi_no, nationality, province, district, ward, detail_address, hf, remark, vaccin1, date1, no1, vaccin2, date2, no2 } = req.body; console.log({ fullname, gender, dob, nation, email, po, job, phone, id_number, hi_no, nationality, province, district, ward, detail_address, hf, remark, vaccin1, date1, no1, vaccin2, date2, no2 });
+    let { fullname, gender, dob, nation, email, po, job, work_place, phone, id_number, hi_no, nationality, province, district, ward, detail_address, hf, remark, vaccin1, date1, no1, vaccin2, date2, no2 } = req.body; console.log({ fullname, gender, dob, nation, email, po, job, phone, id_number, hi_no, nationality, province, district, ward, detail_address, hf, remark, vaccin1, date1, no1, vaccin2, date2, no2 });
 
     CV.countDocuments({ id_number })
         .then(count => {
