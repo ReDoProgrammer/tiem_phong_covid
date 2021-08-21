@@ -10,6 +10,20 @@
                 </button>
             </div>
             <div class="modal-body container">
+                
+                <div class="row justify-content-center mb-20" id="qrCode">
+                   <div class="col-sm-5">
+                    <div class="card">
+                        <div class="card-header">
+
+                        </div>
+                        <div class="card-body">
+                            <video id="preview" width="240" height="240"></video>                           
+                        </div>
+                    </div>
+                   </div>
+                   
+                </div>
                 <div class="row">
                     <div class="col-sm-4 form-group">
                         <label class="text-info">Họ tên:</label>
@@ -194,6 +208,91 @@
     </div>
 </div>
 
+
+
+
+<script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function(){
+        $('#qrCode').hide();
+    })
+
+    var scanner = new Instascan.Scanner({ video: document.getElementById('preview'), scanPeriod: 5, mirror: false });
+    scanner.addListener('scan', function (content) {
+
+        //window.location.href=content;
+         
+        let arr = splitIDCard(content);
+        if(arr.length > 0){
+            $('#txtFullname').val(arr[2]);
+            if (arr[4] == 'Nam') {
+                $('#rbtMale').prop('checked', true);
+              } else {
+                if (arr[4] == 'Nữ') {
+                  $('#rbtFemale').prop('checked', true);
+                } else {
+                  $('#rbtOther').prop('checked', true);
+                }
+              }
+            let dob = arr[3];
+            $('#txtDOB').val(dob.substr(0,2)+'/'+dob.substr(2,2)+'/'+dob.substr(4,4));
+            // let detail_address = arr[5].split(',');
+            // $('#txtDetailAddress').val(detail_address[0]+',');
+            $('#txtIDNumber').va(arr[0]);
+        }
+    });
+    Instascan.Camera.getCameras().then(function (cameras) {
+        if (cameras.length > 0) {
+            scanner.start(cameras[0]);
+            $('[name="options"]').on('change', function () {
+                if ($(this).val() == 1) {
+                    if (cameras[0] != "") {
+                        scanner.start(cameras[0]);
+                    } else {
+                        alert('No Front camera found!');
+                    }
+                } else if ($(this).val() == 2) {
+                    if (cameras[1] != "") {
+                        scanner.start(cameras[1]);
+                    } else {
+                        alert('No Back camera found!');
+                    }
+                }
+            });
+        } else {
+            console.error('No cameras found.');
+            alert('No cameras found.');
+        }
+    }).catch(function (e) {
+        console.error(e);
+        alert(1)
+        alert(e);
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <script>
     $(document).ready(function () {
         LoadPO();
@@ -206,7 +305,7 @@
     })
 
     $('#btnQRCode').click(function(){
-        $('#modalQRCode').modal();
+        $('#qrCode').show(500);
     })
 
     $.fn.datepicker.defaults.format = "dd/mm/yyyy";

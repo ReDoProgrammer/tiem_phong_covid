@@ -1,5 +1,5 @@
 <div class="modal" tabindex="-1" role="dialog" id="modalQRCode">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title text-info" id="title_error">Quét mã thẻ CCCD</h5>
@@ -9,21 +9,15 @@
             </div>
             <div class="modal-body container">
 
-                <div class="row justify-content-center mt-20">
+                <div class="row  justify-content-center">
                     <div class="col-sm-12">
-                     <div class="card">
-                         <div class="card-header">
-             
-                         </div>
-                         <div class="card-body">
-                             <video id="preview" width="300" height="300"></video>
-                             <input type="text" class="form-control" id="txtContent">
-                         </div>
-                     </div>
+                        <video id="preview"></video>
                     </div>
-                </div>
+                </div>               
 
             </div>
+
+
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-success" id="btnSubmitError">
@@ -40,25 +34,48 @@
     </div>
 </div>
 
+<style>
+    #preview {
+        width: 300px;
+        height: 300px;
+        margin-left: 0 auto;
+        margin-right: 0 auto;
 
-<script src="/js/instascan.min.js"></script>
+    }
+</style>
 
-<script>
-    let scanner = new Instascan.Scanner({video:document.getElementById("preview")});
-    scanner.addListener('scan',function(content){
-        $('#txtContent').val(content);
-    })
- 
- 
-    Instascan.Camera.getCameras()
-    .then(function(cameras){
-        if(cameras.length>0){
-            scanner.start(cameras[0])
-        }else{
-            alert('No camera detected')
+<script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+<script type="text/javascript">
+    var scanner = new Instascan.Scanner({ video: document.getElementById('preview'), scanPeriod: 5, mirror: false });
+    scanner.addListener('scan', function (content) {
+
+        //window.location.href=content;
+    });
+    Instascan.Camera.getCameras().then(function (cameras) {
+        if (cameras.length > 0) {
+            scanner.start(cameras[0]);
+            $('[name="options"]').on('change', function () {
+                if ($(this).val() == 1) {
+                    if (cameras[0] != "") {
+                        scanner.start(cameras[0]);
+                    } else {
+                        alert('No Front camera found!');
+                    }
+                } else if ($(this).val() == 2) {
+                    if (cameras[1] != "") {
+                        scanner.start(cameras[1]);
+                    } else {
+                        alert('No Back camera found!');
+                    }
+                }
+            });
+        } else {
+            console.error('No cameras found.');
+            alert('No cameras found.');
         }
-    })
-    .catch(e=>{
-        console.log(e.message);
-    })
- </script>
+    }).catch(function (e) {
+        console.error(e);
+        alert(1)
+        alert(e);
+    });
+</script>
