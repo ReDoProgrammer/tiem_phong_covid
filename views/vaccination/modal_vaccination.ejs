@@ -9,16 +9,13 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body container">
-                
+            <div class="modal-body container">                
                 <div class="row justify-content-center mb-20" id="qrCode">
                    <div class="col-sm-5">
-                    <div class="card">
-                        <div class="card-header">
-
-                        </div>
-                        <div class="card-body">
-                            <video id="preview" width="240" height="240"></video>                           
+                    <div class="card">                       
+                        <div class="card-body text-center">
+                            <video id="preview" width="240" height="240"></video>      
+                            <button class="btn btn-sm btn-info" id="btnFinishSan">Xong</button>                     
                         </div>
                     </div>
                    </div>
@@ -216,6 +213,10 @@
 
     $(document).ready(function(){
         $('#qrCode').hide();
+    })
+
+    $('#btnFinishSan').click(function(){
+        $('#qrCode').hide(500);
     })
 
     var scanner = new Instascan.Scanner({ video: document.getElementById('preview'), scanPeriod: 5, mirror: false });
