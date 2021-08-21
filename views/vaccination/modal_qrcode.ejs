@@ -1,0 +1,54 @@
+<div class="modal" tabindex="-1" role="dialog" id="modalQRCode">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-info" id="title_error">Thiết lập lỗi của hồ sơ</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body container">
+
+                <textarea id="target-input"></textarea>
+                <input type="button" id="openreader-btn" value="Scan QRCode" />
+
+                <div id="resultScaned">
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="btnSubmitError">
+                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                    Xác nhận
+                </button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
+<!-- qrcode-reader core CSS file -->
+<link rel="stylesheet" href="/dist/qrcode/qrcode-reader.min.css">
+
+<!-- qrcode-reader core JS file -->
+<script src="/dist/qrcode/qrcode-reader.min.js"></script>
+
+<script>
+    $("#openreader-btn").qrCodeReader({
+        target: "#target-input",
+        audioFeedback: true,
+        multiple: true,
+        skipDuplicates: false,
+        callback: function (codes) {
+            $('#resultScaned').html(codes);
+        }
+    });
+</script>
