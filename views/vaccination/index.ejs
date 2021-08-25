@@ -1,18 +1,12 @@
 <div class="row">
-  <div class="col-sm-1">
+  <div class="col-sm-2">
     <button class="btn btn-success" id="btnAddNew">
       <i class="fa fa-plus" aria-hidden="true"></i>
       Thêm mới
     </button>
   </div>
-  <div class="col-sm-1">
-    <button class="btn btn-info" id="btnImportExcel">
-      <i class="fa fa-file-excel-o" aria-hidden="true"></i>
-      Import Excel
-    </button>
-  </div>
   <!-- phần tìm kiếm -->
-  <div class="offset-sm-2 col-sm-4">
+  <div class="offset-sm-4 col-sm-4">
     <div class="input-group">
       <input type="text" class="form-control" placeholder="Keyword ..." id="txtSearch" />
       <div class="input-group-btn">
@@ -75,144 +69,170 @@
 </div>
 
 
-
-
 <script src="../../dist/date-picker/js/bootstrap-datepicker.min.js"></script>
 <link rel="stylesheet" href="../../dist/date-picker/css/bootstrap-datepicker.css">
 <script type="text/javascript" src="//unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
-
-
-
-
 <%-include('modal_vaccination')%>
   <%-include('modal_error')%>
-    <%-include('modal_import')%>
 
-
-      <script>
-        var search = "";
-        var cvId = "";
-        $(document).ready(function () {
-          LoadCV();
-        })
-
-        $('#btnImportExcel').click(_ => {
-          $('#modalImport').modal();
-        })
-
-        $('#btnExportExcel').click(function () {
-          $.ajax({
-            url: '/danh-sach-tiem-phong-covid-19/excel',
-            type: 'get',
-            headers: {
-              Authorization: "Covid-19 " + getACCESS_TOKEN()
-            },
-            success: function (data) {
-              console.log(data);
-              var createXLSLFormatObj = [];
-
-              /* XLS Head Columns */
-              var xlsHeader = ["STT", "Họ và tên", "Giới tính", "Ngày sinh", "E-mail", "Mã nhóm đối tượng ưu tiên (*)", "Nghề nghiệp", "Đơn vị công tác", "Số điện thoại (*)",
-                "Số CMT/CCCD/Hộ chiếu (*) ", "Số thẻ bảo hiểm y tế ", "Dân tộc", "Quốc tịch", "Tỉnh/Thành phố", "Mã Tỉnh/Thành phố (*)", "Quận/Huyện", "Mã Quận/Huyện", "Xã/Phường", "Mã Xã/Phường", "Địa chỉ chi tiết",
-                "Mã cơ sở y tế tiêm (*)", "Ghi chú", "Loại vắc xin (*)", "Ngày tiêm (*) ", "Lô vắc xin (*)", "Loại vắc xin (*)", "Ngày tiêm (*) ", "Lô vắc xin (*)"];
-
-
-              /* XLS Rows Data */
-              let idx = 1;
-              var xlsRows = data.cv.map(c => {
-                let x = {};
-                x['idx'] = idx++;
-                x['fullname'] = UppercaseEachFirstLetter(c.fullname);
-                x['gender'] = c.gender;
-                x['dob'] = c.dob.split('/')[2] + c.dob.split('/')[1] + c.dob.split('/')[0];
-                x['email'] = c.email;
-                x['po_code'] = c.po_id.code;
-                x['job'] = c.job_id.name;
-                x['work_place'] = c.work_place;
-                x['phone'] = c.phone;
-                x['id_number'] = c.id_number;
-                x['hi_no'] = c.hi_no;
-                x['nation'] = c.nation_id.code;
-                x['nationality'] = c.nationality_id.code;
-                x['province'] = c.prov_id.name;
-                x['province_code'] = c.prov_id.code;
-                x['district'] = c.dist_id.name;
-                x['district_code'] = c.dist_id.code;
-                x['ward'] = c.ward_id.name;
-                x['ward_code'] = c.ward_id.code;
-                x['detail_address'] = c.detail_address;
-                x['hf_no'] = c.hf_id.code;
-                x['remark'] = c.remark;
-                x['vaccin1'] = c.date1.trim().length == 0 ? '' : c.vaccin1.name;
-                x['date1'] = c.date1.trim().length == 0 ? '' : c.date1.split('/')[2] + c.date1.split('/')[1] + c.date1.split('/')[0];
-                x['no1'] = c.date1.trim().length == 0 ? '' : c.no1;
-                x['vaccin2'] = c.date2.trim().length == 0 ? '' : c.vaccin2.name;
-                x['date2'] = c.date2.trim().length == 0 ? '' : c.date2.split('/')[2] + c.date2.split('/')[1] + c.date2.split('/')[0];
-                x['no2'] = c.date2.trim().length == 0 ? '' : c.no2;
-
-                return x;
+    <script>
+      var search = "";
+      var cvId = "";
+      $(document).ready(function () {
+        LoadCV();
+      })
+      $('#btnExportExcel').click(function () {
+        $.ajax({
+          url: '/danh-sach-tiem-phong-covid-19/excel',
+          type: 'get',
+          headers: {
+            Authorization: "Covid-19 " + getACCESS_TOKEN()
+          },
+          success: function (data) {
+            console.log(data);
+            var createXLSLFormatObj = [];
+            /* XLS Head Columns */
+            var xlsHeader = ["STT", "Họ và tên","Giới tính","Ngày sinh","E-mail","Mã nhóm đối tượng ưu tiên (*)","Nghề nghiệp","Đơn vị công tác","Số điện thoại (*)",
+            "Số CMT/CCCD/Hộ chiếu (*) ","Số thẻ bảo hiểm y tế ","Dân tộc","Quốc tịch","Tỉnh/Thành phố","Mã Tỉnh/Thành phố (*)","Quận/Huyện","Mã Quận/Huyện","Xã/Phường","Mã Xã/Phường","Địa chỉ chi tiết",
+          "Mã cơ sở y tế tiêm (*)","Ghi chú","Loại vắc xin (*)","Ngày tiêm (*) ","Lô vắc xin (*)","Loại vắc xin (*)","Ngày tiêm (*) ","Lô vắc xin (*)"];
+            /* XLS Rows Data */
+            let idx = 1;
+            var xlsRows = data.cv.map(c=>{
+              let x = {};
+              x['idx'] = idx++;
+              x['fullname'] = UppercaseEachFirstLetter(c.fullname);
+              x['gender'] = c.gender;
+              x['dob'] = c.dob.split('/')[2]+ c.dob.split('/')[1]+ c.dob.split('/')[0];
+              x['email'] = c.email;
+              x['po_code'] = c.po_id.code;
+              x['job'] = c.job_id.name;
+              x['work_place'] = c.work_place;          
+              x['phone'] = c.phone;
+              x['id_number'] = c.id_number;
+              x['hi_no'] = c.hi_no;
+              x['nation'] = c.nation_id.code;
+              x['nationality'] = c.nationality_id.code;
+              x['province'] = c.prov_id.name;
+              x['province_code'] = c.prov_id.code;
+              x['district'] = c.dist_id.name;
+              x['district_code'] =c.dist_id.code;
+              x['ward'] = c.ward_id.name;
+              x['ward_code'] = c.ward_id.code;
+              x['detail_address'] = c.detail_address;
+              x['hf_no'] = c.hf_id.code;
+              x['remark'] = c.remark;
+              x['vaccin1'] =c.date1.trim().length == 0?'': c.vaccin1.name;
+              x['date1'] =c.date1.trim().length == 0?'': c.date1.split('/')[2]+ c.date1.split('/')[1]+ c.date1.split('/')[0];
+              x['no1'] = c.date1.trim().length == 0?'':c.no1;
+              x['vaccin2'] = c.date2.trim().length == 0?'':c.vaccin2.name;
+              x['date2'] =  c.date2.trim().length == 0?'':c.date2.split('/')[2]+ c.date2.split('/')[1]+ c.date2.split('/')[0];
+              x['no2'] =  c.date2.trim().length == 0?'':c.no2;
+              
+              return x;
+            });
+            createXLSLFormatObj.push(xlsHeader);
+            $.each(xlsRows, function (index, value) {
+              var innerRowData = [];
+              
+              $.each(value, function (ind, val) {
+                innerRowData.push(val);
               });
-
-              createXLSLFormatObj.push(xlsHeader);
-              $.each(xlsRows, function (index, value) {
-                var innerRowData = [];
-
-                $.each(value, function (ind, val) {
-                  innerRowData.push(val);
-                });
-                createXLSLFormatObj.push(innerRowData);
-              });
-
-
-              /* File Name */
-              var filename = "PL1_Danh sách đối tượng tiêm.xlsx";
-
-              /* Sheet Name */
-              var ws_name = "PL1_Danh sách đối tượng tiêm";
-
-              if (typeof console !== 'undefined') console.log(new Date());
-              var wb = XLSX.utils.book_new(),
-                ws = XLSX.utils.aoa_to_sheet(createXLSLFormatObj);
-
-              /* Add worksheet to workbook */
-              XLSX.utils.book_append_sheet(wb, ws, ws_name);
-
-              /* Write workbook and Download */
-              if (typeof console !== 'undefined') console.log(new Date());
-              XLSX.writeFile(wb, filename);
-              if (typeof console !== 'undefined') console.log(new Date());
-
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-              alert(jqXHR.responseJSON.msg);
+              createXLSLFormatObj.push(innerRowData);
+            });
+            /* File Name */
+            var filename = "PL1_Danh sách đối tượng tiêm.xlsx";
+            /* Sheet Name */
+            var ws_name = "PL1_Danh sách đối tượng tiêm";
+            if (typeof console !== 'undefined') console.log(new Date());
+            var wb = XLSX.utils.book_new(),
+              ws = XLSX.utils.aoa_to_sheet(createXLSLFormatObj);
+            /* Add worksheet to workbook */
+            XLSX.utils.book_append_sheet(wb, ws, ws_name);
+            /* Write workbook and Download */
+            if (typeof console !== 'undefined') console.log(new Date());
+            XLSX.writeFile(wb, filename);
+            if (typeof console !== 'undefined') console.log(new Date());
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            alert(jqXHR.responseJSON.msg);
+          }
+        })
+      })
+      $('#modalVaccination').on('shown.bs.modal', function (e) {
+        $('#txtFullname').val('');
+        $('#txtDOB').val('');
+        $('#txtEmail').val('');
+        $('#txtPhone').val('');
+        $('#txtIDNumber').val('');
+        $('#txtHINo').val('');
+        $('#txtDetailAddress').val('');
+        $('#txtRemark').val('');
+      });
+      $(document).on("click", "button[name='set_error']", function () {
+        cvId = $(this).closest("tr").attr("id");
+        $('#modalError').modal();
+      })
+      $(document).on("click", "button[name='update']", function () {
+        cvId = $(this).closest("tr").attr("id");
+        $.ajax({
+          url: '/danh-sach-tiem-phong-covid-19/detail',
+          type: 'get',
+          headers: {
+            Authorization: "Covid-19 " + getACCESS_TOKEN()
+          },
+          data: {
+            cvId
+          },
+          success: function (data) {           
+            $('#modalVaccination').modal();
+            $('#txtFullname').val(UppercaseEachFirstLetter(data.cv.fullname));
+            $('#txtDOB').val(data.cv.dob);
+            $('#txtEmail').val(data.cv.email);
+            $('#txtPhone').val(data.cv.phone);
+            $('#txtIDNumber').val(data.cv.id_number);
+            $('#txtHINo').val(data.cv.hi_no);
+            $('#txtDetailAddress').val(data.cv.detail_address);
+            $('#txtRemark').val(data.cv.remark);
+            $('#txtDate1').val(data.cv.date1);
+            $('#txtDate2').val(data.cv.date2);
+            $('#txtNo1').val(data.cv.no1);
+            $('#txtNo2').val(data.cv.no2);
+            $('#slNationality').val(data.cv.nationality_id);
+            $('#slProvince').val(data.cv.prov_id);
+            $('#slDistrict').val(data.cv.dist_id);
+            LoadWard();
+            $('#slWard').val(data.cv.ward_id);
+            $('#slNation').val(data.cv.nation_id);
+            $('#slPO').val(data.cv.po_id);
+            $('#slJob').val(data.cv.job_id);
+            $('#slHF').val(data.cv.hf_id);
+            $('#slVaccin1').val(data.cv.vaccin1);
+            $('#slVaccin2').val(data.cv.vaccin2);
+            if (data.cv.gender == 1) {
+              $('#rbtMale').prop('checked', true);
+            } else {
+              if (data.cv.gender == 2) {
+                $('#rbtFemale').prop('checked', true);
+              } else {
+                $('#rbtOther').prop('checked', true);
+              }
             }
-          })
-
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            alert(jqXHR.responseJSON.msg);
+          },
         })
-
-        $('#modalVaccination').on('shown.bs.modal', function (e) {
-          $('#txtFullname').val('');
-          $('#txtDOB').val('');
-          $('#txtEmail').val('');
-          $('#txtPhone').val('');
-          $('#txtIDNumber').val('');
-          $('#txtHINo').val('');
-          $('#txtDetailAddress').val('');
-          $('#txtRemark').val('');
-        });
-
-        $(document).on("click", "button[name='set_error']", function () {
-          cvId = $(this).closest("tr").attr("id");
-          $('#modalError').modal();
-
-        })
-
-        $(document).on("click", "button[name='update']", function () {
-          cvId = $(this).closest("tr").attr("id");
-
+      })
+      $(document).on("click", "button[name='delete']", function () {
+        let cvId = $(this).closest("tr").attr("id");
+        let cvName = $(this).closest("tr").data("name");
+        var r = confirm(
+          "Bạn thực sự muốn xóa hồ sơ của " + cvName + "?"
+        );
+        if (r) {
           $.ajax({
-            url: '/danh-sach-tiem-phong-covid-19/detail',
-            type: 'get',
+            url: '/danh-sach-tiem-phong-covid-19',
+            type: 'delete',
             headers: {
               Authorization: "Covid-19 " + getACCESS_TOKEN()
             },
@@ -220,197 +240,121 @@
               cvId
             },
             success: function (data) {
-              $('#modalVaccination').modal();
-              $('#txtFullname').val(UppercaseEachFirstLetter(data.cv.fullname));
-              $('#txtDOB').val(data.cv.dob);
-              $('#txtEmail').val(data.cv.email);
-              $('#txtPhone').val(data.cv.phone);
-              $('#txtIDNumber').val(data.cv.id_number);
-              $('#txtHINo').val(data.cv.hi_no);
-              $('#txtDetailAddress').val(data.cv.detail_address);
-              $('#txtRemark').val(data.cv.remark);
-              $('#txtDate1').val(data.cv.date1);
-              $('#txtDate2').val(data.cv.date2);
-              $('#txtNo1').val(data.cv.no1);
-              $('#txtNo2').val(data.cv.no2);
-
-              $('#slNationality').val(data.cv.nationality_id);
-              $('#slProvince').val(data.cv.prov_id);
-              $('#slDistrict').val(data.cv.dist_id);
-              LoadWard();
-              $('#slWard').val(data.cv.ward_id);
-              $('#slNation').val(data.cv.nation_id);
-              $('#slPO').val(data.cv.po_id);
-              $('#slJob').val(data.cv.job_id);
-              $('#slHF').val(data.cv.hf_id);
-              $('#slVaccin1').val(data.cv.vaccin1);
-              $('#slVaccin2').val(data.cv.vaccin2);
-
-              if (data.cv.gender == 1) {
-                $('#rbtMale').prop('checked', true);
-              } else {
-                if (data.cv.gender == 2) {
-                  $('#rbtFemale').prop('checked', true);
-                } else {
-                  $('#rbtOther').prop('checked', true);
-                }
-              }
+              alert(data.msg);
+              LoadCV();
             },
             error: function (jqXHR, textStatus, errorThrown) {
               alert(jqXHR.responseJSON.msg);
             },
-
           })
-
-        })
-
-
-
-
-        $(document).on("click", "button[name='delete']", function () {
-          let cvId = $(this).closest("tr").attr("id");
-          let cvName = $(this).closest("tr").data("name");
-          var r = confirm(
-            "Bạn thực sự muốn xóa hồ sơ của " + cvName + "?"
-          );
-          if (r) {
-            $.ajax({
-              url: '/danh-sach-tiem-phong-covid-19',
-              type: 'delete',
-              headers: {
-                Authorization: "Covid-19 " + getACCESS_TOKEN()
-              },
-              data: {
-                cvId
-              },
-              success: function (data) {
-                alert(data.msg);
-                LoadCV();
-              },
-              error: function (jqXHR, textStatus, errorThrown) {
-                alert(jqXHR.responseJSON.msg);
-              },
-
+        }
+      })
+      $('#btnAddNew').click(function () {
+        cvId = "";
+        $('#modalVaccination').modal();
+      })
+      $("#modalVaccination").on("hidden.bs.modal", function () {
+        LoadCV();
+      });
+      $("#modalError").on("hidden.bs.modal", function () {
+        LoadCV();
+      });
+      $('#btnSearch').click(function () {
+        search = $('#txtSearch').val();
+        LoadCV();
+      })
+      function LoadCV() {
+        $.ajax({
+          url: '/danh-sach-tiem-phong-covid-19/list',
+          type: 'get',
+          headers: {
+            Authorization: "Covid-19 " + getACCESS_TOKEN()
+          },
+          data: {
+            search
+          },
+          success: function (data) {
+            let idx = 1;
+            $('#tblData').empty();
+            data.cv.forEach(c => {
+              let tr = '<tr id="' + c._id + '" data-name="' + UppercaseEachFirstLetter(c.fullname) + '">';
+              if (!c.is_correct) {
+                tr = '<tr id="' + c._id + '" data-name="' + UppercaseEachFirstLetter(c.fullname) + '" class="bg-warning">';
+              }
+              tr += '<td class="text-nowrap text-right">' + (idx < 10 ? '0' + (idx++) : (idx++)) + '</td>';
+              tr += '<td class="text-nowrap">' + UppercaseEachFirstLetter(c.fullname) + '</td>';
+              tr += '<td class="text-nowrap">';
+              tr += c.gender == 1 ? 'Nam' : (c.gender == 2 ? 'Nữ' : 'Không rõ');
+              tr += '</td>';
+              tr += '<td class="text-nowrap">' + c.dob + '</td>';
+              tr += '<td class="text-nowrap">' + c.email + '</td>';
+              tr += '<td class="text-nowrap">' + c.po_id.name + '</td>';
+              tr += '<td class="text-nowrap">' + c.job_id.name + '</td>';
+              tr += '<td class="text-nowrap">' + c.work_place + '</td>';
+              tr += '<td class="text-nowrap">' + c.phone + '</td>';
+              tr += '<td class="text-nowrap">' + c.id_number + '</td>';
+              tr += '<td class="text-nowrap">' + c.hi_no + '</td>';
+              tr += '<td class="text-nowrap">' + c.nation_id.name + '</td>';
+              tr += '<td class="text-nowrap">' + c.nationality_id.name + '</td>';
+              tr += '<td class="text-nowrap">';
+              if (c.detail_address.trim().length > 0) {
+                tr += c.detail_address + ' - ';
+              }
+              tr += c.ward_id.name + ' - ' + c.dist_id.name + ' - ' + c.prov_id.name + ' - ' + c.nationality_id.name
+              tr += '</td>';
+              tr += '<td class="text-nowrap">' + c.hf_id.name + '</td>';
+              tr += '<td class="text-nowrap">' + c.remark + '</td>';
+              if (c.date1.length > 0) {
+                tr += '<td class="text-nowrap">' + c.vaccin1.name + '</td>';
+                tr += '<td class="text-nowrap">' + c.date1 + '</td>';
+                tr += '<td class="text-nowrap">' + c.no1 + '</td>';
+              } else {
+                tr += '<td></td>';
+                tr += '<td></td>';
+                tr += '<td></td>';
+              }
+              if (c.date2.length > 0) {
+                tr += '<td class="text-nowrap">' + c.vaccin2.name + '</td>';
+                tr += '<td class="text-nowrap">' + c.date2 + '</td>';
+                tr += '<td class="text-nowrap">' + c.no2 + '</td>';
+              } else {
+                tr += '<td></td>';
+                tr += '<td></td>';
+                tr += '<td></td>';
+              }
+              tr += '<td class="text-nowrap">' + UppercaseEachFirstLetter(c.created_by.fullname) + '</td>';
+              tr += '<td class="text-nowrap">' + c.error_note + '</td>';
+              tr += '<td class="text-right text-nowrap">';
+              if (c.created_by._id == data.user_id) {
+                tr += '<button  name = "update" class = "btn btn-sm btn-warning ml-2"><i class="fa fa-refresh" aria-hidden="true"></i></button>';
+                tr += '<button  name = "delete" class = "btn btn-sm btn-danger ml-2"><i class="fa fa-trash" aria-hidden="true"></i></button>';
+              }
+              if (data.error_editable) {
+                tr += '<button  name = "set_error" class = "btn btn-sm btn-warning ml-2"><i class="fa fa-exclamation-triangle text-danger" aria-hidden="true"></i></button>';
+              }
+              tr += '</td>';
+              tr += '</tr>';
+              $('#tblData').append(tr);
             })
-          }
+          }, error: function (jqXHR, textStatus, errorThrown) {
+            alert(jqXHR.responseJSON.msg);
+          },
         })
+      }
+    </script>
 
-        $('#btnAddNew').click(function () {
-          cvId = "";
-          $('#modalVaccination').modal();
-        })
-
-        $("#modalVaccination").on("hidden.bs.modal", function () {
-          LoadCV();
-        });
-        $("#modalError").on("hidden.bs.modal", function () {
-          LoadCV();
-        });
-
-        $('#btnSearch').click(function () {
-          search = $('#txtSearch').val();
-          LoadCV();
-        })
-
-        function LoadCV() {
-          $.ajax({
-            url: '/danh-sach-tiem-phong-covid-19/list',
-            type: 'get',
-            headers: {
-              Authorization: "Covid-19 " + getACCESS_TOKEN()
-            },
-            data: {
-              search
-            },
-            success: function (data) {
-              let idx = 1;
-              $('#tblData').empty();
-              data.cv.forEach(c => {
-                let tr = '<tr id="' + c._id + '" data-name="' + UppercaseEachFirstLetter(c.fullname) + '">';
-                if (!c.is_correct) {
-                  tr = '<tr id="' + c._id + '" data-name="' + UppercaseEachFirstLetter(c.fullname) + '" class="bg-warning">';
-                }
-                tr += '<td class="text-nowrap text-right">' + (idx < 10 ? '0' + (idx++) : (idx++)) + '</td>';
-                tr += '<td class="text-nowrap">' + UppercaseEachFirstLetter(c.fullname) + '</td>';
-                tr += '<td class="text-nowrap">';
-                tr += c.gender == 1 ? 'Nam' : (c.gender == 2 ? 'Nữ' : 'Không rõ');
-                tr += '</td>';
-                tr += '<td class="text-nowrap">' + c.dob + '</td>';
-                tr += '<td class="text-nowrap">' + c.email + '</td>';
-                tr += '<td class="text-nowrap">' + c.po_id.name + '</td>';
-                tr += '<td class="text-nowrap">' + c.job_id.name + '</td>';
-                tr += '<td class="text-nowrap">' + c.work_place + '</td>';
-                tr += '<td class="text-nowrap">' + c.phone + '</td>';
-                tr += '<td class="text-nowrap">' + c.id_number + '</td>';
-                tr += '<td class="text-nowrap">' + c.hi_no + '</td>';
-                tr += '<td class="text-nowrap">' + c.nation_id.name + '</td>';
-                tr += '<td class="text-nowrap">' + c.nationality_id.name + '</td>';
-                tr += '<td class="text-nowrap">';
-                if (c.detail_address.trim().length > 0) {
-                  tr += c.detail_address + ' - ';
-                }
-                tr += c.ward_id.name + ' - ' + c.dist_id.name + ' - ' + c.prov_id.name + ' - ' + c.nationality_id.name
-                tr += '</td>';
-                tr += '<td class="text-nowrap">' + c.hf_id.name + '</td>';
-                tr += '<td class="text-nowrap">' + c.remark + '</td>';
-
-                if (c.date1.length > 0) {
-                  tr += '<td class="text-nowrap">' + c.vaccin1.name + '</td>';
-                  tr += '<td class="text-nowrap">' + c.date1 + '</td>';
-                  tr += '<td class="text-nowrap">' + c.no1 + '</td>';
-                } else {
-                  tr += '<td></td>';
-                  tr += '<td></td>';
-                  tr += '<td></td>';
-                }
-
-                if (c.date2.length > 0) {
-                  tr += '<td class="text-nowrap">' + c.vaccin2.name + '</td>';
-                  tr += '<td class="text-nowrap">' + c.date2 + '</td>';
-                  tr += '<td class="text-nowrap">' + c.no2 + '</td>';
-                } else {
-                  tr += '<td></td>';
-                  tr += '<td></td>';
-                  tr += '<td></td>';
-                }
-
-
-                tr += '<td class="text-nowrap">' + UppercaseEachFirstLetter(c.created_by.fullname) + '</td>';
-                tr += '<td class="text-nowrap">' + c.error_note + '</td>';
-                tr += '<td class="text-right text-nowrap">';
-                if (c.created_by._id == data.user_id) {
-                  tr += '<button  name = "update" class = "btn btn-sm btn-warning ml-2"><i class="fa fa-refresh" aria-hidden="true"></i></button>';
-                  tr += '<button  name = "delete" class = "btn btn-sm btn-danger ml-2"><i class="fa fa-trash" aria-hidden="true"></i></button>';
-                }
-                if (data.error_editable) {
-                  tr += '<button  name = "set_error" class = "btn btn-sm btn-warning ml-2"><i class="fa fa-exclamation-triangle text-danger" aria-hidden="true"></i></button>';
-                }
-                tr += '</td>';
-                tr += '</tr>';
-                $('#tblData').append(tr);
-              })
-
-            }, error: function (jqXHR, textStatus, errorThrown) {
-              alert(jqXHR.responseJSON.msg);
-            },
-          })
-        }
-      </script>
-
-      <style>
-        #data_center {
-          display: inline-block;
-          overflow-y: scroll;
-          max-height: 550px;
-        }
-
-        table {
-          text-align: left;
-          position: relative;
-        }
-
-        thead {
-          position: sticky;
-          top: 0;
-        }
-      </style>
+    <style>
+      #data_center {
+        display: inline-block;
+        overflow-y: scroll;
+        max-height: 550px;
+      }
+      table {
+        text-align: left;
+        position: relative;
+      }
+      thead {
+        position: sticky;
+        top: 0;
+      }
+    </style>
