@@ -12,17 +12,19 @@
         </button>
     </div>
 </div>
-<table class="table table-dark mt-2">
-    <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Mã quốc gia</th>
-            <th scope="col">Tên quốc gia</th>
-            <th scope="col"></th>
-        </tr>
-    </thead>
-    <tbody id="tblContent"></tbody>
-</table>
+<div class="container-fluid">
+    <table class="table table-dark mt-2">
+        <thead>
+            <tr >
+                <th scope="col" class="col-sm-1">#</th>
+                <th scope="col" class="col-sm-1">Mã quốc gia</th>
+                <th scope="col" class="col-sm-8">Tên quốc gia</th>
+                <th scope="col" class="col-sm-2"></th>
+            </tr>
+        </thead>
+        <tbody id="tblContent"></tbody>
+    </table>
+</div>
 
 
 
@@ -109,11 +111,11 @@
                 let idx = 1;
                 $('#tblContent').empty();
                 data.nats.forEach(n => {
-                    let tr = '<tr id="' + n._id + '" data-name= "' + n.name + '">';
-                    tr += '<td>' + (idx++) + '</td>';
-                    tr += '<td>' + n.code + '</td>';
-                    tr += '<td>' + n.name + '</td>';
-                    tr += '<td class="text-right">';
+                    let tr = '<tr id="' + n._id + '" data-name= "' + n.name + '" class="row">';
+                    tr += '<td class="col-sm-1 text-right">' + (idx++) + '</td>';
+                    tr += '<td class="col-sm-1 text-center">' + n.code + '</td>';
+                    tr += '<td class="col-sm-8">' + n.name + '</td>';
+                    tr += '<td class="text-center col-sm-2">';
                     tr += '<button name="provinces" class = "btn btn-sm btn-success"><i class="fa fa-bars" aria-hidden="true"></i></button>';
                     tr += '<button  name = "deleteNat" class = "btn btn-sm btn-danger ml-2"><i class="fa fa-trash" aria-hidden="true"></i></button>';
                     tr += '</td>';
@@ -134,3 +136,14 @@
 <%-include('modal_district')%>
 
 <%-include('modal_ward')%>
+
+<style>
+    thead, tbody { display: block; width: 100%; }
+    
+    tbody {
+        height: 450px;       /* Just for the demo          */
+        overflow-y: auto;    /* Trigger vertical scroll    */
+        overflow-x: hidden;  /* Hide the horizontal scroll */
+    }
+      
+    </style>

@@ -27,21 +27,37 @@ router.get('/list',authenticateToken,(req,res)=>{
 
 router.post('/',authenticateToken,(req,res)=>{
     let {code,name} = req.body;
-    var nat = new Nationality({
-        code,
-        name
-    });
-    nat.save()
-    .then(_=>{
-        return res.status(201).json({
-            msg:'Thêm mới quốc tịch thành công!'
-        })
+    Nationality.countDocuments({code})
+    .exec()
+    .then(count=>{
+        if(count>0){
+            return res.status(409).json({
+                msg:'Mã quốc gia này đã tồn tại trong hệ thống!'
+            })
+        }else{
+            var nat = new Nationality({
+                code,
+                name
+            });
+            nat.save()
+            .then(_=>{
+                return res.status(201).json({
+                    msg:'Thêm mới quốc tịch thành công!'
+                })
+            })
+            .catch(err=>{
+                return res.status(500).json({
+                    msg:`Thêm mới quốc tịch thất bại. Lỗi: ${new Error(err.message)}`
+                })
+            })
+        }
     })
     .catch(err=>{
         return res.status(500).json({
-            msg:`Thêm mới quốc tịch thất bại. Lỗi: ${new Error(err.message)}`
+            msg:`Lỗi kiểm tra mã quốc gia: ${new Error(err.message)}`
         })
     })
+    
 })
 
 router.delete('/',authenticateToken,(req,res)=>{

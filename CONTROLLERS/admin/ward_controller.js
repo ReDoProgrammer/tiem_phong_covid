@@ -25,22 +25,36 @@ router.get('/',authenticateToken,(req,res)=>{
 
 router.post('/',authenticateToken,(req,res)=>{
     let {code,name,distId} = req.body;
-    let w = new Ward({        
-        code,
-        name,
-        dist:distId
-    });
-    w.save()
-    .then(_=>{
-        return res.status(201).json({
-            msg:'Thêm mới xã phường thành công!'
-        })
+    Ward.countDocuments({code})
+    .exec()
+    .then(count=>{
+        if(count>0){
+            return res.status(409).json({
+                msg:'Mã xã phường đã tồn tại trong hệ thống!'
+            })
+        }else{
+            let w = new Ward({        
+                code,
+                name,
+                dist:distId
+            });
+            w.save()
+            .then(_=>{
+                return res.status(201).json({
+                    msg:'Thêm mới xã phường thành công!'
+                })
+            })
+            .catch(err=>{
+                return res.status(500).json({
+                    msg:`Thêm mới xã phường thất bại. Lỗi: ${new Error(err.message)}`
+                })
+            })
+        }
     })
     .catch(err=>{
-        return res.status(500).json({
-            msg:`Thêm mới xã phường thất bại. Lỗi: ${new Error(err.message)}`
-        })
+        msg:`Lỗi kiểm tra mã xã phường: ${new Error(err.message)}`
     })
+    
 })
 
 

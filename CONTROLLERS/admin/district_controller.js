@@ -25,22 +25,39 @@ router.get('/',authenticateToken,(req,res)=>{
 router.post('/',authenticateToken,(req,res)=>{
     let {code,name,provId} = req.body;
     
-    let d = new District({        
-        code,
-        name,
-        prov:provId
-    });
-    d.save()
-    .then(_=>{
-        return res.status(201).json({
-            msg:'Thêm mới quận huyện thành công!'
-        })
+    District.countDocuments({code})
+    .exec()
+    .then(count=>{
+        if(count>0){
+            return res.status(409).json({
+                msg:'Mã quận huyện đã tồn tại trong hệ thống!'
+            })
+        }else{
+            let d = new District({        
+                code,
+                name,
+                prov:provId
+            });
+            d.save()
+            .then(_=>{
+                return res.status(201).json({
+                    msg:'Thêm mới quận huyện thành công!'
+                })
+            })
+            .catch(err=>{
+                return res.status(500).json({
+                    msg:`Thêm mới quận huyện thất bại. Lỗi: ${new Error(err.message)}`
+                })
+            })
+        }
     })
     .catch(err=>{
         return res.status(500).json({
-            msg:`Thêm mới quận huyện thất bại. Lỗi: ${new Error(err.message)}`
+            msg:`Lỗi kiểm tra mã quận huyện: ${new Error(err.message)}`
         })
     })
+
+    
 })
 
 

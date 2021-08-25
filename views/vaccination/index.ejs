@@ -1,8 +1,14 @@
 <div class="row">
-  <div class="col-sm-2">
+  <div class="col-sm-1">
     <button class="btn btn-success" id="btnAddNew">
       <i class="fa fa-plus" aria-hidden="true"></i>
       Thêm mới
+    </button>
+  </div>
+  <div class="col-sm-1">
+    <button class="btn btn-info" id="btnImportExcel">
+      <i class="fa fa-upload" aria-hidden="true"></i>
+      Import Excel
     </button>
   </div>
   <!-- phần tìm kiếm -->
@@ -74,6 +80,7 @@
 <script type="text/javascript" src="//unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 <%-include('modal_vaccination')%>
   <%-include('modal_error')%>
+  <%-include('modal_import')%>
 
     <script>
       var search = "";
@@ -81,6 +88,12 @@
       $(document).ready(function () {
         LoadCV();
       })
+
+      $('#btnImportExcel').click(function(){
+        $('#modalImport').modal();
+      })
+
+
       $('#btnExportExcel').click(function () {
         $.ajax({
           url: '/danh-sach-tiem-phong-covid-19/excel',
@@ -343,18 +356,3 @@
       }
     </script>
 
-    <style>
-      #data_center {
-        display: inline-block;
-        overflow-y: scroll;
-        max-height: 550px;
-      }
-      table {
-        text-align: left;
-        position: relative;
-      }
-      thead {
-        position: sticky;
-        top: 0;
-      }
-    </style>

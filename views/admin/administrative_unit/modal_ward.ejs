@@ -23,11 +23,11 @@
                 </div>
                 <table class="table mt-2">
                     <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Mã</th>
-                            <th scope="col">Tên xã phường</th>
-                            <th scope="col"></th>
+                        <tr class="row">
+                            <th scope="col" class="col-sm-1">#</th>
+                            <th scope="col" class="col-sm-2">Mã</th>
+                            <th scope="col" class="col-sm-7">Tên xã phường</th>
+                            <th scope="col" class="col-sm-2"></th>
                         </tr>
                     </thead>
                     <tbody id="tblWard"></tbody>
@@ -125,11 +125,11 @@
                 $('#tblWard').empty();
                 let idx = 1;
                 data.wards.forEach(w => {
-                    let tr = '<tr id="' + w._id + '" data-ward="' + w.name + '">';
-                    tr += '<td>' + (idx++) + '</td>';
-                    tr += '<td class="font-weight-bold text-danger">' + w.code + '</td>';
-                    tr += '<td>' + w.name + '</td>';
-                    tr += '<td class="text-right">';
+                    let tr = '<tr id="' + w._id + '" data-ward="' + w.name + '" class="row">';
+                    tr += '<td class="col-sm-1">' + (idx++) + '</td>';
+                    tr += '<td class="font-weight-bold text-danger col-sm-2">' + w.code + '</td>';
+                    tr += '<td class="col-sm-7">' + w.name + '</td>';
+                    tr += '<td class="text-center col-sm-2">';
                     tr += '<button  name = "deleteWard" class = "btn btn-sm btn-danger ml-2"><i class="fa fa-trash" aria-hidden="true"></i></button>';
                     tr += '</td>'
                     tr += '</tr>';

@@ -24,22 +24,38 @@ router.get('/',authenticateToken,(req,res)=>{
 
 router.post('/',authenticateToken,(req,res)=>{
     let {code,name,natId} = req.body;
-    let p = new Province({        
-        code,
-        name,
-        nation:natId
-    });
-    p.save()
-    .then(_=>{
-        return res.status(201).json({
-            msg:'Thêm mới tỉnh thành thành công!'
-        })
+    Province.countDocuments({code})
+    .exec()
+    .then(count=>{
+        if(count>0){
+            return res.status(409).json({
+                msg:'Mã tỉnh đã tồn tại trong hệ thống!'
+            })
+        }else{
+            let p = new Province({        
+                code,
+                name,
+                nation:natId
+            });
+            p.save()
+            .then(_=>{
+                return res.status(201).json({
+                    msg:'Thêm mới tỉnh thành thành công!'
+                })
+            })
+            .catch(err=>{
+                return res.status(500).json({
+                    msg:`Thêm mới tỉnh thành thất bại. Lỗi: ${new Error(err.message)}`
+                })
+            })
+        }
     })
     .catch(err=>{
         return res.status(500).json({
-            msg:`Thêm mới tỉnh thành thất bại. Lỗi: ${new Error(err.message)}`
+            msg:`Lỗi kiểm tra mã tỉnh: ${new Error(err.message)}`
         })
     })
+    
 })
 
 

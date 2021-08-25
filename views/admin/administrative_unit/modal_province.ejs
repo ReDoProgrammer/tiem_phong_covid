@@ -25,10 +25,10 @@
                 <table class="table mt-2">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Mã</th>
-                            <th scope="col">Tên tỉnh thành</th>
-                            <th scope="col"></th>
+                            <th scope="col" class="col-sm-1">#</th>
+                            <th scope="col" class="col-sm-1">Mã</th>
+                            <th scope="col" class="col-sm-8">Tên tỉnh thành</th>
+                            <th scope="col" class="col-sm-2"></th>
                         </tr>
                     </thead>
                     <tbody id="tblProvinces"></tbody>
@@ -122,11 +122,11 @@
                 $('#tblProvinces').empty();
                 let idx = 1;
                 data.provs.forEach(p => {
-                    let tr = '<tr id="' + p._id + '" data-prov="' + p.name + '">';
-                    tr += '<td>' + (idx++) + '</td>';
-                    tr += '<td class="font-weight-bold text-danger">' + p.code + '</td>';
-                    tr += '<td>' + p.name + '</td>';
-                    tr += '<td class="text-right">';
+                    let tr = '<tr id="' + p._id + '" data-prov="' + p.name + '" class="row">';
+                    tr += '<td class="col-sm-1">' + (idx++) + '</td>';
+                    tr += '<td class="font-weight-bold text-danger col-sm-1">' + p.code + '</td>';
+                    tr += '<td class="col-sm-8">' + p.name + '</td>';
+                    tr += '<td class="text-right col-sm-2">';
                     tr += '<button name="dists" class = "btn btn-sm btn-success"><i class="fa fa-bars" aria-hidden="true"></i></button>';
                     tr += '<button  name = "delProv" class = "btn btn-sm btn-danger ml-2"><i class="fa fa-trash" aria-hidden="true"></i></button>';
                     tr += '</td>';
@@ -141,3 +141,4 @@
 
 
 </script>
+
