@@ -41,9 +41,9 @@ router.get('/list', authenticateToken, (req, res) => {
         ]
     })
         .populate('nation_id', '-_id name')
-        .populate('po_id', '-_id name')
-        .populate('job_id', '-_id name')
-        .populate('nationality_id', '-_id name')
+        .populate('po_id', '-_id code name')
+        //.populate('job_id', '-_id name')
+       // .populate('nationality_id', '-_id name')
         .populate('prov_id', '-_id name')
         .populate('dist_id', '-_id name')
         .populate('ward_id', '-_id name')

@@ -27,18 +27,13 @@
         <th rowspan="2" class="align-middle font-weight-bold text-center">Họ và tên</th>
         <th rowspan="2" class="align-middle font-weight-bold text-center">Giới tính</th>
         <th rowspan="2" class="align-middle font-weight-bold text-center">Ngày sinh</th>
-        <th rowspan="2" class="align-middle font-weight-bold text-center">Email</th>
-        <th rowspan="2" class="align-middle font-weight-bold text-center">Đối tượng ưu tiên</th>
-        <th rowspan="2" class="align-middle font-weight-bold text-center">Nghề nghiệp</th>
+         <th rowspan="2" class="align-middle font-weight-bold text-center">Đối tượng ưu tiên</th>
         <th rowspan="2" class="align-middle font-weight-bold text-center">Đơn vị công tác</th>
         <th rowspan="2" class="align-middle font-weight-bold text-center">Số điện thoại</th>
         <th rowspan="2" class="align-middle font-weight-bold text-center">CMND/CCCD</th>
         <th rowspan="2" class="align-middle font-weight-bold text-center">Số thẻ BHYT</th>
-        <th rowspan="2" class="align-middle font-weight-bold text-center">Dân tộc</th>
-        <th rowspan="2" class="align-middle font-weight-bold text-center">Quốc tịch</th>
-        <th rowspan="2" class="align-middle font-weight-bold text-center">Địa chỉ</th>
+        <th colspan="4"  class="align-middle font-weight-bold text-center">Địa chỉ (Hộ khẩu)</th>
         <th rowspan="2" class="align-middle font-weight-bold text-center">CSYT tiêm</th>
-        <th rowspan="2" class="align-middle font-weight-bold text-center">Ghi chú</th>
         <th colspan="3" class="text-center font-weight-bold text-center">Mũi 1</th>
         <th colspan="3" class="text-center font-weight-bold text-center">Mũi 2</th>
         <th rowspan="2" class="align-middle font-weight-bold text-center">Người nhập</th>
@@ -46,6 +41,12 @@
         <th rowspan="2" class="align-middle font-weight-bold text-center"></th>
       </tr>
       <tr>
+        <th class="text-center">Chi tiết</th>
+        <th class="text-center">Tỉnh/Tp</th>
+        <th class="text-center">Quận/Huyện/Tp</th>
+        <th class="text-center">Xã/Phường/Thị trấn</th>
+       
+
         <th class="text-center">Loại vaccin</th>
         <th class="text-center">Ngày tiêm</th>
         <th class="text-center">Lô vaccin</th>
@@ -258,44 +259,28 @@
             tr += c.gender == 1 ? 'Nam' : (c.gender == 2 ? 'Nữ' : 'Không rõ');
             tr += '</td>';
             tr += '<td class="text-nowrap">' + c.dob + '</td>';
-            tr += '<td class="text-nowrap">' + c.email + '</td>';
-            tr += '<td class="text-nowrap">' + c.po_id.name + '</td>';
-            tr += '<td class="text-nowrap">' + c.job_id.name + '</td>';
+            tr += '<td class="text-nowrap">' + c.po_id.code + '</td>';
             tr += '<td class="text-nowrap">' + c.work_place + '</td>';
             tr += '<td class="text-nowrap">' + c.phone + '</td>';
             tr += '<td class="text-nowrap">' + c.id_number + '</td>';
             tr += '<td class="text-nowrap">' + c.hi_no + '</td>';
-            tr += '<td class="text-nowrap">' + c.nation_id.name + '</td>';
-            tr += '<td class="text-nowrap">' + c.nationality_id.name + '</td>';
-            tr += '<td class="text-nowrap">';
-            if (c.detail_address.trim().length > 0) {
-              tr += c.detail_address + ' - ';
-            }
-            tr += c.ward_id.name + ' - ' + c.dist_id.name + ' - ' + c.prov_id.name + ' - ' + c.nationality_id.name
-            tr += '</td>';
-            tr += '<td class="text-nowrap">' + c.hf_id.name + '</td>';
-            tr += '<td class="text-nowrap">' + c.remark + '</td>';
 
-            if (c.date1.length > 0) {
-              tr += '<td class="text-nowrap">' + c.vaccin1.name + '</td>';
-              tr += '<td class="text-nowrap">' + c.date1 + '</td>';
-              tr += '<td class="text-nowrap">' + c.no1 + '</td>';
-            } else {
-              tr += '<td></td>';
-              tr += '<td></td>';
-              tr += '<td></td>';
-            }
+            tr += '<td class="text-nowrap">' + c.detail_address + '</td>';
+            tr += '<td class="text-nowrap">' + c.prov_id.name + '</td>';
+            tr += '<td class="text-nowrap">' + c.dist_id.name + '</td>';
+            tr += '<td class="text-nowrap">' + c.ward_id.name + '</td>';
 
-            if (c.date2.length > 0) {
-              tr += '<td class="text-nowrap">' + c.vaccin2.name + '</td>';
-              tr += '<td class="text-nowrap">' + c.date2 + '</td>';
-              tr += '<td class="text-nowrap">' + c.no2 + '</td>';
-            } else {
-              tr += '<td></td>';
-              tr += '<td></td>';
-              tr += '<td></td>';
-            }
+      
+             tr += '<td class="text-nowrap">' + c.hf_id.name + '</td>';
+            
+             tr += '<td class="text-nowrap">' + c.vaccin1.name + '</td>';
+             tr += '<td class="text-nowrap">' + c.date1 + '</td>';
+             tr += '<td class="text-nowrap">' + c.no1 + '</td>';
 
+             tr += '<td class="text-nowrap">' + c.vaccin2.name + '</td>';
+             tr += '<td class="text-nowrap">' + c.date2 + '</td>';
+             tr += '<td class="text-nowrap">' + c.no2 + '</td>';
+            
 
             tr += '<td class="text-nowrap">' + UppercaseEachFirstLetter(c.created_by.fullname) + '</td>';
             tr += '<td class="text-nowrap">' + c.error_note + '</td>';
