@@ -522,7 +522,7 @@
             success: function (data) {
                 $('#slPO').empty();
                 data.po.forEach(p => {
-                    let opt = '<option value="' + p._id + '">' + p.name + '</option>';
+                    let opt = '<option value="' + p._id + '">' + p.code +' - '+p.name+ '</option>';
                     $('#slPO').append(opt);
                 })
             }, error: function (jqXHR, textStatus, errorThrown) {
