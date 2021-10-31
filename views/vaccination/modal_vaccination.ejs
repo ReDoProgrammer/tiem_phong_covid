@@ -12,7 +12,7 @@
             <div class="modal-body container">
 
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Keyword ..." id="txtSearch" />
+                    <input type="text" class="form-control" placeholder="Họ tên, số điện thoại, CMND/CCCD" id="txtSearchObject" />
                     <div class="input-group-btn">
                         <button class="btn btn-dark" id="btnSearch">
                             <i class="fa fa-search" aria-hidden="true"></i>
@@ -65,7 +65,7 @@
 
                     <div class="col-sm-3 form-group">
                         <label class="text-info">Ngày sinh (<span class="text-danger">dd/mm/yyyy</span>):</label>
-                        <input class="form-control" data-inputmask="'alias': 'date','placeholder': '_'">
+                        <input class="form-control" data-inputmask="'alias': 'date','placeholder': '_'" id="txtDOB">
                     </div>
                 </div>
 
@@ -131,16 +131,16 @@
                         <div class="row">
                             <div class="col-sm-6 form-group">
                                 <label class="text-info">Loại vaccin</label>
-                                <select name="" id="slVaccin1" class="form-control vaccin"></select>
+                                <select name="" id="slVaccin" class="form-control vaccin"></select>
                             </div>
                             <div class="col-sm-3 form-group">
                                 <label class="text-info">Ngày tiêm (<span
                                         class="text-danger">dd/mm/yyyy</span>):</label>
-                                <input class="form-control" data-inputmask="'alias': 'date','placeholder': '_'">
+                                <input class="form-control" data-inputmask="'alias': 'date','placeholder': '_'" id="txtDate">
                             </div>
                             <div class="col-sm-3 form-group">
                                 <label class="text-info">Lô vaccin:</label>
-                                <input type="text" name="" id="txtNo1" class="form-control">
+                                <input type="text" name="" id="txtNo" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -235,28 +235,21 @@
         let fullname = $('#txtFullname').val().trim();
         let gender = $('#rbtMale').is(':checked') ? 1 : $('#rbtFemale').is(':checked') ? 2 : 0;
         let dob = $('#txtDOB').val().trim();
-        let nation = $('#slNation option:selected').val().trim();
-        let email = $('#txtEmail').val().trim();
+
         let po = $('#slPO option:selected').val().trim();
-        let job = $('#slJob option:selected').val().trim();
         let work_place = $('#txtWorkPlace').val();
         let phone = $('#txtPhone').val().trim();
         let id_number = $('#txtIDNumber').val().trim();
         let hi_no = $('#txtHINo').val().trim();
-        let nationality = $('#slNationality option:selected').val().trim();
         let province = $('#slProvince option:selected').val().trim();
         let district = $('#slDistrict option:selected').val().trim();
         let ward = $('#slWard option:selected').val().trim();
         let detail_address = $('#txtDetailAddress').val().trim();
         let hf = $('#slHF option:selected').val().trim();
-        let remark = $('#txtRemark').val().trim();
-        let vaccin1 = $('#slVaccin1 option:selected').val().trim();
-        let date1 = $('#txtDate1').val().trim();
-        let no1 = $('#txtNo1').val().trim();
+        let vaccin = $('#slVaccin option:selected').val().trim();
+        let date = $('#txtDate').val().trim();
+        let no = $('#txtNo').val().trim();
 
-        let vaccin2 = $('#slVaccin2 option:selected').val().trim();
-        let date2 = $('#txtDate2').val().trim();
-        let no2 = $('#txtNo2').val().trim();
 
 
 
