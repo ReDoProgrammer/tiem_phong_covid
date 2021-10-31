@@ -49,7 +49,14 @@ const vaccination_controller = require('./CONTROLLERS/vaccination_controller');
 app.use('/danh-sach-tiem-phong-covid-19',vaccination_controller);
 
 
+const province_controller = require('./CONTROLLERS/provice_controller');
+app.use('/province',province_controller);
 
+const district_controller = require('./CONTROLLERS/district_controller');
+app.use('/district',district_controller);
+
+const ward_controller = require('./CONTROLLERS/ward_controller');
+app.use('/ward',ward_controller);
 
 
 

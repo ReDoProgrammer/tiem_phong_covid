@@ -268,20 +268,7 @@ router.post('/', authenticateToken, (req, res) => {
 })
 
 
-router.get('/nation', authenticateToken, (req, res) => {
-    Nation.find()
-        .then(nt => {
-            return res.status(200).json({
-                msg: 'Load danh sách dân tộc thành công!',
-                nt: nt
-            })
-        })
-        .catch(err => {
-            return res.status(500).json({
-                msg: `Load danh sách dân tộc thất bại. Lỗi: ${new Error(err.message)}`
-            })
-        })
-})
+
 
 
 router.get('/vaccin', authenticateToken, (req, res) => {
@@ -314,87 +301,6 @@ router.get('/hf', authenticateToken, (req, res) => {
         })
 })
 
-
-router.get('/ward', authenticateToken, (req, res) => {
-    let { distId } = req.query;
-    Ward.find({ dist: distId })
-        .then(wd => {
-            return res.status(200).json({
-                msg: 'Load danh sách xã phường thành công!',
-                wd: wd
-            })
-        })
-        .catch(err => {
-            return res.status(500).json({
-                msg: `Load danh sách xã phường thất bại. Lỗi: ${new Error(err.message)}`
-            })
-        })
-})
-
-router.get('/district', authenticateToken, (req, res) => {
-    let { provId } = req.query;
-    District.find({ prov: provId })
-        .then(dt => {
-            return res.status(200).json({
-                msg: 'Load danh sách quận huyện thành công!',
-                dt: dt
-            })
-        })
-        .catch(err => {
-            return res.status(500).json({
-                msg: `Load danh sách quận huyện thất bại. Lỗi: ${new Error(err.message)}`
-            })
-        })
-})
-
-router.get('/province', authenticateToken, (req, res) => {
-    let { natId } = req.query;
-    Province.find({ nation: natId })
-        .then(pv => {
-            return res.status(200).json({
-                msg: 'Load danh sách tỉnh thành thành công!',
-                pv: pv
-            })
-        })
-        .catch(err => {
-            return res.status(500).json({
-                msg: `Load danh sách tỉnh thành thất bại. Lỗi: ${new Error(err.message)}`
-            })
-        })
-})
-
-router.get('/nationality', authenticateToken, (req, res) => {
-    Nationality.find()
-        .then(nt => {
-            return res.status(200).json({
-                msg: 'Load danh sách quốc tịch thành công!',
-                nt: nt
-            })
-        })
-        .catch(err => {
-            return res.status(500).json({
-                msg: `Load danh sách quốc tịch thất bại. Lỗi: ${new Error(err.message)}`
-            })
-        })
-})
-
-
-
-
-router.get('/job', authenticateToken, (req, res) => {
-    Job.find()
-        .then(jb => {
-            return res.status(200).json({
-                msg: 'Load danh sách nghề nghiệp thành công!',
-                jb: jb
-            })
-        })
-        .catch(err => {
-            return res.status(500).json({
-                msg: `Load danh sách nghề nghiệp thất bại. Lỗi: ${new Error(err.message)}`
-            })
-        })
-})
 
 
 router.get('/po', authenticateToken, (req, res) => {
