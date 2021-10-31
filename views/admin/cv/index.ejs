@@ -1,6 +1,12 @@
 <div class="row">
+  <div class="col-sm-2">
+    <button class="btn btn-success" id="btnImportExcel">
+      <i class="fa fa-file-excel-o text-danger" aria-hidden="true"></i>
+        Import Excel
+    </button>
+  </div>
   <!-- phần tìm kiếm -->
-  <div class="offset-sm-6 col-sm-4">
+  <div class="offset-sm-4 col-sm-4">
     <div class="input-group">
       <input type="text" class="form-control" placeholder="Keyword ..." id="txtSearch" />
       <div class="input-group-btn">
@@ -14,11 +20,11 @@
   <div class="col-sm-2">
     <button class="btn btn-info" id="btnExportExcel">
       <i class="fa fa-file-excel-o" aria-hidden="true"></i>
-      Xuất Excel
+      Export Excel
     </button>
   </div>
 </div>
-<div class="table-responsive" id="data_center">
+<div class="table-responsive mt-2" id="data_center">
 
   <table class="table table-bordered mt-20">
     <thead class="bg-info text-white text-white ">
@@ -68,6 +74,7 @@
 
 
 <%-include('modal_error')%>
+<%-include('modal_import')%>
 
   <script src="../../dist/date-picker/js/bootstrap-datepicker.min.js"></script>
   <link rel="stylesheet" href="../../dist/date-picker/css/bootstrap-datepicker.css">
@@ -226,7 +233,9 @@
     })
 
 
-
+    $('#btnImportExcel').click(function(){
+      $('#modalImportExcel').modal();
+    })
 
 
     $('#btnSearch').click(function () {
