@@ -77,6 +77,10 @@ const citizenVaccinatonSchema = new Schema({
         type:Schema.Types.ObjectId,
         ref:'vaccin'
     },
+    hf1:{
+        type:Schema.Types.ObjectId,
+        ref:'health_facility'
+    },
     date1:{
         type:String
     },
@@ -86,6 +90,10 @@ const citizenVaccinatonSchema = new Schema({
     vaccin2:{
         type:Schema.Types.ObjectId,
         ref:'vaccin'
+    },
+    hf2:{
+        type:Schema.Types.ObjectId,
+        ref:'health_facility'
     },
     date2:{
         type:String

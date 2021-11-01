@@ -268,7 +268,11 @@
             tr += c.gender == 1 ? 'Nam' : (c.gender == 2 ? 'Nữ' : 'Không rõ');
             tr += '</td>';
             tr += '<td class="text-nowrap">' + c.dob + '</td>';
-            tr += '<td class="text-nowrap">' + c.po_id.code + '</td>';
+            // tr += '<td class="text-nowrap">' + (c.po_id !==null && c.prov_id!='')?c.po_id.code:'' + '</td>';
+
+            tr += '<td class="text-nowrap"></td>';
+
+
             tr += '<td class="text-nowrap">' + c.work_place + '</td>';
             tr += '<td class="text-nowrap">' + c.phone + '</td>';
             tr += '<td class="text-nowrap">' + c.id_number + '</td>';
@@ -280,7 +284,8 @@
             tr += '<td class="text-nowrap">' + c.ward_id.name + '</td>';
 
       
-             tr += '<td class="text-nowrap">' + c.hf_id.name + '</td>';
+            //  tr += '<td class="text-nowrap">' + c.hf_id !==null ? c.hf_id.name:'' + '</td>';
+             tr += '<td class="text-nowrap"></td>';
             
              tr += '<td class="text-nowrap">' + c.vaccin1.name + '</td>';
              tr += '<td class="text-nowrap">' + c.date1 + '</td>';
@@ -291,7 +296,8 @@
              tr += '<td class="text-nowrap">' + c.no2 + '</td>';
             
 
-            tr += '<td class="text-nowrap">' + UppercaseEachFirstLetter(c.created_by.fullname) + '</td>';
+            // tr += '<td class="text-nowrap">' + UppercaseEachFirstLetter(c.created_by.fullname) + '</td>';
+            tr += '<td class="text-nowrap"></td>';
             tr += '<td class="text-nowrap">' + c.error_note + '</td>';
             tr += '<td class="text-right text-nowrap">';
             tr += '<button  name = "set_error" class = "btn btn-sm btn-warning ml-2"><i class="fa fa-exclamation-triangle text-danger" aria-hidden="true"></i></button>';
