@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const CV = require('../../MODELS/citizen_vaccination_model');
+const Vaccin = require('../../MODELS/vaccin_model');
 const { authenticateToken } = require('../../MIDDLEWARES/authenticate');
 
 
@@ -95,6 +96,29 @@ router.post('/drop',authenticateToken,(req,res)=>{
             })
         }
 })
+
+
+
+
+router.post('/',authenticateToken,(req,res)=>{
+    try {
+        var {array} = req.body; // your response in a string        
+        var objects = JSON.parse(array); // an *array* that contains the user
+        objects.forEach(o => {
+            console.log(o);
+        });
+
+    } catch (error) {
+        
+    }
+})
+
+
+
+
+
+
+
 
 router.get('/excel', authenticateToken, (req, res) => {
     CV.find()

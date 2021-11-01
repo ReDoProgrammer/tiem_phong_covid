@@ -16,15 +16,15 @@
                 <input type="file" id="excelfile" />
                 <input type="button" id="viewfile" value="Export To Table" onclick="ExportToTable()"
                     class="btn btn-warning" />
-                    <div class="table-responsive mt-2" id="data_center">
-                <table id="exceltable" class="table table-bordered mt-20">
-                </table>
-                    </div>
+                <div class="table-responsive mt-2" id="data_center">
+                    <table id="exceltable" class="table table-bordered mt-20">
+                    </table>
+                </div>
 
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" id="btnSubmitError">
+                <button type="button" class="btn btn-success" id="btnSubmitImportExcel">
                     <i class="fa fa-floppy-o" aria-hidden="true"></i>
                     Xác nhận
                 </button>
@@ -39,6 +39,54 @@
 </div>
 
 <script>
+
+
+
+
+    $('#btnSubmitImportExcel').click(function () {
+        let array = [];
+        $('#exceltable tr').each(function () {
+            if (!this.rowIndex) return; // skip first row
+
+            let unitId = this.cells[1].innerHTML;
+            let fullname = this.cells[2].innerHTML;
+            let dob = this.cells[3].innerHTML;
+            let phone = this.cells[4].innerHTML;
+            let idNo = this.cells[5].innerHTML;
+            let prov = this.cells[6].innerHTML;
+            let dist = this.cells[7].innerHTML;
+            let ward = this.cells[8].innerHTML;
+            let add_detail = this.cells[18].innerHTML;
+            let vaccin1 = this.cells[10].innerHTML;
+            let date1 = this.cells[11].innerHTML;
+            let no1 = this.cells[12].innerHTML;
+            let hf1 = this.cells[13].innerHTML;
+            let vaccin2 = this.cells[14].innerHTML;
+            let date2 = this.cells[15].innerHTML;
+            let no2 = this.cells[16].innerHTML;
+            let hf2 = this.cells[17].innerHTML;
+            let item = { unitId, fullname, dob, phone, idNo, prov, dist, ward, add_detail, vaccin1, date1, no1, hf1, vaccin2, date2, no2, hf2 }
+            array.push(item);
+
+
+
+
+        });
+       // console.log(array);
+        $.ajax({
+            url: '/admin/ho-so',
+            type: 'post',
+            headers: {
+                Authorization: "Covid-19 " + getACCESS_TOKEN()
+            },
+            data: {array: JSON.stringify(array)},
+            dataType: 'JSON',
+        })
+    })
+
+
+
+
     function ExportToTable() {
         var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xlsx|.xls)$/;
         /*Checks whether the file is a valid excel file*/
@@ -94,34 +142,34 @@
         }
     }
 
-    function BindTable(jsondata, tableid) {/*Function used to convert the JSON array to Html Table*/  
-     var columns = BindTableHeader(jsondata, tableid); /*Gets all the column headings of Excel*/  
-     for (var i = 0; i < jsondata.length; i++) {  
-         var row$ = $('<tr/>');  
-         for (var colIndex = 0; colIndex < columns.length; colIndex++) {  
-             var cellValue = jsondata[i][columns[colIndex]];  
-             if (cellValue == null)  
-                 cellValue = "";  
-             row$.append($('<td/>').html(cellValue));  
-         }  
-         $(tableid).append(row$);  
-     }  
- }  
- function BindTableHeader(jsondata, tableid) {/*Function used to get all column names from JSON and bind the html table header*/  
-     var columnSet = [];  
-     var headerTr$ = $('<tr/>');  
-     for (var i = 0; i < jsondata.length; i++) {  
-         var rowHash = jsondata[i];  
-         for (var key in rowHash) {  
-             if (rowHash.hasOwnProperty(key)) {  
-                 if ($.inArray(key, columnSet) == -1) {/*Adding each unique column names to a variable array*/  
-                     columnSet.push(key);  
-                     headerTr$.append($('<th/>').html(key));  
-                 }  
-             }  
-         }  
-     }  
-     $(tableid).append(headerTr$);  
-     return columnSet;  
- }  
+    function BindTable(jsondata, tableid) {/*Function used to convert the JSON array to Html Table*/
+        var columns = BindTableHeader(jsondata, tableid); /*Gets all the column headings of Excel*/
+        for (var i = 0; i < jsondata.length; i++) {
+            var row$ = $('<tr/>');
+            for (var colIndex = 0; colIndex < columns.length; colIndex++) {
+                var cellValue = jsondata[i][columns[colIndex]];
+                if (cellValue == null)
+                    cellValue = "";
+                row$.append($('<td/>').html(cellValue));
+            }
+            $(tableid).append(row$);
+        }
+    }
+    function BindTableHeader(jsondata, tableid) {/*Function used to get all column names from JSON and bind the html table header*/
+        var columnSet = [];
+        var headerTr$ = $('<tr/>');
+        for (var i = 0; i < jsondata.length; i++) {
+            var rowHash = jsondata[i];
+            for (var key in rowHash) {
+                if (rowHash.hasOwnProperty(key)) {
+                    if ($.inArray(key, columnSet) == -1) {/*Adding each unique column names to a variable array*/
+                        columnSet.push(key);
+                        headerTr$.append($('<th/>').html(key));
+                    }
+                }
+            }
+        }
+        $(tableid).append(headerTr$);
+        return columnSet;
+    }  
 </script>
