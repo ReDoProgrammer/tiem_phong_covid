@@ -45,19 +45,20 @@ router.get('/list', authenticateToken, (req, res) => {
             { hi_no: { "$regex": search, "$options": "i" } }
         ]
     })
-        .populate('nation_id', '-_id name')
-        .populate('po_id', '-_id code name')
+        //.populate('nation_id', '-_id name')
+        //.populate('po_id', '-_id code name')
         //.populate('job_id', '-_id name')
         // .populate('nationality_id', '-_id name')
         .populate('prov_id', '-_id name')
         .populate('dist_id', '-_id name')
         .populate('ward_id', '-_id name')
-        .populate('hf_id', '-_id name')
-        .populate('vaccin1', '-_id name')
-        .populate('vaccin2', '-_id name')
-        .populate('created_by', 'fullname')
+       
+        .populate(['vaccin1'])
+        .populate(['vaccin2'])
+        //.populate('created_by', 'fullname')
         .exec()
         .then(cv => {
+           
             return res.status(200).json({
                 msg: 'Load danh sách tiêm chủng Covid-19 thành công!',
                 cv: cv,
@@ -131,12 +132,12 @@ router.post('/', authenticateToken, (req, res) => {
                                     dist_id: v[1]._id,
                                     ward_id: v[2]._id,
                                     detail_address: o.add_detail,
-                                    vaccin1: v[3] == '' ? '' : v[3]._id,
-                                    hf1: v[4] == '' ? '' : v[4]._id,
+                                    vaccin1: (v[4] == '' || v[4] == null) ? null : v[3]._id,
+                                    hf1: (v[4] == '' || v[4] == null) ? null : v[4]._id,
                                     date1: o.date1,
                                     no1: o.no1,
-                                    vaccin2: v[4] == '' ? '' : v[4]._id,
-                                    hf2: v[5] == '' ? '' : v[5]._id,
+                                    vaccin2: (v[4] == '' || v[4] == null)  ? null : v[4]._id,
+                                    hf2: (v[5] == '' || v[5] == null) ? null : v[5]._id,
                                     date2: o.date2,
                                     no2: o.no2
                                 });
