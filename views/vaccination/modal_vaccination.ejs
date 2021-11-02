@@ -14,7 +14,7 @@
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Họ tên, số điện thoại, CMND/CCCD" id="txtSearchObject" />
                     <div class="input-group-btn">
-                        <button class="btn btn-dark" id="btnSearch">
+                        <button class="btn btn-dark" id="btnSearchObject">
                             <i class="fa fa-search" aria-hidden="true"></i>
                         </button>
                     </div>
@@ -31,11 +31,11 @@
                                 <th rowspan="2" class="align-middle font-weight-bold text-center">CMNC/CCCD</th>
                                 <th rowspan="2" class="align-middle font-weight-bold text-center">Điện thoại</th>
                                 <th rowspan="2" class="align-middle font-weight-bold text-center">Mũi 1</th>
-                                <th rowspan="2" class="align-middle font-weight-bold text-center">Ngày tiêm mũi 1</th>
+                                <th rowspan="2" class="align-middle font-weight-bold text-center">Ngày tiêm</th>
                                 <th rowspan="2" class="align-middle font-weight-bold text-center"></th>
                             </tr>
                         </thead>
-                        <tbody id="tblData">
+                        <tbody id="tblObjectsData">
 
                         </tbody>
                     </table>
@@ -208,7 +208,77 @@
 
     $(":input").inputmask();
 
+
+    $(document).on("click", "button[name='btnChooseObject']", function () {
+        let objId = $(this).closest("tr").attr('id');
+       $.ajax({
+           url:'/danh-sach-tiem-phong-covid-19/detail',
+           type:'get',
+           headers: {
+                Authorization: "Covid-19 " + getACCESS_TOKEN()
+            },
+            data:{
+                cvId:objId
+            },
+            success:function(data){
+                $('#tblObjectsData').empty();
+                let cv = data.cv;
+                $('#txtFullname').val(cv.fullname);
+                $('#txtDOB').val(cv.dob);
+                $('#txtWorkPlace').val(cv.work_place);
+                $('#txtPhone').val(cv.phone);
+                $('#txtIDNumber').val(cv.id_number);
+                $('#txtHINo').val(cv.hi_no);
+                $('#slProvince').val(cv.prov);
+                LoadDistrict();
+                $('#slDistrict').val(cv.dist);
+                LoadWard();
+                $('#slWard').val(cv.ward);
+                $('#txtDetailAddress').val(cv.detail_address);               
+            }
+       })
+        
+        
+    })
+
+
+
+    $('#btnSearchObject').click(function(){
+        if($('#txtSearchObject').val().trim().length > 0){
+            $.ajax({
+            url:'/danh-sach-tiem-phong-covid-19/search',
+            type:'get',
+            headers: {
+                Authorization: "Covid-19 " + getACCESS_TOKEN()
+            },
+            data:{
+                search: $('#txtSearchObject').val()
+            },
+            success:function(data){
+                $('#tblObjectsData').empty();
+                data.cv.forEach(c=>{
+                    let tr = '<tr id = "'+c._id+'">';
+                        tr += '<td class="fullname">'+c.fullname+'</td>';
+                        tr += '<td class="dob">'+c.dob+'</td>';
+                        tr += '<td class="id_number">'+c.id_number+'</td>';
+                        tr += '<td class="phone">'+c.phone+'</td>';                       
+                        tr += '<td class="vaccin1">'+c.vaccin1+'</td>';
+                        tr += '<td class="date1">'+c.date1+'</td>';
+                        tr += '<td><button class="btn btn-sm btn-info btnChooseObject" name="btnChooseObject"><i class="fa fa-plus" aria-hidden="true"></i></button></td>';
+                        tr+= '</tr>';
+                    
+                        $('#tblObjectsData').append(tr);
+                })
+            }
+        })
+        }
+        
+    })
+
     
+
+
+
 
     function LoadProvinces() {
         $.ajax({

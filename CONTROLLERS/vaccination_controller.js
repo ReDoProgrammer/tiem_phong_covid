@@ -302,6 +302,33 @@ router.get('/hf', authenticateToken, (req, res) => {
 })
 
 
+router.get('/search',authenticateToken,(req,res)=>{
+    let {search} = req.query;
+    CV.find({
+        $or: [
+            { fullname: { "$regex": search, "$options": "i" } },
+            { phone: { "$regex": search, "$options": "i" } },            
+            { id_number: { "$regex": search, "$options": "i" } },
+            { hi_no: { "$regex": search, "$options": "i" } }
+        ]
+    })    
+    .exec()
+    .then(cv=>{       
+        return res.status(200).json({
+            msg:'Tìm kiếm thông tin đối tượng tiêm chủng thành công!',
+            cv
+        })
+    })
+    .catch(err=>{
+        return res.status(500).json({
+            msg:'Tìm kiếm thông tin đối tượng tiêm chủng thất bại!!!',
+            error: new Error(err.message)
+        })
+    })
+})
+
+
+
 
 router.get('/po', authenticateToken, (req, res) => {
     PO.find()

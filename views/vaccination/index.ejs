@@ -1,16 +1,11 @@
 <div class="row">
-  <div class="col-sm-1">
+  <div class="col-sm-2">
     <button class="btn btn-success" id="btnAddNew">
       <i class="fa fa-plus" aria-hidden="true"></i>
       Thêm mới
     </button>
   </div>
-  <div class="col-sm-1">
-    <button class="btn btn-info" id="btnImportExcel">
-      <i class="fa fa-upload" aria-hidden="true"></i>
-      Import Excel
-    </button>
-  </div>
+
   <!-- phần tìm kiếm -->
   <div class="offset-sm-4 col-sm-4">
     <div class="input-group">
@@ -94,83 +89,7 @@
       })
 
 
-      $('#btnExportExcel').click(function () {
-        $.ajax({
-          url: '/danh-sach-tiem-phong-covid-19/excel',
-          type: 'get',
-          headers: {
-            Authorization: "Covid-19 " + getACCESS_TOKEN()
-          },
-          success: function (data) {
-            console.log(data);
-            var createXLSLFormatObj = [];
-            /* XLS Head Columns */
-            var xlsHeader = ["STT", "Họ và tên","Giới tính","Ngày sinh","E-mail","Mã nhóm đối tượng ưu tiên (*)","Nghề nghiệp","Đơn vị công tác","Số điện thoại (*)",
-            "Số CMT/CCCD/Hộ chiếu (*) ","Số thẻ bảo hiểm y tế ","Dân tộc","Quốc tịch","Tỉnh/Thành phố","Mã Tỉnh/Thành phố (*)","Quận/Huyện","Mã Quận/Huyện","Xã/Phường","Mã Xã/Phường","Địa chỉ chi tiết",
-          "Mã cơ sở y tế tiêm (*)","Ghi chú","Loại vắc xin (*)","Ngày tiêm (*) ","Lô vắc xin (*)","Loại vắc xin (*)","Ngày tiêm (*) ","Lô vắc xin (*)"];
-            /* XLS Rows Data */
-            let idx = 1;
-            var xlsRows = data.cv.map(c=>{
-              let x = {};
-              x['idx'] = idx++;
-              x['fullname'] = UppercaseEachFirstLetter(c.fullname);
-              x['gender'] = c.gender;
-              x['dob'] = c.dob.split('/')[2]+ c.dob.split('/')[1]+ c.dob.split('/')[0];
-              x['email'] = c.email;
-              x['po_code'] = c.po_id.code;
-              x['job'] = c.job_id.name;
-              x['work_place'] = c.work_place;          
-              x['phone'] = c.phone;
-              x['id_number'] = c.id_number;
-              x['hi_no'] = c.hi_no;
-              x['nation'] = c.nation_id.code;
-              x['nationality'] = c.nationality_id.code;
-              x['province'] = c.prov_id.name;
-              x['province_code'] = c.prov_id.code;
-              x['district'] = c.dist_id.name;
-              x['district_code'] =c.dist_id.code;
-              x['ward'] = c.ward_id.name;
-              x['ward_code'] = c.ward_id.code;
-              x['detail_address'] = c.detail_address;
-              x['hf_no'] = c.hf_id.code;
-              x['remark'] = c.remark;
-              x['vaccin1'] =c.date1.trim().length == 0?'': c.vaccin1.name;
-              x['date1'] =c.date1.trim().length == 0?'': c.date1.split('/')[2]+ c.date1.split('/')[1]+ c.date1.split('/')[0];
-              x['no1'] = c.date1.trim().length == 0?'':c.no1;
-              x['vaccin2'] = c.date2.trim().length == 0?'':c.vaccin2.name;
-              x['date2'] =  c.date2.trim().length == 0?'':c.date2.split('/')[2]+ c.date2.split('/')[1]+ c.date2.split('/')[0];
-              x['no2'] =  c.date2.trim().length == 0?'':c.no2;
-              
-              return x;
-            });
-            createXLSLFormatObj.push(xlsHeader);
-            $.each(xlsRows, function (index, value) {
-              var innerRowData = [];
-              
-              $.each(value, function (ind, val) {
-                innerRowData.push(val);
-              });
-              createXLSLFormatObj.push(innerRowData);
-            });
-            /* File Name */
-            var filename = "PL1_Danh sách đối tượng tiêm.xlsx";
-            /* Sheet Name */
-            var ws_name = "PL1_Danh sách đối tượng tiêm";
-            if (typeof console !== 'undefined') console.log(new Date());
-            var wb = XLSX.utils.book_new(),
-              ws = XLSX.utils.aoa_to_sheet(createXLSLFormatObj);
-            /* Add worksheet to workbook */
-            XLSX.utils.book_append_sheet(wb, ws, ws_name);
-            /* Write workbook and Download */
-            if (typeof console !== 'undefined') console.log(new Date());
-            XLSX.writeFile(wb, filename);
-            if (typeof console !== 'undefined') console.log(new Date());
-          },
-          error: function (jqXHR, textStatus, errorThrown) {
-            alert(jqXHR.responseJSON.msg);
-          }
-        })
-      })
+     
       $('#modalVaccination').on('shown.bs.modal', function (e) {
         $('#txtFullname').val('');
         $('#txtDOB').val('');
