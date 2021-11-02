@@ -39,29 +39,20 @@ router.get('/list', authenticateToken, (req, res) => {
     CV.find({
         $or: [
             { fullname: { "$regex": search, "$options": "i" } },
-            { phone: { "$regex": search, "$options": "i" } },
-            { email: { "$regex": search, "$options": "i" } },
+            { phone: { "$regex": search, "$options": "i" } },            
             { id_number: { "$regex": search, "$options": "i" } },
             { hi_no: { "$regex": search, "$options": "i" } }
         ]
-    })
-        //.populate('nation_id', '-_id name')
-        //.populate('po_id', '-_id code name')
-        //.populate('job_id', '-_id name')
-        // .populate('nationality_id', '-_id name')
-        .populate('prov_id', '-_id name')
-        .populate('dist_id', '-_id name')
-        .populate('ward_id', '-_id name')
-       
-        .populate(['vaccin1'])
-        .populate(['vaccin2'])
-        //.populate('created_by', 'fullname')
+    })       
+        .populate('prov', '-_id name')
+        .populate('dist', '-_id name')
+        .populate('ward', '-_id name')
         .exec()
-        .then(cv => {
-           
+        .then( cv => {
+            console.log(cv);
             return res.status(200).json({
                 msg: 'Load danh sách tiêm chủng Covid-19 thành công!',
-                cv: cv,
+                cv,
                 user_id: req.user.user_id,
                 error_editable: req.user.is_mod
             })
@@ -120,31 +111,33 @@ router.post('/', authenticateToken, (req, res) => {
                 .exec()
                 .then(cv => {
                     if (cv == null) {
-                        Promise.all([getProvId(o.prov), getDistId(o.dist), getWardId(o.ward), getVaccinId(o.vaccin1), getVaccinId(o.vaccin2), getHFIdByCode(o.hf1), getHFIdByCode(o.hf2)])
+                        Promise.all([getProvId(o.prov), getDistId(o.dist), getWardId(o.ward)])
                             .then((v) => {
-                                console.log(v);
+                                
                                 let cv = new CV({
-                                    fullname:o.fullname,
-                                    dob:o.dob,
-                                    id_number:o.idNo,
-                                    phone:o.phone,
-                                    prov_id: v[0]._id,
-                                    dist_id: v[1]._id,
-                                    ward_id: v[2]._id,
+                                    fullname: o.fullname,
+                                    dob: o.dob,
+                                    gender:(o.fullname.toLowerCase().includes('thị')?0:1),
+                                    id_number: o.idNo,
+                                    phone: o.phone,
+                                    prov: v[0]._id,
+                                    dist: v[1]._id,
+                                    ward: v[2]._id,
                                     detail_address: o.add_detail,
-                                    vaccin1: (v[4] == '' || v[4] == null) ? null : v[3]._id,
-                                    hf1: (v[4] == '' || v[4] == null) ? null : v[4]._id,
+                                    work_place:v[2].name,
+                                    vaccin1:o.vaccin1,
+                                    hf1:o.hf1,
                                     date1: o.date1,
                                     no1: o.no1,
-                                    vaccin2: (v[4] == '' || v[4] == null)  ? null : v[4]._id,
-                                    hf2: (v[5] == '' || v[5] == null) ? null : v[5]._id,
+                                    vaccin2:o.vaccin2,
+                                    hf2:o.hf2,
                                     date2: o.date2,
                                     no2: o.no2
                                 });
                                 cv.save()
-                                .then(_=>{
-                                   count++;
-                                })
+                                    .then(_ => {
+                                        count++;
+                                    })
                                 // .catch(err=>{
                                 //     return res.status(500).json({
                                 //         msg:'Thêm mới đối tượng tiêm chủng thất bại: '+new Error(err.message),
@@ -163,15 +156,15 @@ router.post('/', authenticateToken, (req, res) => {
 
 
         });
-        if(count>0){
+        if (count > 0) {
             return res.status(201).json({
-                msg:'Thêm mới thành công '+count+' đối tượng tiêm chủng covid'
+                msg: 'Thêm mới thành công ' + count + ' đối tượng tiêm chủng covid'
             })
         }
 
     } catch (error) {
         return res.status(500).json({
-            msg:'Lỗi: '+new Error(error.message)
+            msg: 'Lỗi: ' + new Error(error.message)
         })
     }
 })
@@ -214,25 +207,7 @@ router.get('/excel', authenticateToken, (req, res) => {
 module.exports = router;
 
 
-const getHFIdByCode = (code) => {
-    return new Promise((resolve, reject) => {
-        if (code == null || code == '') {
-            return resolve('');
-        } else {
-            HF.findOne({ code })
-                .exec()
-                .then(hf => {
-                    if (hf == null) {
-                        return reject({ code: 404, msg: 'Không tìm thấy cơ sở y tế: ' + code })
-                    }
-                    resolve(hf);
-                })
-                .catch(err => {
-                    reject({ code: 500, msg: new Error(err.message) });
-                })
-        }
-    })
-};
+
 
 
 const getProvId = (provName) => {
@@ -283,27 +258,3 @@ const getWardId = (wardName) => {
     })
 };
 
-const getVaccinId = (name) => {
-    return new Promise((resolve, reject) => {
-        if (name == null || name == '') {
-            return resolve('');
-        } else {
-            Vaccin.findOne({ name })
-                .exec()
-                .then(vaccin => {
-                    if (vaccin == null) {
-                        return reject({
-                            code: 404, msg: 'Không tìm thấy loại vaccin phù hợp phù hợp: ' + name
-
-
-                        })
-                    }
-                    return resolve(vaccin);
-                })
-                .catch(err => {
-                    return reject({ code: 500, msg: new Error(err.message) });
-                })
-        }
-
-    })
-};

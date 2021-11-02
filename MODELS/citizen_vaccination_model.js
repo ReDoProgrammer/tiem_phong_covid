@@ -18,11 +18,8 @@ const citizenVaccinatonSchema = new Schema({
     },
     dob:{
         type:String        
-    },
-    
-    email:{
-        type:String
-    },
+    },    
+   
     po_id:{
         type:Schema.Types.ObjectId,
         ref:'priority_object',
@@ -44,15 +41,15 @@ const citizenVaccinatonSchema = new Schema({
         default:''
     },
   
-    prov_id:{
+    prov:{
         type:Schema.Types.ObjectId,
         ref:'province'
     },
-    dist_id:{
+    dist:{
         type:Schema.Types.ObjectId,
         ref:'district'
     },
-    ward_id:{
+    ward:{
         type:Schema.Types.ObjectId,
         ref:'ward'
     },
@@ -63,44 +60,36 @@ const citizenVaccinatonSchema = new Schema({
         type:String
     },
     vaccin1:{
-        type:Schema.Types.ObjectId,
-        ref:'vaccin', 
-        default:null
+       type:String,
+       default:''
     },
     hf1:{
-        type:Schema.Types.ObjectId,
-        ref:'health_facility',
-        default:null
+       type:String,
+       default:''
     },
     date1:{
-        type:String
+        type:String,
+        default:''
     },
     no1:{
-        type:String
+        type:String,
+        default:''
     },
     vaccin2:{
-        type:Schema.Types.ObjectId,
-        ref:'vaccin',
-        default:null
+       type:String,
+       default:''
     },
     hf2:{
-        type:Schema.Types.ObjectId,
-        ref:'health_facility',
-        default:null
+       type:String,
+       default:''
     },
     date2:{
-        type:String
+        type:String,
+        default:''
     },
     no2:{
-        type:String
-    },
-    is_correct:{
-        type:Boolean,
-        default:true
-    },
-    error_note:{
         type:String,
-        default:null
+        default:''
     },
     created_by:{
         type:Schema.Types.ObjectId,
