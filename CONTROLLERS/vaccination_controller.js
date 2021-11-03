@@ -98,52 +98,52 @@ router.put('/', authenticateToken, (req, res) => {
 
 })
 
-router.put('/set-vaccin',authenticateToken,(req,res)=>{
-    let {cvId,vaccin,no} = req.body;
+router.put('/set-vaccin', authenticateToken, (req, res) => {
+    let { cvId, vaccin, no } = req.body;
     console.log(cvId);
     CV.findById(cvId)
-    .exec()
-    .then(c=>{
-        if(c.vaccin1 == ''){
-            c.vaccin1 = vaccin;
-            c.no1 = no;
-            c.status  = 1;
-            c.save()
-            .then(_=>{
-                return res.status(200).json({
-                    msg:'Cập nhật thông tin tiêm chủng thành công!'
-                })
-            })
-            .catch(err=>{
-                return res.status(500).json({
-                    msg:'Cập nhật thông tin tiêm chủng thất bại!!',
-                    error: new Error(err.message)
-                })
-            })
-        }else{
-            c.vaccin2 = vaccin;
-            c.no2 = no;
-            c.status  = 1;
-            c.save()
-            .then(_=>{
-                return res.status(200).json({
-                    msg:'Cập nhật thông tin tiêm chủng thành công!'
-                })
-            })
-            .catch(err=>{
-                return res.status(500).json({
-                    msg:'Cập nhật thông tin tiêm chủng thất bại!!',
-                    error: new Error(err.message)
-                })
-            })
-        }
+        .exec()
+        .then(c => {
+            if (c.vaccin1 == '') {
+                c.vaccin1 = vaccin;
+                c.no1 = no;
+                c.status = 1;
+                c.save()
+                    .then(_ => {
+                        return res.status(200).json({
+                            msg: 'Cập nhật thông tin tiêm chủng thành công!'
+                        })
+                    })
+                    .catch(err => {
+                        return res.status(500).json({
+                            msg: 'Cập nhật thông tin tiêm chủng thất bại!!',
+                            error: new Error(err.message)
+                        })
+                    })
+            } else {
+                c.vaccin2 = vaccin;
+                c.no2 = no;
+                c.status = 1;
+                c.save()
+                    .then(_ => {
+                        return res.status(200).json({
+                            msg: 'Cập nhật thông tin tiêm chủng thành công!'
+                        })
+                    })
+                    .catch(err => {
+                        return res.status(500).json({
+                            msg: 'Cập nhật thông tin tiêm chủng thất bại!!',
+                            error: new Error(err.message)
+                        })
+                    })
+            }
 
-    })
-    .catch(err=>{
-        return res.status(404).json({
-            msg:'Không tìm thấy hồ sơ tiêm chủng phù hợp!'
         })
-    })
+        .catch(err => {
+            return res.status(404).json({
+                msg: 'Không tìm thấy hồ sơ tiêm chủng phù hợp!'
+            })
+        })
 })
 
 
@@ -166,13 +166,47 @@ router.get('/detail', authenticateToken, (req, res) => {
 router.delete('/', authenticateToken, (req, res) => {
     let { cvId } = req.body;
     CV.findById(cvId)
-    .exec()
-    .then(cv=>{
+        .exec()
+        .then(cv => {
+            if (cv.vaccin1.trim().length == 0 && cv.vaccin2.trim().length == 0) {
+                CV.findByIdAndDelete(cvId)
+                    .exec()
+                    .then(_ => {
+                        return res.status(200).json({
+                            msg: 'Xóa hồ sơ đối tượng tiêm chủng thành công!'
+                        })
+                    })
+                    .catch(err => {
+                        return res.status(500).json({
+                            msg: 'Xóa hồ sơ tiêm chủng thất bại!!!',
+                            error: new Error(err.message)
+                        })
+                    })
+            } else {
+                CV.findByIdAndUpdate(cvId,
+                    { status: -1 },
+                    { new: true }, (err, result) => {
+                        if(err){
+                            return res.status(500).json({
+                                msg:'Xóa hồ sơ khởi tạo thất bại!',
+                                error: new Error(err.message)
+                            })
+                        }
+                        if(result == null){
+                            return res.status(404).json({
+                                msg:'Không tìm thấy đối tượng cần xóa!!'
+                            })
+                        }
+                        return res.status(200).json({
+                            msg:'Xóa hồ sơ khởi tạo thành công!'
+                        })
+                    }
+                )
+            }
+        })
+        .catch(err => {
 
-    })
-    .catch(err=>{
-
-    })
+        })
 })
 
 
@@ -183,23 +217,22 @@ router.get('/list', authenticateToken, (req, res) => {
     CV.find({
         $or: [
             { fullname: { "$regex": search, "$options": "i" } },
-            { phone: { "$regex": search, "$options": "i" } },          
+            { phone: { "$regex": search, "$options": "i" } },
             { id_number: { "$regex": search, "$options": "i" } },
             { hi_no: { "$regex": search, "$options": "i" } }
         ],
         unit_id: req.user.unit_id,
-        status:0
+        status: 0
     })
 
         .populate('po_id', '-_id name')
         .populate('prov', '-_id name')
         .populate('dist', '-_id name')
         .populate('ward', '-_id name')
-        .populate('hf_id', '-_id name')   
-        .populate('created_by','-_id fullname')          
+        .populate('hf_id', '-_id name')
+        .populate('created_by', '-_id fullname')
         .exec()
         .then(cv => {
-            console.log(cv);
             if (!req.user.is_mod) {
                 cv = cv.filter(x => x.created_by._id == req.user.user_id);
             }
@@ -222,14 +255,14 @@ router.get('/list', authenticateToken, (req, res) => {
 
 router.post('/', authenticateToken, (req, res) => {
 
-   let created_by = req.user.user_id;
+    let created_by = req.user.user_id;
     let { cvId, fullname, gender, dob, po_id, work_place, phone, id_number, hi_no, prov, dist, ward, detail_address, hf } = req.body;
-    
-    
-    if (cvId.trim().length > 0) {       
+
+
+    if (cvId.trim().length > 0) {
         CV.findOneAndUpdate(
             { _id: cvId },
-            { fullname, gender, dob, po_id, work_place, phone, id_number, hi_no, province, district, ward, detail_address, hf, status: 0, unit_id: req.user.unit_id,created_by},
+            { fullname, gender, dob, po_id, work_place, phone, id_number, hi_no, province, district, ward, detail_address, hf, status: 0, unit_id: req.user.unit_id, created_by },
             { new: true }
         )
             .exec()
@@ -246,8 +279,8 @@ router.post('/', authenticateToken, (req, res) => {
                 })
             })
     } else {
-        let cv = new CV({ fullname, gender, dob, po_id, work_place, phone, id_number, hi_no, prov, dist, ward, detail_address, hf, status: 0, unit_id: req.user.unit_id,created_by:req.user.user_id});
-        
+        let cv = new CV({ fullname, gender, dob, po_id, work_place, phone, id_number, hi_no, prov, dist, ward, detail_address, hf, status: 0, unit_id: req.user.unit_id, created_by: req.user.user_id });
+
         cv.save()
             .then(c => {
                 return res.status(201).json({

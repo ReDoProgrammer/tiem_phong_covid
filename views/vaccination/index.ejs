@@ -31,7 +31,7 @@
     <thead class="bg-info text-white text-white ">
       <tr>
         <th rowspan="2" class="align-middle font-weight-bold text-center">STT</th>
-        <th rowspan="2" class="align-middle font-weight-bold text-center"></th>
+        <th rowspan="2" class="align-middle font-weight-bold text-center "></th>
         <th rowspan="2" class="align-middle font-weight-bold text-center">Họ và tên</th>
         <th rowspan="2" class="align-middle font-weight-bold text-center">Giới tính</th>
         <th rowspan="2" class="align-middle font-weight-bold text-center">Ngày sinh</th>
@@ -88,11 +88,12 @@
         $('#txtIDNumber').val('');
         $('#txtHINo').val('');
         $('#txtWorkPlace').val('');
+        $('#btnSubmit').text('Tạo mới hồ sơ');
       });
 
 
-      $(document).on("click", "button[name='update']", function () {
-        cvId = $(this).closest("tr").attr("id");
+      $(document).on("click", "button[name='btnUpdateCV']", function () {
+        cvId = $(this).closest("tr").attr('id');
         $.ajax({
           url: '/danh-sach-tiem-phong-covid-19/detail',
           type: 'get',
@@ -100,49 +101,35 @@
             Authorization: "Covid-19 " + getACCESS_TOKEN()
           },
           data: {
-            cvId
+            cvId: cvId
           },
           success: function (data) {
             $('#modalVaccination').modal();
-            $('#txtFullname').val(UppercaseEachFirstLetter(data.cv.fullname));
-            $('#txtDOB').val(data.cv.dob);
-            $('#txtEmail').val(data.cv.email);
-            $('#txtPhone').val(data.cv.phone);
-            $('#txtIDNumber').val(data.cv.id_number);
-            $('#txtHINo').val(data.cv.hi_no);
-            $('#txtDetailAddress').val(data.cv.detail_address);
-            $('#txtRemark').val(data.cv.remark);
-            $('#txtDate1').val(data.cv.date1);
-            $('#txtDate2').val(data.cv.date2);
-            $('#txtNo1').val(data.cv.no1);
-            $('#txtNo2').val(data.cv.no2);
-            $('#slNationality').val(data.cv.nationality_id);
-            $('#slProvince').val(data.cv.prov_id);
-            $('#slDistrict').val(data.cv.dist_id);
+            let cv = data.cv;
+            $('#txtFullname').val(cv.fullname);
+
+            if (cv.fullname.toLowerCase().includes('thị'))
+              $('#rbtFemale').prop('checked', true);
+            else $('#rbtMale').prop('checked', true);
+
+
+            $('#txtDOB').val(cv.dob);
+            $('#txtWorkPlace').val(cv.work_place);
+            $('#txtPhone').val(cv.phone);
+            $('#txtIDNumber').val(cv.id_number);
+            $('#txtHINo').val(cv.hi_no);
+            $('#slProvince').val(cv.prov);
+            LoadDistrict();
+            $('#slDistrict').val(cv.dist);
             LoadWard();
-            $('#slWard').val(data.cv.ward_id);
-            $('#slNation').val(data.cv.nation_id);
-            $('#slPO').val(data.cv.po_id);
-            $('#slJob').val(data.cv.job_id);
-            $('#slHF').val(data.cv.hf_id);
-            $('#slVaccin1').val(data.cv.vaccin1);
-            $('#slVaccin2').val(data.cv.vaccin2);
-            if (data.cv.gender == 1) {
-              $('#rbtMale').prop('checked', true);
-            } else {
-              if (data.cv.gender == 2) {
-                $('#rbtFemale').prop('checked', true);
-              } else {
-                $('#rbtOther').prop('checked', true);
-              }
-            }
-          },
-          error: function (jqXHR, textStatus, errorThrown) {
-            alert(jqXHR.responseJSON.msg);
-          },
+            $('#slWard').val(cv.ward);
+            $('#txtDetailAddress').val(cv.detail_address);
+            $('#btnSubmit').text('Lưu thông tin cập nhật');
+          }
         })
+
       })
-      $(document).on("click", "button[name='delete']", function () {
+      $(document).on("click", "button[name='btnDeleteCV']", function () {
         cvId = $(this).closest("tr").attr("id");
         let cvName = $(this).closest("tr").data("name");
         var r = confirm(
@@ -234,7 +221,7 @@
             data.cv.forEach(c => {
               let tr = '<tr id="' + c._id + '" data-name="' + UppercaseEachFirstLetter(c.fullname) + '">';
               tr += '<td class="text-nowrap text-right">' + (idx < 10 ? '0' + (idx++) : (idx++)) + '</td>';
-              tr += '<td class="text-nowrap text-right"><button  name = "btnSetCV" class = "btn btn-sm btn-success ml-2"><i class="fa fa-check" aria-hidden="true"></i>Tiêm phòng</button></td>';
+              tr += '<td class="text-nowrap text-right  "><button  name = "btnSetCV" class = "btn btn-sm btn-success ml-2"><i class="fa fa-check" aria-hidden="true"></i>Tiêm phòng</button></td>';
               tr += '<td class="text-nowrap">' + UppercaseEachFirstLetter(c.fullname) + '</td>';
               tr += '<td class="text-nowrap">' + (c.gender == 1 ? 'Nam' : 'Nữ') + '</td>';
               tr += '<td class="text-nowrap">' + c.dob + '</td>';
@@ -264,3 +251,4 @@
         })
       }
     </script>
+
