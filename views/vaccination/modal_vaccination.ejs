@@ -290,8 +290,8 @@
         let phone = $('#txtPhone').val().trim();
         let id_number = $('#txtIDNumber').val().trim();
         let hi_no = $('#txtHINo').val().trim();
-        let province = $('#slProvince option:selected').val().trim();
-        let district = $('#slDistrict option:selected').val().trim();
+        let prov = $('#slProvince option:selected').val().trim();
+        let dist = $('#slDistrict option:selected').val().trim();
         let ward = $('#slWard option:selected').val().trim();
         let detail_address = $('#txtDetailAddress').val().trim();
         let hf = $('#slHF option:selected').val().trim();
@@ -346,7 +346,7 @@
             headers: {
                 Authorization: "Covid-19 " + getACCESS_TOKEN()
             },
-            data: { cvId, fullname, gender, dob, po_id, work_place, phone, id_number, hi_no, province, district, ward, detail_address, hf, date },
+            data: { cvId, fullname, gender, dob, po_id, work_place, phone, id_number, hi_no, prov, dist, ward, detail_address, hf, date },
             success: function (data) {
 
                 alert(data.msg);

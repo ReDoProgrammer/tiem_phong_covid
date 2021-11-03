@@ -165,17 +165,14 @@ router.get('/detail', authenticateToken, (req, res) => {
 
 router.delete('/', authenticateToken, (req, res) => {
     let { cvId } = req.body;
-    CV.findOneAndDelete({ _id: cvId })
-        .then(_ => {
-            return res.status(200).json({
-                msg: 'Xóa hồ sơ thành công!'
-            })
-        })
-        .catch(err => {
-            return res.status(500).json({
-                msg: `Xóa hồ sơ thất bại. Lỗi: ${new Error(err.message)}`
-            })
-        })
+    CV.findById(cvId)
+    .exec()
+    .then(cv=>{
+
+    })
+    .catch(err=>{
+
+    })
 })
 
 
@@ -226,7 +223,7 @@ router.get('/list', authenticateToken, (req, res) => {
 router.post('/', authenticateToken, (req, res) => {
 
    let created_by = req.user.user_id;
-    let { cvId, fullname, gender, dob, po_id, work_place, phone, id_number, hi_no, province, district, ward, detail_address, hf } = req.body;
+    let { cvId, fullname, gender, dob, po_id, work_place, phone, id_number, hi_no, prov, dist, ward, detail_address, hf } = req.body;
     
     
     if (cvId.trim().length > 0) {       
@@ -237,7 +234,6 @@ router.post('/', authenticateToken, (req, res) => {
         )
             .exec()
             .then(cv => {
-                console.log(cv);
                 return res.status(200).json({
                     msg: 'Cập nhật hồ sơ tiêm chủng Covid-19 thành công!',
                     cv
@@ -250,11 +246,10 @@ router.post('/', authenticateToken, (req, res) => {
                 })
             })
     } else {
-        let cv = new CV({ fullname, gender, dob, po, work_place, phone, id_number, hi_no, province, district, ward, detail_address, hf, status: 0, unit_id: req.user.unit_id,created_by});
+        let cv = new CV({ fullname, gender, dob, po_id, work_place, phone, id_number, hi_no, prov, dist, ward, detail_address, hf, status: 0, unit_id: req.user.unit_id,created_by:req.user.user_id});
         
         cv.save()
             .then(c => {
-                console.log(c);
                 return res.status(201).json({
                     msg: 'Tạo mới hồ sơ tiêm chủng Covid-19 thành công!'
                 })
