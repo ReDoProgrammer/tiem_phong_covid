@@ -170,8 +170,24 @@
       })
     
     $(document).on('click','button[name="btnSetCV"]',function(){
-        let   cvId = $(this).closest("tr").attr("id");
+        cvId = $(this).closest("tr").attr("id");
         $('#modalSetVaccination').modal();
+        $.ajax({
+            url: '/danh-sach-tiem-phong-covid-19/detail',
+            type: 'get',
+            headers: {
+                Authorization: "Covid-19 " + getACCESS_TOKEN()
+            },
+            data: {
+                cvId: cvId
+            },
+            success: function (data) {
+               $('#lblFullname').text(data.cv.fullname);
+               $('#lblDob').text(data.cv.dob);
+               $('#lblPhone').text(data.cv.phone);
+               $('#lblIdNo').text(data.cv.id_number);
+            }
+        })
     })
     
     
@@ -185,6 +201,9 @@
       })
 
 
+      $("#modalSetVaccination").on("hidden.bs.modal", function () {
+        LoadCV();
+      });
       $("#modalVaccination").on("hidden.bs.modal", function () {
         LoadCV();
       });

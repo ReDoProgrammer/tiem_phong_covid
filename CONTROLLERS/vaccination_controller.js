@@ -2,15 +2,8 @@ const router = require('express').Router();
 
 const { authenticateToken } = require('../MIDDLEWARES/user_authenticate');
 const PO = require('../MODELS/priority_object_model');
-const Job = require('../MODELS/job_model');
-const Nationality = require('../MODELS/nationality_model');
-const Province = require('../MODELS/province_model');
-const District = require('../MODELS/district_model');
-const Ward = require('../MODELS/ward_model');
 const HF = require('../MODELS/health_facility_model');
 const Vaccin = require('../MODELS/vaccin_model');
-const Nation = require('../MODELS/nation_model');
-const Account = require('../MODELS/account_model');
 const CV = require('../MODELS/citizen_vaccination_model');
 
 
@@ -105,29 +98,56 @@ router.put('/', authenticateToken, (req, res) => {
 
 })
 
-
-router.put('/error', authenticateToken, (req, res) => {
-    if (req.user.is_mod) {
-        let { cvId, err } = req.body;
-        CV.findOneAndUpdate({ _id: cvId }, {
-            error_note: err,
-            is_correct: false
-        }, (err, cv) => {
-            if (err) {
-                return res.status(500).json({
-                    msg: `Cập nhật lỗi hồ sơ thất bại. Lỗi: ${new Error(err.message)}`
+router.put('/set-vaccin',authenticateToken,(req,res)=>{
+    let {cvId,vaccin,no} = req.body;
+    console.log(cvId);
+    CV.findById(cvId)
+    .exec()
+    .then(c=>{
+        if(c.vaccin1 == ''){
+            c.vaccin1 = vaccin;
+            c.no1 = no;
+            c.status  = 1;
+            c.save()
+            .then(_=>{
+                return res.status(200).json({
+                    msg:'Cập nhật thông tin tiêm chủng thành công!'
                 })
-            }
-            return res.status(200).json({
-                msg: 'Cập nhật lỗi hồ sơ thành công!'
-            });
+            })
+            .catch(err=>{
+                return res.status(500).json({
+                    msg:'Cập nhật thông tin tiêm chủng thất bại!!',
+                    error: new Error(err.message)
+                })
+            })
+        }else{
+            c.vaccin2 = vaccin;
+            c.no2 = no;
+            c.status  = 1;
+            c.save()
+            .then(_=>{
+                return res.status(200).json({
+                    msg:'Cập nhật thông tin tiêm chủng thành công!'
+                })
+            })
+            .catch(err=>{
+                return res.status(500).json({
+                    msg:'Cập nhật thông tin tiêm chủng thất bại!!',
+                    error: new Error(err.message)
+                })
+            })
+        }
+
+    })
+    .catch(err=>{
+        return res.status(404).json({
+            msg:'Không tìm thấy hồ sơ tiêm chủng phù hợp!'
         })
-    } else {
-        return res.status(409).json({
-            msg: 'Bạn không có quyền truy cập chức năng này!!'
-        })
-    }
+    })
 })
+
+
+
 
 router.get('/detail', authenticateToken, (req, res) => {
     let { cvId } = req.query;
