@@ -1,3 +1,4 @@
+   
 const router = require('express').Router();
 const CV = require('../../MODELS/citizen_vaccination_model');
 const Vaccin = require('../../MODELS/vaccin_model');
@@ -257,4 +258,3 @@ const getWardId = (wardName) => {
             })
     })
 };
-

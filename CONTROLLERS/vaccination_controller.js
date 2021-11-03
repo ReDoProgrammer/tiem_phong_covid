@@ -166,26 +166,23 @@ router.get('/list', authenticateToken, (req, res) => {
     CV.find({
         $or: [
             { fullname: { "$regex": search, "$options": "i" } },
-            { phone: { "$regex": search, "$options": "i" } },
-            { email: { "$regex": search, "$options": "i" } },
+            { phone: { "$regex": search, "$options": "i" } },          
             { id_number: { "$regex": search, "$options": "i" } },
             { hi_no: { "$regex": search, "$options": "i" } }
         ],
-        unit_id: req.user.unit_id
+        unit_id: req.user.unit_id,
+        status:0
     })
-        .populate('nation_id', '-_id name')
+
         .populate('po_id', '-_id name')
-        .populate('job_id', '-_id name')
-        .populate('nationality_id', '-_id name')
-        .populate('prov_id', '-_id name')
-        .populate('dist_id', '-_id name')
-        .populate('ward_id', '-_id name')
-        .populate('hf_id', '-_id name')
-        .populate('vaccin1', '-_id name')
-        .populate('vaccin2', '-_id name')
-        .populate('created_by', 'fullname')
+        .populate('prov', '-_id name')
+        .populate('dist', '-_id name')
+        .populate('ward', '-_id name')
+        .populate('hf_id', '-_id name')   
+        .populate('created_by','-_id fullname')          
         .exec()
         .then(cv => {
+            console.log(cv);
             if (!req.user.is_mod) {
                 cv = cv.filter(x => x.created_by._id == req.user.user_id);
             }
@@ -207,63 +204,49 @@ router.get('/list', authenticateToken, (req, res) => {
 
 
 router.post('/', authenticateToken, (req, res) => {
-    let { fullname, gender, dob, nation, email, po, job, work_place, phone, id_number, hi_no, nationality, province, district, ward, detail_address, hf, remark, vaccin1, date1, no1, vaccin2, date2, no2 } = req.body; console.log({ fullname, gender, dob, nation, email, po, job, phone, id_number, hi_no, nationality, province, district, ward, detail_address, hf, remark, vaccin1, date1, no1, vaccin2, date2, no2 });
 
-    CV.countDocuments({ id_number })
-        .then(count => {
-            if (count == 0) {
-
-                let cv = new CV({
-                    unit_id: req.user.unit_id,
-                    fullname,
-                    gender,
-                    dob,
-                    nation_id: nation,
-                    email,
-                    po_id: po,
-                    job_id: job,
-                    work_place,
-                    phone,
-                    id_number,
-                    hi_no,
-                    nationality_id: nationality,
-                    prov_id: province,
-                    dist_id: district,
-                    ward_id: ward,
-                    detail_address,
-                    hf_id: hf,
-                    remark,
-                    vaccin1,
-                    date1,
-                    no1,
-                    vaccin2,
-                    date2,
-                    no2,
-                    created_by: req.user.user_id
-                });
-                cv.save()
-                    .then(_ => {
-                        return res.status(201).json({
-                            msg: 'Thêm mới dữ liệu tiêm phòng Covid-19 thành công!'
-                        })
-                    })
-                    .catch(err => {
-                        return res.status(500).json({
-                            msg: `Thêm mới dữ liệu tiêm phòng Covid-19 thất bại. Lỗi: ${new Error(err.message)}`
-                        })
-                    })
-
-            } else {
-                return res.status(409).json({
-                    msg: `Số CMND/CCCD này đã tồn tại trong hệ thống!`
+   let created_by = req.user.user_id;
+    let { cvId, fullname, gender, dob, po, work_place, phone, id_number, hi_no, province, district, ward, detail_address, hf } = req.body;
+    
+    
+    if (cvId.trim().length > 0) {       
+        CV.findOneAndUpdate(
+            { _id: cvId },
+            { fullname, gender, dob, po, work_place, phone, id_number, hi_no, province, district, ward, detail_address, hf, status: 0, unit_id: req.user.unit_id,created_by},
+            { new: true }
+        )
+            .exec()
+            .then(cv => {
+                console.log(cv);
+                return res.status(200).json({
+                    msg: 'Cập nhật hồ sơ tiêm chủng Covid-19 thành công!',
+                    cv
                 })
-            }
-        })
-        .catch(err => {
-            return res.status(500).json({
-                msg: `Lỗi kiểm tra CMND/CCCD: ${new Error(err.message)}`
+
             })
-        })
+            .catch(err => {
+                return res.status(500).json({
+                    msg: `Cập nhật hồ sơ tiêm phòng Covid-19 thất bại: ${new Error(err.message)}`
+                })
+            })
+    } else {
+        let cv = new CV({ fullname, gender, dob, po, work_place, phone, id_number, hi_no, province, district, ward, detail_address, hf, status: 0, unit_id: req.user.unit_id,created_by});
+        
+        cv.save()
+            .then(c => {
+                console.log(c);
+                return res.status(201).json({
+                    msg: 'Tạo mới hồ sơ tiêm chủng Covid-19 thành công!'
+                })
+            })
+            .catch(err => {
+                return res.status(500).json({
+                    msg: `Tạo hồ sơ tiêm phòng Covid-19 thất bại: ${new Error(err.message)}`
+                })
+            })
+    }
+
+
 
 })
 
@@ -302,29 +285,30 @@ router.get('/hf', authenticateToken, (req, res) => {
 })
 
 
-router.get('/search',authenticateToken,(req,res)=>{
-    let {search} = req.query;
+router.get('/search', authenticateToken, (req, res) => {
+    let { search } = req.query;
     CV.find({
         $or: [
             { fullname: { "$regex": search, "$options": "i" } },
-            { phone: { "$regex": search, "$options": "i" } },            
+            { phone: { "$regex": search, "$options": "i" } },
             { id_number: { "$regex": search, "$options": "i" } },
             { hi_no: { "$regex": search, "$options": "i" } }
-        ]
-    })    
-    .exec()
-    .then(cv=>{       
-        return res.status(200).json({
-            msg:'Tìm kiếm thông tin đối tượng tiêm chủng thành công!',
-            cv
-        })
+        ],
+        status: -1
     })
-    .catch(err=>{
-        return res.status(500).json({
-            msg:'Tìm kiếm thông tin đối tượng tiêm chủng thất bại!!!',
-            error: new Error(err.message)
+        .exec()
+        .then(cv => {
+            return res.status(200).json({
+                msg: 'Tìm kiếm thông tin đối tượng tiêm chủng thành công!',
+                cv
+            })
         })
-    })
+        .catch(err => {
+            return res.status(500).json({
+                msg: 'Tìm kiếm thông tin đối tượng tiêm chủng thất bại!!!',
+                error: new Error(err.message)
+            })
+        })
 })
 
 

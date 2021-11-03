@@ -1,6 +1,14 @@
 <script type='text/javascript'
     src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
 
+<style>
+    #tblSearchedObject {
+        max-height: 150px !important;
+        overflow: scroll;
+        display: block;
+    }
+</style>
+
 <div class="modal" tabindex="-1" role="dialog" id="modalVaccination">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -12,7 +20,8 @@
             <div class="modal-body container">
 
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Họ tên, số điện thoại, CMND/CCCD" id="txtSearchObject" />
+                    <input type="text" class="form-control" placeholder="Họ tên, số điện thoại, CMND/CCCD"
+                        id="txtSearchObject" />
                     <div class="input-group-btn">
                         <button class="btn btn-dark" id="btnSearchObject">
                             <i class="fa fa-search" aria-hidden="true"></i>
@@ -21,9 +30,9 @@
                 </div>
 
 
-                <div class="table-responsive" id="data_center">
+                <div class="table-responsive" id="tblSearch">
 
-                    <table class="table table-bordered mt-20">
+                    <table class="table table-bordered mt-20" id="tblSearchedObject">
                         <thead class="bg-info text-white text-white ">
                             <tr>
                                 <th rowspan="2" class="align-middle font-weight-bold text-center">Họ và tên</th>
@@ -43,12 +52,12 @@
 
 
 
-                <div class="row">
+                <div class="row mt-20">
                     <div class="col-sm-4 form-group">
                         <label class="text-info">Họ tên:</label>
                         <input type="text" name="" id="txtFullname" class="form-control">
                     </div>
-                    <div class="col-sm-5 form-group">
+                    <div class="col-sm-4 form-group">
                         <label class="text-info">Giới tính:</label>
                         <div class="mt-2">
                             <label class="radio-inline text-info">
@@ -57,13 +66,10 @@
                             <label class="radio-inline ml-2 text-primary">
                                 <input type="radio" name="optradio" id="rbtFemale"> Nữ
                             </label>
-                            <label class="radio-inline ml-2 text-warning">
-                                <input type="radio" name="optradio" id="rbtOther"> K. rõ
-                            </label>
                         </div>
                     </div>
 
-                    <div class="col-sm-3 form-group">
+                    <div class="col-sm-4 form-group">
                         <label class="text-info">Ngày sinh (<span class="text-danger">dd/mm/yyyy</span>):</label>
                         <input class="form-control" data-inputmask="'alias': 'date','placeholder': '_'" id="txtDOB">
                     </div>
@@ -86,7 +92,7 @@
                         <input type="text" name="" id="txtPhone" class="form-control">
                     </div>
                     <div class="col-sm-4 form-group">
-                        <label class="text-info">CMND/CCCD:</label>
+                        <label class="text-info">CMND/CCCD (<span class="text-danger">*</span>):</label>
                         <input type="text" name="" id="txtIDNumber" class="form-control">
                     </div>
                     <div class="col-sm-4 form-group">
@@ -117,48 +123,21 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-sm-12 form-group">
+                    <div class="col-sm-4 form-group">
+                        <label class="text-info">Ngày tiêm (<span class="text-danger">dd/mm/yyyy</span>):</label>
+                        <input class="form-control" data-inputmask="'alias': 'date','placeholder': '_'" id="txtDate">
+                    </div>
+                    <div class="col-sm-8 form-group">
                         <label class="text-info">CSYT Tiêm:</label>
                         <select name="" id="slHF" class="form-control"></select>
                     </div>
                 </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        Thông tin mũi tiêm
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label class="text-info">Loại vaccin</label>
-                                <select name="" id="slVaccin" class="form-control vaccin"></select>
-                            </div>
-                            <div class="col-sm-3 form-group">
-                                <label class="text-info">Ngày tiêm (<span
-                                        class="text-danger">dd/mm/yyyy</span>):</label>
-                                <input class="form-control" data-inputmask="'alias': 'date','placeholder': '_'" id="txtDate">
-                            </div>
-                            <div class="col-sm-3 form-group">
-                                <label class="text-info">Lô vaccin:</label>
-                                <input type="text" name="" id="txtNo" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
-
-
-
-
-
             </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-success" id="btnSubmit">
                     <i class="fa fa-floppy-o" aria-hidden="true"></i>
-                    Xác nhận
+                    Tạo mới hồ sơ
                 </button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">
                     Close
@@ -172,56 +151,48 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <script>
     $(document).ready(function () {
         LoadProvinces();
-        LoadPO();   
+        LoadPO();
         LoadHF();
         LoadVaccin();
+
+
+        var d = new Date();
+
+        var month = d.getMonth() + 1;
+        var day = d.getDate();
+
+
+        let date = (day < 10 ? '0' : '') + day + '/' + (month < 10 ? '0' : '') + month + '/' + d.getFullYear();
+        $('#txtDate').val(date);
     })
 
     $(":input").inputmask();
 
 
+
+
+
+    $('#modalVaccination').on('shown.bs.modal', function (e) {
+        $('#tblSearch').hide();
+    })
+
+
     $(document).on("click", "button[name='btnChooseObject']", function () {
-        let objId = $(this).closest("tr").attr('id');
-       $.ajax({
-           url:'/danh-sach-tiem-phong-covid-19/detail',
-           type:'get',
-           headers: {
+        cvId = $(this).closest("tr").attr('id');
+        $.ajax({
+            url: '/danh-sach-tiem-phong-covid-19/detail',
+            type: 'get',
+            headers: {
                 Authorization: "Covid-19 " + getACCESS_TOKEN()
             },
-            data:{
-                cvId:objId
+            data: {
+                cvId: cvId
             },
-            success:function(data){
-                $('#tblObjectsData').empty();
+            success: function (data) {
+                $('#tblSearch').hide(500);
                 let cv = data.cv;
                 $('#txtFullname').val(cv.fullname);
                 $('#txtDOB').val(cv.dob);
@@ -234,48 +205,51 @@
                 $('#slDistrict').val(cv.dist);
                 LoadWard();
                 $('#slWard').val(cv.ward);
-                $('#txtDetailAddress').val(cv.detail_address);               
-            }
-       })
-        
-        
-    })
-
-
-
-    $('#btnSearchObject').click(function(){
-        if($('#txtSearchObject').val().trim().length > 0){
-            $.ajax({
-            url:'/danh-sach-tiem-phong-covid-19/search',
-            type:'get',
-            headers: {
-                Authorization: "Covid-19 " + getACCESS_TOKEN()
-            },
-            data:{
-                search: $('#txtSearchObject').val()
-            },
-            success:function(data){
-                $('#tblObjectsData').empty();
-                data.cv.forEach(c=>{
-                    let tr = '<tr id = "'+c._id+'">';
-                        tr += '<td class="fullname">'+c.fullname+'</td>';
-                        tr += '<td class="dob">'+c.dob+'</td>';
-                        tr += '<td class="id_number">'+c.id_number+'</td>';
-                        tr += '<td class="phone">'+c.phone+'</td>';                       
-                        tr += '<td class="vaccin1">'+c.vaccin1+'</td>';
-                        tr += '<td class="date1">'+c.date1+'</td>';
-                        tr += '<td><button class="btn btn-sm btn-info btnChooseObject" name="btnChooseObject"><i class="fa fa-plus" aria-hidden="true"></i></button></td>';
-                        tr+= '</tr>';
-                    
-                        $('#tblObjectsData').append(tr);
-                })
+                $('#txtDetailAddress').val(cv.detail_address);
             }
         })
-        }
-        
+
+
     })
 
-    
+
+
+    $('#btnSearchObject').click(function () {
+        if ($('#txtSearchObject').val().trim().length > 0) {
+            $.ajax({
+                url: '/danh-sach-tiem-phong-covid-19/search',
+                type: 'get',
+                headers: {
+                    Authorization: "Covid-19 " + getACCESS_TOKEN()
+                },
+                data: {
+                    search: $('#txtSearchObject').val()
+                },
+                success: function (data) {
+                    if (data.cv.length > 0) {
+                        $('#tblSearch').show(500);
+                    }
+                    $('#tblObjectsData').empty();
+                    data.cv.forEach(c => {
+                        let tr = '<tr id = "' + c._id + '">';
+                        tr += '<td class="fullname">' + c.fullname + '</td>';
+                        tr += '<td class="dob">' + c.dob + '</td>';
+                        tr += '<td class="id_number">' + c.id_number + '</td>';
+                        tr += '<td class="phone">' + c.phone + '</td>';
+                        tr += '<td class="vaccin1">' + c.vaccin1 + '</td>';
+                        tr += '<td class="date1">' + c.date1 + '</td>';
+                        tr += '<td><button class="btn btn-sm btn-info btnChooseObject" name="btnChooseObject"><i class="fa fa-plus" aria-hidden="true"></i></button></td>';
+                        tr += '</tr>';
+
+                        $('#tblObjectsData').append(tr);
+                    })
+                }
+            })
+        }
+
+    })
+
+
 
 
 
@@ -288,10 +262,9 @@
                 Authorization: "Covid-19 " + getACCESS_TOKEN()
             },
             success: function (data) {
-                console.log(data);
                 $('#slProvince').empty();
                 data.provinces.forEach(p => {
-                    let opt =  new Option(p.name, p._id);  
+                    let opt = new Option(p.name, p._id);
                     $('#slProvince').append(opt);
                 })
                 LoadDistrict();
@@ -316,9 +289,8 @@
         let ward = $('#slWard option:selected').val().trim();
         let detail_address = $('#txtDetailAddress').val().trim();
         let hf = $('#slHF option:selected').val().trim();
-        let vaccin = $('#slVaccin option:selected').val().trim();
         let date = $('#txtDate').val().trim();
-        let no = $('#txtNo').val().trim();
+
 
 
 
@@ -355,98 +327,25 @@
             return;
         }
 
-        if ((date1.length != 0 && date1.length != 10) || (date1.length == 10 && !isDate(date1))) {
+        if ((date.length != 0 && date.length != 10) || (date.length == 10 && !isDate(date))) {
             alert('Dữ liệu ngày tiêm lần 1 không hợp lệ!');
             return;
         }
-        if ((date2.length != 0 && date2.length != 10) || (date2.length == 10 && !isDate(date2))) {
-            alert('Dữ liệu ngày tiêm lần 2 không hợp lệ!');
-            return;
-        }
-
-        if (date1.length > 0 && !isDate(date1)) {
-            alert('Dữ liệu ngày tiêm lần 1 không hợp lệ. Vui lòng kiểm tra lại!');
-            return;
-        }
-        if (date1.length > 0 && isDate(date1) && no1.length == 0) {
-            alert('Vui lòng nhập lô vaccin tiêm lần 1!');
-            return;
-        }
 
 
 
-        if (date2.length > 0 && !isDate(date2)) {
-            alert('Dữ liệu ngày tiêm lần 2 không hợp lệ. Vui lòng kiểm tra lại!');
-            return;
-        }
-        if (date2.length > 0 && isDate(date2)) {
-            if (date1.length == 0 || !isDate(date1) || no1.length == 0) {
-                alert('Vui lòng nhập dữ liệu tiêm lần 1 trước');
-                return;
+        $.ajax({
+            url: '/danh-sach-tiem-phong-covid-19',
+            type: 'post',
+            headers: {
+                Authorization: "Covid-19 " + getACCESS_TOKEN()
+            },
+            data: { cvId, fullname, gender, dob, po, work_place, phone, id_number, hi_no, province, district, ward, detail_address, hf, date },
+            success: function (data) {
+                alert(data.msg);                
             }
-            if (no2.length == 0) {
-                alert('Vui lòng nhập dữ lô vaccin tiêm lần 2');
-                return;
-            }
-
-        }
-
-
-        if (new Date(date2) <= new Date(date1)) {
-            alert('Dữ liệu ngày tiêm lần 1 và lần 2 không hợp lệ. Ngày tiêm lần 2 phải lớn hơn ngày tiêm lần 1');
-            return;
-        }
-
-
-        //end data validation
-
-
-
-
-        if (cvId.trim().length == 0) {
-            $.ajax({
-                url: '/danh-sach-tiem-phong-covid-19',
-                type: 'post',
-                headers: {
-                    Authorization: "Covid-19 " + getACCESS_TOKEN()
-                },
-                data: { fullname, gender, dob, nation, email, po, job, work_place, phone, id_number, hi_no, nationality, province, district, ward, detail_address, hf, remark, vaccin1, date1, no1, vaccin2, date2, no2 },
-                success: function (data) {
-                    alert(data.msg);
-
-                    $('#txtFullname').val('');
-                    $('#txtDOB').val('');
-                    $('#txtEmail').val('');
-                    $('#txtPhone').val('');
-                    $('#txtIDNumber').val('');
-                    $('#txtHINo').val('');
-                    $('#txtDetailAddress').val('');
-                    $('#txtRemark').val('');
-                    LoadCV();
-                }, error: function (jqXHR, textStatus, errorThrown) {
-                    alert(jqXHR.responseJSON.msg);
-                },
-            })
-        } else {
-            $.ajax({
-                url: '/danh-sach-tiem-phong-covid-19',
-                type: 'put',
-                headers: {
-                    Authorization: "Covid-19 " + getACCESS_TOKEN()
-                },
-                data: { cvId, fullname, gender, dob, nation, email, po, job, work_place, phone, id_number, hi_no, nationality, province, district, ward, detail_address, hf, remark, vaccin1, date1, no1, vaccin2, date2, no2 },
-                success: function (data) {
-                    alert(data.msg);
-                    $('#modalVaccination').modal('hide');
-                }, error: function (jqXHR, textStatus, errorThrown) {
-                    alert(jqXHR.responseJSON.msg);
-                },
-            })
-        }
-
-
-
-
+        })
+        cvId='';
 
     })
 
@@ -568,9 +467,9 @@
         })
     }
 
-   
 
-    
+
+
 
 
 
@@ -585,7 +484,7 @@
             success: function (data) {
                 $('#slPO').empty();
                 data.po.forEach(p => {
-                    let opt = '<option value="' + p._id + '">' + p.code +' - '+p.name+ '</option>';
+                    let opt = '<option value="' + p._id + '">' + p.code + ' - ' + p.name + '</option>';
                     $('#slPO').append(opt);
                 })
             }, error: function (jqXHR, textStatus, errorThrown) {

@@ -94,6 +94,10 @@ const citizenVaccinatonSchema = new Schema({
     created_by:{
         type:Schema.Types.ObjectId,
         ref:'account'
+    },
+    status:{
+        type:Number,
+        default:-1
     }
 
    
