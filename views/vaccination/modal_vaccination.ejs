@@ -195,6 +195,12 @@
                 $('#tblSearch').hide(500);
                 let cv = data.cv;
                 $('#txtFullname').val(cv.fullname);
+
+                if (cv.fullname.toLowerCase().includes('thị'))
+                    $('#rbtFemale').prop('checked', true);
+                else $('#rbtMale').prop('checked', true);
+
+
                 $('#txtDOB').val(cv.dob);
                 $('#txtWorkPlace').val(cv.work_place);
                 $('#txtPhone').val(cv.phone);
@@ -279,7 +285,7 @@
         let gender = $('#rbtMale').is(':checked') ? 1 : $('#rbtFemale').is(':checked') ? 2 : 0;
         let dob = $('#txtDOB').val().trim();
 
-        let po = $('#slPO option:selected').val().trim();
+        let po_id = $('#slPO option:selected').val().trim();
         let work_place = $('#txtWorkPlace').val();
         let phone = $('#txtPhone').val().trim();
         let id_number = $('#txtIDNumber').val().trim();
@@ -340,12 +346,23 @@
             headers: {
                 Authorization: "Covid-19 " + getACCESS_TOKEN()
             },
-            data: { cvId, fullname, gender, dob, po, work_place, phone, id_number, hi_no, province, district, ward, detail_address, hf, date },
+            data: { cvId, fullname, gender, dob, po_id, work_place, phone, id_number, hi_no, province, district, ward, detail_address, hf, date },
             success: function (data) {
-                alert(data.msg);                
+
+                alert(data.msg);
             }
+
         })
-        cvId='';
+
+        cvId = '';
+        $('#txtFullname').val('');
+        $('#txtDOB').val('');
+        $('#txtPhone').val('');
+        $('#txtDetailAddress').val('');
+        $('#txtIDNumber').val('');
+        $('#txtHINo').val('');
+        $('#txtWorkPlace').val('');
+
 
     })
 

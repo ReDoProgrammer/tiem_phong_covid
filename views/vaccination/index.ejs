@@ -48,7 +48,7 @@
         <th class="text-center">Chi tiết</th>
         <th class="text-center">Xã/Phường/Thị trấn</th>
         <th class="text-center">Quận/huyện</th>
-        <th class="text-center">Tỉnh/ thành phố</th>    
+        <th class="text-center">Tỉnh/ thành phố</th>
       </tr>
 
     </thead>
@@ -63,7 +63,7 @@
 <link rel="stylesheet" href="../../dist/date-picker/css/bootstrap-datepicker.css">
 <script type="text/javascript" src="//unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 <%-include('modal_vaccination')%>
-<%-include('modal_set_vaccination')%>
+  <%-include('modal_set_vaccination')%>
 
 
     <script>
@@ -73,24 +73,24 @@
         LoadCV();
       })
 
-      $('#btnImportExcel').click(function(){
+      $('#btnImportExcel').click(function () {
         $('#modalImport').modal();
       })
 
 
-     
+
       $('#modalVaccination').on('shown.bs.modal', function (e) {
+        cvId = '';
         $('#txtFullname').val('');
         $('#txtDOB').val('');
-        $('#txtEmail').val('');
         $('#txtPhone').val('');
+        $('#txtDetailAddress').val('');
         $('#txtIDNumber').val('');
         $('#txtHINo').val('');
-        $('#txtDetailAddress').val('');
-        $('#txtRemark').val('');
+        $('#txtWorkPlace').val('');
       });
 
-    
+
       $(document).on("click", "button[name='update']", function () {
         cvId = $(this).closest("tr").attr("id");
         $.ajax({
@@ -102,7 +102,7 @@
           data: {
             cvId
           },
-          success: function (data) {           
+          success: function (data) {
             $('#modalVaccination').modal();
             $('#txtFullname').val(UppercaseEachFirstLetter(data.cv.fullname));
             $('#txtDOB').val(data.cv.dob);
@@ -168,33 +168,33 @@
           })
         }
       })
-    
-    $(document).on('click','button[name="btnSetCV"]',function(){
+
+      $(document).on('click', 'button[name="btnSetCV"]', function () {
         cvId = $(this).closest("tr").attr("id");
         $('#modalSetVaccination').modal();
         $.ajax({
-            url: '/danh-sach-tiem-phong-covid-19/detail',
-            type: 'get',
-            headers: {
-                Authorization: "Covid-19 " + getACCESS_TOKEN()
-            },
-            data: {
-                cvId: cvId
-            },
-            success: function (data) {
-               $('#lblFullname').text(data.cv.fullname);
-               $('#lblDob').text(data.cv.dob);
-               $('#lblPhone').text(data.cv.phone);
-               $('#lblIdNo').text(data.cv.id_number);
-            }
+          url: '/danh-sach-tiem-phong-covid-19/detail',
+          type: 'get',
+          headers: {
+            Authorization: "Covid-19 " + getACCESS_TOKEN()
+          },
+          data: {
+            cvId: cvId
+          },
+          success: function (data) {
+            $('#lblFullname').text(data.cv.fullname);
+            $('#lblDob').text(data.cv.dob);
+            $('#lblPhone').text(data.cv.phone);
+            $('#lblIdNo').text(data.cv.id_number);
+          }
         })
-    })
-    
-    
-    
-    
-    
-    
+      })
+
+
+
+
+
+
       $('#btnAddNew').click(function () {
         cvId = "";
         $('#modalVaccination').modal();
@@ -209,7 +209,7 @@
       });
 
 
-     
+
 
 
       $('#btnSearch').click(function () {
@@ -232,28 +232,28 @@
             let idx = 1;
             $('#tblData').empty();
             data.cv.forEach(c => {
-              let tr = '<tr id="' + c._id + '" data-name="' + UppercaseEachFirstLetter(c.fullname) + '">';             
+              let tr = '<tr id="' + c._id + '" data-name="' + UppercaseEachFirstLetter(c.fullname) + '">';
               tr += '<td class="text-nowrap text-right">' + (idx < 10 ? '0' + (idx++) : (idx++)) + '</td>';
               tr += '<td class="text-nowrap text-right"><button  name = "btnSetCV" class = "btn btn-sm btn-success ml-2"><i class="fa fa-check" aria-hidden="true"></i>Tiêm phòng</button></td>';
               tr += '<td class="text-nowrap">' + UppercaseEachFirstLetter(c.fullname) + '</td>';
-              tr += '<td class="text-nowrap">'+(c.gender == 1 ? 'Nam' : 'Nữ')+'</td>';
+              tr += '<td class="text-nowrap">' + (c.gender == 1 ? 'Nam' : 'Nữ') + '</td>';
               tr += '<td class="text-nowrap">' + c.dob + '</td>';
-              tr += '<td class="text-nowrap">' + ((typeof c.po_id=='undefined' || c.po_id==null)?'': c.po_id.name) + '</td>';
+              tr += '<td class="text-nowrap">' + ((typeof c.po_id == 'undefined' || c.po_id == null) ? '' : c.po_id.name) + '</td>';
               tr += '<td class="text-nowrap">' + c.work_place + '</td>';
-              tr += '<td class="text-nowrap">' + c. phone + '</td>';
+              tr += '<td class="text-nowrap">' + c.phone + '</td>';
               tr += '<td class="text-nowrap">' + c.id_number + '</td>';
               tr += '<td class="text-nowrap">' + c.hi_no + '</td>';
               tr += '<td class="text-nowrap">' + c.detail_address + '</td>';
               tr += '<td class="text-nowrap">' + c.ward.name + '</td>';
               tr += '<td class="text-nowrap">' + c.dist.name + '</td>';
               tr += '<td class="text-nowrap">' + c.prov.name + '</td>';
-             
-              tr += '<td class="text-nowrap">' + UppercaseEachFirstLetter(c.created_by.fullname) + '</td>';           
+
+              tr += '<td class="text-nowrap">' + UppercaseEachFirstLetter(c.created_by.fullname) + '</td>';
               tr += '<td class="text-right text-nowrap">';
-             
+
               tr += '<button  name = "btnUpdateCV" class = "btn btn-sm btn-warning ml-2"><i class="fa fa-refresh" aria-hidden="true"></i></button>';
               tr += '<button  name = "btnDeleteCV" class = "btn btn-sm btn-danger ml-2"><i class="fa fa-trash" aria-hidden="true"></i></button>';
-             
+
               tr += '</td>';
               tr += '</tr>';
               $('#tblData').append(tr);
@@ -264,4 +264,3 @@
         })
       }
     </script>
-

@@ -97,8 +97,10 @@
             data:{cvId,vaccin,no},
             success:function(data){
                 alert(data.msg);
+                
                 $('#modalSetVaccination').modal('hide');
             }
         })
+        cvId='';
     })
 </script>
