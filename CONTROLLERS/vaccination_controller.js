@@ -262,7 +262,7 @@ router.post('/', authenticateToken, (req, res) => {
     if (cvId.trim().length > 0) {
         CV.findOneAndUpdate(
             { _id: cvId },
-            { fullname, gender, dob, po_id, work_place, phone, id_number, hi_no, province, district, ward, detail_address, hf, status: 0, unit_id: req.user.unit_id, created_by },
+            { fullname, gender, dob, po_id, work_place, phone, id_number, hi_no, prov, dist, ward, detail_address, hf, status: 0, unit_id: req.user.unit_id, created_by },
             { new: true }
         )
             .exec()
