@@ -31,6 +31,7 @@
     <thead class="bg-info text-white text-white ">
       <tr>
         <th rowspan="2" class="align-middle font-weight-bold text-center">STT</th>
+        <th rowspan="2" class="align-middle font-weight-bold text-center"></th>
         <th rowspan="2" class="align-middle font-weight-bold text-center">Họ và tên</th>
         <th rowspan="2" class="align-middle font-weight-bold text-center">Giới tính</th>
         <th rowspan="2" class="align-middle font-weight-bold text-center">Ngày sinh</th>
@@ -40,7 +41,6 @@
         <th rowspan="2" class="align-middle font-weight-bold text-center">CMND/CCCD</th>
         <th rowspan="2" class="align-middle font-weight-bold text-center">Số thẻ BHYT</th>
         <th colspan="4" class="align-middle font-weight-bold text-center">Địa chỉ hộ khẩu</th>
-        <th rowspan="2" class="align-middle font-weight-bold text-center">CSYT tiêm</th>
         <th rowspan="2" class="align-middle font-weight-bold text-center">Người nhập</th>
         <th rowspan="2" class="align-middle font-weight-bold text-center"></th>
       </tr>
@@ -63,6 +63,7 @@
 <link rel="stylesheet" href="../../dist/date-picker/css/bootstrap-datepicker.css">
 <script type="text/javascript" src="//unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 <%-include('modal_vaccination')%>
+<%-include('modal_set_vaccination')%>
 
 
     <script>
@@ -167,6 +168,17 @@
           })
         }
       })
+    
+    $(document).on('click','button[name="btnSetCV"]',function(){
+        let   cvId = $(this).closest("tr").attr("id");
+        $('#modalSetVaccination').modal();
+    })
+    
+    
+    
+    
+    
+    
       $('#btnAddNew').click(function () {
         cvId = "";
         $('#modalVaccination').modal();
@@ -203,14 +215,13 @@
             data.cv.forEach(c => {
               let tr = '<tr id="' + c._id + '" data-name="' + UppercaseEachFirstLetter(c.fullname) + '">';             
               tr += '<td class="text-nowrap text-right">' + (idx < 10 ? '0' + (idx++) : (idx++)) + '</td>';
+              tr += '<td class="text-nowrap text-right"><button  name = "btnSetCV" class = "btn btn-sm btn-success ml-2"><i class="fa fa-check" aria-hidden="true"></i>Tiêm phòng</button></td>';
               tr += '<td class="text-nowrap">' + UppercaseEachFirstLetter(c.fullname) + '</td>';
-              tr += '<td class="text-nowrap">';
-              tr += c.gender == 1 ? 'Nam' : 'Nữ';
-              tr += '</td>';
+              tr += '<td class="text-nowrap">'+(c.gender == 1 ? 'Nam' : 'Nữ')+'</td>';
               tr += '<td class="text-nowrap">' + c.dob + '</td>';
-              tr += '<td class="text-nowrap">' + (typeof c.po_id=='undefined' || c.po_id==null)?'': c.po_id.name + '</td>';
+              tr += '<td class="text-nowrap">' + ((typeof c.po_id=='undefined' || c.po_id==null)?'': c.po_id.name) + '</td>';
               tr += '<td class="text-nowrap">' + c.work_place + '</td>';
-              tr += '<td class="text-nowrap">' + c.phone + '</td>';
+              tr += '<td class="text-nowrap">' + c. phone + '</td>';
               tr += '<td class="text-nowrap">' + c.id_number + '</td>';
               tr += '<td class="text-nowrap">' + c.hi_no + '</td>';
               tr += '<td class="text-nowrap">' + c.detail_address + '</td>';
@@ -218,16 +229,12 @@
               tr += '<td class="text-nowrap">' + c.dist.name + '</td>';
               tr += '<td class="text-nowrap">' + c.prov.name + '</td>';
              
-              tr += '<td class="text-nowrap">' + UppercaseEachFirstLetter(c.created_by.fullname) + '</td>';
-              tr += '<td class="text-nowrap">' + c.error_note + '</td>';
+              tr += '<td class="text-nowrap">' + UppercaseEachFirstLetter(c.created_by.fullname) + '</td>';           
               tr += '<td class="text-right text-nowrap">';
-              if (c.created_by._id == data.user_id) {
-                tr += '<button  name = "update" class = "btn btn-sm btn-warning ml-2"><i class="fa fa-refresh" aria-hidden="true"></i></button>';
-                tr += '<button  name = "delete" class = "btn btn-sm btn-danger ml-2"><i class="fa fa-trash" aria-hidden="true"></i></button>';
-              }
-              if (data.error_editable) {
-                tr += '<button  name = "set_error" class = "btn btn-sm btn-warning ml-2"><i class="fa fa-exclamation-triangle text-danger" aria-hidden="true"></i></button>';
-              }
+             
+              tr += '<button  name = "btnUpdateCV" class = "btn btn-sm btn-warning ml-2"><i class="fa fa-refresh" aria-hidden="true"></i></button>';
+              tr += '<button  name = "btnDeleteCV" class = "btn btn-sm btn-danger ml-2"><i class="fa fa-trash" aria-hidden="true"></i></button>';
+             
               tr += '</td>';
               tr += '</tr>';
               $('#tblData').append(tr);
